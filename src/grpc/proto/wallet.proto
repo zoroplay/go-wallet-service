@@ -1,0 +1,988 @@
+syntax = "proto3";
+
+import "google/protobuf/struct.proto";
+option go_package = "github.com/zoroplay/feeds-service/grpc/protobuf";
+option java_multiple_files = true;
+option java_package = "com.github.zoroplay.grpc";
+option java_outer_classname = "WalletService";
+
+package wallet;
+
+service WalletService {
+  rpc CashbookVerifyFinalTransaction(FetchLastApprovedRequest) returns (CommonResponseObj) {}
+  rpc CashbookFetchLastApproved(FetchLastApprovedRequest) returns (LastApprovedResponse) {}
+  rpc CashbookFetchSalesReport(FetchSalesReportRequest) returns (SalesReportResponseArray) {}
+  rpc CashbookFetchReport(FetchReportRequest) returns (FetchReportResponse) {}
+  rpc CashbookHandleReport(HandleReportRequest) returns (LastApprovedResponseObj) {}
+  rpc CashbookFetchMonthlyShopReport(FetchReportRequest) returns (CommonResponseObj) {}
+  rpc CurrentReport(FetchReportRequest) returns (CommonResponseObj) {}
+
+
+  
+  rpc CashbookApproveExpense(CashbookApproveExpenseRequest) returns (ExpenseSingleResponse) {}
+  rpc CashbookCreateExpense(CashbookCreateExpenseRequest) returns (ExpenseSingleResponse) {}
+  rpc CashbookFindAllExpense(EmptyRequest) returns (ExpenseRepeatedResponse) {}
+  rpc CashbookFindOneExpense(CashbookIdRequest) returns (ExpenseSingleResponse) {}
+  rpc CashbookDeleteOneExpense(CashbookIdRequest) returns (ExpenseSingleResponse) {}
+  rpc CashbookUpdateOneExpense(CashbookCreateExpenseRequest) returns (ExpenseSingleResponse) {}
+  rpc CashbookFindAllBranchExpense(BranchRequest) returns (ExpenseRepeatedResponse) {}
+
+  rpc CashbookCreateExpenseType(CashbookCreateExpenseTypeRequest) returns (ExpenseTypeSingleResponse) {}
+  rpc CashbookFindAllExpenseType(EmptyRequest) returns (ExpenseTypeRepeatedResponse) {}
+  
+  rpc CashbookApproveCashIn (CashbookApproveCashInOutRequest) returns (CashInOutSingleResponse) {}
+  rpc CashbookCreateCashIn (CashbookCreateCashInOutRequest) returns (CashInOutSingleResponse) {}
+  rpc CashbookUpdateCashIn (CashbookCreateCashInOutRequest) returns (CashInOutSingleResponse) {}
+  rpc CashbookDeleteOneCashIn (CashbookIdRequest) returns (CashInOutSingleResponse) {}
+  rpc CashbookFindOneCashIn (CashbookIdRequest) returns (CashInOutSingleResponse) {}
+  rpc CashbookFindAllCashIn (EmptyRequest) returns (CashInOutRepeatedResponse) {}
+  rpc CashbookFindAllBranchCashIn (BranchRequest) returns (CashInOutRepeatedResponse) {}
+  rpc FindAllBranchApprovedCashinWDate (BranchRequest) returns (CashInOutRepeatedResponse) {}
+  rpc FindAllBranchPendingCashinWDate (BranchRequest) returns (CashInOutRepeatedResponse) {}
+  
+  rpc CashbookApproveCashOut (CashbookApproveCashInOutRequest) returns (CashInOutSingleResponse) {}
+  rpc CashbookCreateCashOut (CashbookCreateCashInOutRequest) returns (CashInOutSingleResponse) {}
+  rpc CashbookUpdateCashOut (CashbookCreateCashInOutRequest) returns (CashInOutSingleResponse) {}
+  rpc CashbookDeleteOneCashOut (CashbookIdRequest) returns (CashInOutSingleResponse) {}
+  rpc CashbookFindOneCashOut (CashbookIdRequest) returns (CashInOutSingleResponse) {}
+  rpc CashbookFindAllCashOut (EmptyRequest) returns (CashInOutRepeatedResponse) {}
+  rpc CashbookFindAllBranchCashOut (BranchRequest) returns (CashInOutRepeatedResponse) {}
+ 
+  rpc HandleCreatePawaPay (CreatePawapayRequest) returns (CommonResponseObj) {}
+  rpc HandleCreateBulkPawaPay (CreateBulkPawapayRequest) returns (CommonResponseArray) {}
+  rpc HandleFetchPawaPay (FetchPawapayRequest) returns (CommonResponseArray) {}
+  rpc HandlePawaPayResendCallback (FetchPawapayRequest) returns (CommonResponseObj) {}
+  rpc HandlePawaPayBalances (PawapayCountryRequest) returns (CommonResponseArray) {}
+  rpc HandlePawaPayCountryBalances (PawapayCountryRequest) returns (CommonResponseArray) {}
+  rpc HandlePawaPayPredCorr (PawapayPredCorrRequest) returns (CommonResponseObj) {}
+  rpc HandlePawaPayToolkit (PawapayToolkitRequest) returns (CommonResponseArray) {}
+  rpc HandlePawaPayActiveConf (PawapayCountryRequest) returns (CommonResponseObj) {}
+
+
+  rpc CreateVirtualAccount (WayaBankRequest) returns (CommonResponseObj) {}
+  rpc WayabankAccountEnquiry (WayaBankRequest) returns (CommonResponseObj) {}
+
+
+  rpc StkDepositNotification (StkTransactionRequest) returns (CommonResponseObj) {}
+  rpc StkWithdrawNotification (StkTransactionRequest) returns (CommonResponseObj) {}
+  rpc StkStatusNotification (StkTransactionRequest) returns (CommonResponseObj) {}
+  rpc StkRegisterUrl (StkRegisterUrlRequest) returns (CommonResponseObj) {}
+
+  rpc HandleWayaQuickInit (WayaQuickRequest) returns (CommonResponseObj) {}
+  rpc HandleWayaQuickVerify (WayaQuickRequest) returns (CommonResponseObj) {}
+
+  rpc FetchUsersWithdrawal (FetchUsersWithdrawalRequest) returns (CommonResponseArray) {}
+
+  
+
+  rpc GetBalance (GetBalanceRequest) returns (WalletResponse) {}
+  rpc CreateWallet (CreateWalletRequest) returns (WalletResponse) {} 
+  rpc FetchBetRange (FetchBetRangeRequest) returns (FetchBetRangeResponse) {} 
+  rpc FetchPlayerDeposit (FetchPlayerDepositRequest) returns (WalletResponse) {} 
+  rpc FetchDepositRange (FetchDepositRangeRequest) returns (FetchDepositRangeResponse) {} 
+  rpc FetchDepositCount (FetchDepositCountRequest) returns (FetchDepositCountResponse) {} 
+  rpc CreditUser (CreditUserRequest) returns (WalletResponse) {}
+  rpc AwardBonusWinning (CreditUserRequest) returns (WalletResponse) {} 
+  rpc DebitUser (DebitUserRequest) returns (WalletResponse) {}
+  rpc InititateDeposit (InitiateDepositRequest) returns (InitiateDepositResponse) {}
+  rpc VerifyDeposit (VerifyDepositRequest) returns (VerifyDepositResponse) {}
+  rpc RequestWithdrawal (WithdrawRequest) returns (WithdrawResponse) {}
+  rpc VerifyBankAccount (VerifyBankAccountRequest) returns (VerifyBankAccountResponse) {}
+  rpc ListBanks (EmptyRequest) returns (CommonResponseArray) {}
+  rpc GetTransactions (GetTransactionRequest) returns (GetTransactionResponse) {}
+  rpc GetPaymentMethods (GetPaymentMethodRequest) returns (GetPaymentMethodResponse) {}
+  rpc SavePaymentMethod (PaymentMethodRequest) returns (PaymentMethodResponse) {}
+  rpc PaystackWebhook (PaystackWebhookRequest) returns (WebhookResponse) {}
+  rpc MonnifyWebhook (MonnifyWebhookRequest) returns (WebhookResponse) {}
+  rpc OpayDepositWebhook (OpayWebhookRequest) returns (OpayWebhookResponse) {}
+  rpc OpayLookUpWebhook (OpayWebhookRequest) returns (OpayWebhookResponse) {}
+  rpc ListWithdrawals (ListWithdrawalRequests) returns (ListWithdrawalRequestResponse) {}
+  rpc ListDeposits (ListDepositRequests) returns (PaginationResponse) {}
+  rpc UserTransactions (UserTransactionRequest) returns (UserTransactionResponse) {}
+  rpc UpdateWithdrawal (UpdateWithdrawalRequest) returns (CommonResponseObj) {}
+  rpc GetPlayerWalletData (GetBalanceRequest) returns (PlayerWalletData) {}
+  rpc DeletePlayerData (IdRequest) returns (CommonResponseObj) {}
+  rpc GetUserAccounts (GetBalanceRequest) returns (GetUserAccountsResponse) {}
+  rpc GetNetworkBalance (GetNetworkBalanceRequest) returns (GetNetworkBalanceResponse) {}
+  rpc GetMoneyTransaction (GetTransactionsRequest) returns (CommonResponseObj) {}
+  rpc GetSystemTransaction (GetTransactionsRequest) returns (CommonResponseObj) {}
+
+  // RETAIL SERVICES
+  rpc WalletTransfer (WalletTransferRequest) returns (CommonResponseObj) {}
+  rpc ValidateDepositCode (ValidateTransactionRequest) returns (CommonResponseObj) {}
+  rpc ProcessShopDeposit (ProcessRetailTransaction) returns (CommonResponseObj) {}
+  rpc ValidateWithdrawalCode (ValidateTransactionRequest) returns (CommonResponseObj) {}
+  rpc ProcessShopWithdrawal (ProcessRetailTransaction) returns (CommonResponseObj) {}
+  rpc DebitAgentBalance (DebitUserRequest) returns (CommonResponseObj) {}
+
+
+  // Flutterwave and KoraPay
+
+
+  rpc FlutterWaveWebhook (FlutterwaveWebhookRequest) returns (WebhookResponse) {}
+  rpc  KorapayWebhook (KoraPayWebhookRequest) returns (WebhookResponse){}
+  rpc  TigoWebhook (TigoWebhookRequest) returns (TigoResponse){}
+
+  rpc  PawapayCallback (PawapayRequest) returns (PawapayResponse){}
+ 
+}
+
+
+
+message PawapayRequest {
+  int32 clientId = 1;
+  string   status = 2;
+  string  depositId = 3;
+}
+
+
+message PawapayResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message FlutterwaveWebhookRequest {
+  int32 clientId = 1;
+  string tx_ref = 2;
+  string event = 3;
+  string body = 4;
+  string flutterwaveKey = 5;
+}
+
+message TigoWebhookRequest {
+  int32 clientId = 1;
+  string reference = 2;
+  string event = 3;
+  string body = 4;
+  bool Status = 5;
+ 
+}
+
+message TigoResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message KoraPayWebhookRequest {
+  int32 clientId = 1;
+  string reference = 2;
+  string event = 3;
+  string body = 4;
+  string korapayKey = 5;
+}
+
+message PawapayToolkitRequest {
+  string action = 1;
+  int32 clientId = 2;
+
+}
+
+message PawapayPredCorrRequest {
+  string phoneNumber = 1;  
+  int32 clientId = 2;
+
+}
+
+message CreatePawapayRequest {
+  int32 userId = 1;
+  int32 clientId = 2;
+  string source = 3;
+  int32 amount = 4;
+  string action = 5;
+  string operator = 6;
+  optional string depositId = 7;
+}
+message FetchUsersWithdrawalRequest {
+  int32 userId = 1;
+  int32 clientId = 2;
+  optional bool pending = 3;
+}
+message WayaBankRequest {
+  int32 userId = 1;
+  int32 clientId = 2;
+
+}
+message StkTransactionRequest {
+  int32 clientId = 1;
+  string amount = 2;
+  string msisdn = 3;
+  string trxCode = 4;
+  string trxDate = 5;
+  string refId = 6;
+}
+
+message StkRegisterUrlRequest {
+  string action = 1;
+  string url = 2;
+  int32 clientId = 3;
+
+}
+message WayaQuickRequest {
+  int32 userId = 1;
+  int32 clientId = 2;
+  optional string transactionId = 3;
+  optional int32 amount = 4;
+}
+message CreateBulkPawapayRequest {
+  int32 userId = 1;
+  int32 clientId = 2;
+  string source = 3;
+  repeated int32 amount = 4;
+  string operator = 5;
+}
+
+message FetchPawapayRequest {
+  string action = 1;
+  string actionId = 2;
+  int32 clientId  = 3;
+
+}
+message PawapayCountryRequest {
+  int32 clientId  = 1;
+  string country = 2;
+}
+
+message FetchLastApprovedRequest {
+  int32 branchId = 1;
+  int32 clientId = 2;
+}
+
+message FetchSalesReportRequest {
+  int32 branchId = 1;
+  int32 clientId = 2;
+  int32 status = 3;
+}
+
+message LastApprovedResponse{
+  bool success = 1;
+  int32 status = 2;
+  string message = 3;
+  optional LastApproved data = 4;
+}
+
+message SalesReportResponseArray{
+  bool success = 1;
+  int32 status = 2;
+  string message = 3;
+  repeated LastApproved data = 4;
+}
+message LastApprovedResponseObj{
+  bool success = 1;
+  int32 status = 2;
+  string message = 3;
+  optional LastApproved data = 4;
+}
+
+message LastApproved {
+  int32 id = 1;
+  int32 branchId = 2;
+  int32 openingBalance = 3;
+  int32 closingBalance = 4;
+  int32 onlinePayouts = 5;
+  int32 onlineSales = 6;
+  int32 normalSales = 7;
+  int32 normalPayouts = 8;
+  int32 otherSales = 9;
+  int32 otherPayouts = 10;
+  int32 cashin = 11;
+  int32 cashout = 12;
+  int32 expenses = 13;
+  int32 status = 14;
+  string date = 15;
+  string createdAt = 16;
+  int32 clientId = 17;
+
+}
+
+message FetchReportRequest {
+  int32 clientId = 1;
+  int32 userId = 2;
+  string date = 3;
+}
+message HandleReportRequest {
+  int32 branchId = 1;
+  int32 openingBalance = 2;
+  int32 closingBalance = 3;
+  int32 onlinePayouts = 4;
+  int32 onlineSales = 5;
+  int32 normalSales = 6;
+  int32 normalPayouts = 7;
+  int32 otherPayouts = 8;
+  int32 otherSales = 9;
+  int32 cashin = 10;
+  int32 cashout = 11;
+  int32 expenses = 12;
+  string date = 13;
+  int32 clientId = 14;
+
+}
+message FetchReportResponse{
+  bool success = 1;
+  int32 status = 2;
+  string message = 3;
+  optional google.protobuf.Struct data = 4;
+}
+
+message GetTransactionsRequest {
+  int32 clientId = 1;
+  string from = 2;
+  string to = 3;
+  optional string transactionType = 4;
+  optional string referenceNo = 5;
+  optional string username = 6;
+  optional string keyword = 7;
+  optional int32 limit = 8;
+  int32  page = 9;
+}
+
+message ProcessRetailTransaction {
+  int32 id = 1;
+  int32 clientId = 2;
+  int32 userId = 3;
+  optional string username = 4;
+  optional float amount = 5;
+  optional float withdrawalCharge = 6;
+  optional string userRole = 7;
+}
+
+message WalletTransferRequest {
+  int32 clientId = 1;
+  int32 toUserId = 2;
+  string toUsername = 3;
+  string fromUsername = 4;
+  int32 fromUserId = 5;
+  double amount = 6;
+  optional string description = 7;
+  string action = 8;
+}
+
+message ValidateTransactionRequest {
+  int32 clientId = 1;
+  int32 userId = 2;
+  string code = 3;
+  optional string userRole = 4;
+}
+
+message EmptyRequest {}
+
+message BranchRequest {
+  int32 clientId = 1;
+  int32 branchId = 2;
+  optional string date = 3;
+}
+
+message CashbookIdRequest {
+  int32 id = 1;
+  int32 clientId = 2;
+}
+
+message IdRequest {
+  int32 id = 1;
+}
+
+message CashbookApproveExpenseRequest {
+  int32 status = 1;
+  int32 verifiedBy = 2;
+  int32 amount = 3;
+  int32 expenseId = 4;
+  string comment = 5;
+  
+  
+}
+message CashbookCreateExpenseRequest {
+  int32 amount = 1;
+  int32 expenseTypeId = 2;
+  int32 branchId = 3;
+  string comment = 4;
+  optional int32 id= 5;
+  int32 clientId = 6;
+}
+message ExpenseSingleResponse{
+  bool success = 1;
+  int32 status = 2;
+  string message = 3;
+  optional Expense data = 4;
+}
+
+message ExpenseRepeatedResponse{
+  bool success = 1;
+  int32 status = 2;
+  string message = 3;
+  repeated Expense data = 4;
+}
+
+message Expense{
+  int32 id = 1;
+  int32 userId = 2;
+  int32 expenseTypeId = 3;
+  int32 requestedAmount = 4;
+  int32 amount = 5;
+  int32 status = 6;
+  string branchComment = 7;
+  string adminComment = 8;
+  string verifiedAt = 9;
+  int32 verifiedBy = 10;
+  string createdAt = 11;
+  optional int32 balance = 12;
+  optional string expenseType = 13;
+}
+
+message CashbookApproveCashInOutRequest {
+  int32 status = 1;
+  int32 id = 2;
+  int32 verifiedBy = 3;
+}
+
+message CashbookCreateCashInOutRequest {
+  int32 userId = 1;
+  int32 branchId = 2;
+  int32 amount = 3;
+  string comment = 4;
+  optional int32 id= 5;
+  int32 clientId = 6;
+
+}
+
+message CashInOutSingleResponse{
+  bool success = 1;
+  int32 status = 2;
+  string message = 3;
+  optional CashInOut data = 4;
+}
+
+message CashInOutRepeatedResponse{
+  bool success = 1;
+  int32 status = 2;
+  string message = 3;
+  repeated CashInOut data = 4;
+}
+
+message CashInOut{
+  int32 id = 1;
+  int32 userId = 2;
+  int32 approvedBy = 3;
+  int32 branchId = 4;
+  int32 amount = 5;
+  string comment = 6;
+  int32 status = 7;
+  string createdAt = 8;
+  optional int32 balance = 9;
+}
+
+message CashbookCreateExpenseTypeRequest {
+  string title = 1;
+  int32 fixed = 3;
+  int32 amount = 4;
+}
+
+message ExpenseTypeSingleResponse{
+  bool success = 1;
+  int32 status = 2;
+  string message = 3;
+  optional ExpenseType data = 4;
+}
+
+message ExpenseTypeRepeatedResponse{
+  bool success = 1;
+  int32 status = 2;
+  string message = 3;
+  repeated ExpenseType data = 4;
+}
+
+message ExpenseType {
+  int32 id = 1;
+  string title = 2;
+  int32 amount = 3;
+  string createdAt = 4;
+  int32 status = 5;
+  int32 fixed = 6;
+}
+
+message GetUserAccountsResponse {
+  message BankAccount {
+    string bankCode = 1;
+    string accountName = 2;
+    string accountNumber = 3;
+    string bankName = 4;
+  }
+  repeated BankAccount data = 1;
+}
+
+message GetNetworkBalanceRequest {
+  int32 agentId = 1;
+  string userIds = 2;
+  int32 clientId = 3;
+}
+
+message GetNetworkBalanceResponse {
+  bool success = 1;
+  string message = 2;
+  float networkBalance = 4;
+  float networkTrustBalance = 5;
+  optional float trustBalance = 6;
+  optional float availableBalance = 7;
+  optional float balance = 8;
+}
+
+message FetchBetRangeRequest {
+  int32 minAmount = 1;
+  int32 maxAmount = 2;
+  string startDate = 3;
+  string endDate = 4;
+  int32 clientId = 5;
+}
+
+message FetchBetRangeResponse {
+  int32 status = 1;
+  bool success = 2;
+  message Data {
+    int32 userId = 1;
+    float total = 2;
+    float count = 3;
+    float balance =  4;
+  }
+  repeated Data data = 3;
+  optional string error = 4;
+}
+
+message FetchDepositRangeRequest {
+  int32 minAmount = 1;
+  int32 maxAmount = 2;
+  string startDate = 3;
+  string endDate = 4;
+  int32 clientId = 5;
+}
+message FetchDepositCountRequest {
+  int32 clientId = 1;
+  string startDate = 2;
+  string endDate = 3;
+  int32 count = 4;
+}
+
+message FetchDepositCountResponse {
+  int32 status = 1;
+  bool success = 2;
+  message Data {
+    int32 userId = 1;
+    float total = 2;
+    float balance =  3;
+  }
+  repeated Data data = 3;
+  optional string error = 4;
+}
+
+message FetchDepositRangeResponse {
+  int32 status = 1;
+  bool success = 2;
+  message Data {
+    int32 userId = 1;
+    float total = 2;
+    float balance =  3;
+  }
+  repeated Data data = 3;
+  optional string error = 4;
+}
+
+message FetchPlayerDepositRequest {
+  int32 userId = 1;
+  string startDate = 2;
+  string endDate = 3;
+}
+
+message TransactionEntity {
+  int32   id =1;
+  int32 clientId =2;
+  int32 userId=3;
+  string username =4;
+  string transactionNo=5;
+  int32  amount =6;
+  string  transactionType =7;
+  string  subject =8;
+  string  description =9;
+  string  source =10;
+  string  channel=11;
+  int32  balance =12;
+  int32  status =13;
+  string createdAt =14;
+  string updatedAt =15;
+}
+
+message PaymentMethodRequest {
+  int32 clientId = 1;
+  string title = 2;
+  string provider = 3;
+  string secretKey = 4;
+  string publicKey = 5;
+  string merchantId = 6;
+  string baseUrl = 7;
+  int32 status = 8;
+  int32 forDisbursement = 9;
+  int32 id = 10;
+}
+
+message VerifyDepositRequest {
+  int32 clientId = 1;
+  string transactionRef = 2;
+  string paymentChannel = 3;
+}
+
+message VerifyDepositResponse {
+  bool success = 1;
+  int32 status = 2;
+  string message = 3;
+}
+
+message PaystackWebhookRequest {
+  int32 clientId = 1;
+  string reference = 2;
+  string event = 3;
+  string body = 4;
+  string paystackKey = 5;
+}
+
+message MonnifyWebhookRequest {
+  int32 clientId = 1;
+  string reference = 2;
+  string event = 3;
+  string body = 4;
+}
+
+message WebhookResponse {
+  bool success = 1;
+}
+
+message GetPaymentMethodRequest {
+  int32 clientId = 1;
+  optional int32 status = 2;
+}
+
+message GetPaymentMethodResponse {
+  bool success = 1;
+  int32 status = 2;
+  string message = 3;
+  repeated PaymentMethod data = 4;
+}
+
+message PaymentMethodResponse {
+  bool success = 1;
+  int32 status = 2;
+  string message = 3;
+  optional PaymentMethod data = 4;
+}
+
+message PaymentMethod {
+  string title = 2;
+  string provider = 3;
+  string secret_key = 4;
+  string public_key = 5;
+  string merchant_id = 6;
+  string base_url = 7;
+  int32 status = 8;
+  int32 for_disbursement = 9;
+  int32 id = 10;
+}
+
+message CreateWalletRequest {
+  int32 userId = 1;
+  int32 clientId = 2;
+  string username = 3;
+  optional float amount = 4;
+  optional float bonus = 5;
+}
+
+message WalletResponse {
+  bool success = 1;
+  int32 status = 2;
+  string message = 3;
+  optional Wallet data = 4;
+}
+
+//get user balance
+message GetBalanceRequest {
+  int32 userId = 1;
+  int32 clientId = 2;
+  optional string wallet = 3;
+}
+
+// credit user request payload
+message CreditUserRequest {
+  int32 userId = 1;
+  int32 clientId = 2;
+  string amount = 3;
+  string source = 4;
+  string description = 5;
+  string username = 6;
+  string wallet = 7;
+  string subject = 8;
+  string channel = 9;
+}
+
+// credit user request payload
+message DebitUserRequest {
+  int32 userId = 1;
+  int32 clientId = 2;
+  string amount = 3;
+  string source = 4;
+  string description = 5;
+  string username = 6;
+  string wallet = 7;
+  string subject = 8;
+  string channel = 9;
+}
+
+message Wallet {
+  int32 userId = 1;
+  double balance = 2;
+  double availableBalance = 3;
+  double trustBalance = 4;
+  double sportBonusBalance = 5;
+  double virtualBonusBalance = 6;
+  double casinoBonusBalance = 7;
+}
+
+message InitiateDepositRequest {
+  int32 userId = 1;
+  int32 clientId = 2;
+  double amount = 3;
+  string paymentMethod = 4;
+  string source = 5;
+  string username = 6;
+}
+
+message InitiateDepositResponse {
+  bool success = 1;
+  string message = 2;
+  message Data {
+    optional string link = 1;
+    optional string transactionRef = 2;
+  }
+  optional Data data = 3;
+}
+
+message Transaction {
+  string username = 1;
+  string transactionNo = 2;
+  double amount = 3;
+  string transactionType = 4;
+  string subject = 5;
+  string description = 6;
+  string source = 7;
+  double balance = 8;
+  int32 status = 9;
+  string createdAt = 10;
+  optional string link = 11;
+}
+
+message SearchTransactionsRequest {
+  int32 clientId = 1;
+  int32 userId = 2;
+  string accountNumber = 3;
+  int32 page = 4;
+  int32 size = 5;
+  string fromDate = 6;
+}
+message VerifyBankAccountRequest {
+  int32 clientId = 1;
+  int32 userId = 2;
+  string accountNumber = 3;
+  string bankCode = 4;
+  string source = 5;
+}
+
+message VerifyBankAccountResponse {
+  bool success = 1;
+  int32 status = 2;
+  string message = 3;
+  optional string accountName = 4;
+}
+
+message WithdrawRequest {
+  int32 userId = 1;
+  int32 clientId = 2;
+  double amount = 3;
+  string accountName = 4;
+  string accountNumber = 5;
+  optional string bankCode = 6;
+  optional string bankName = 7;
+  optional string type = 8;
+  optional string source = 9;
+  string username = 10;
+}
+
+message WithdrawResponse {
+  bool success = 1;
+  int32 status = 2;
+  string message = 3;
+  optional Withdraw data = 4;
+}
+
+message Withdraw {
+  double balance = 1;
+  string code = 2;
+}
+
+message GetTransactionRequest {
+  int32 userId = 1;
+  int32 clientId = 2;
+  string from = 3;
+  string to = 4;
+  string type = 5;
+  string tranxType = 6;
+  int32 page = 7;
+  int32 limit = 8;
+}
+
+message GetTransactionResponse {
+  bool success = 1;
+  int32 status = 2;
+  string message = 3;
+  repeated google.protobuf.Struct data = 4;
+}
+
+message OpayWebhookRequest {
+  int32 clientId = 1;
+  optional string username = 2;
+  string orderNo = 3;
+  string amount = 4;
+}
+
+message OpayWebhookResponse {
+  string responseCode = 1;
+  string responseMessage = 2;
+  message Data {
+    string UserID = 1;
+    string OrderNo = 2;
+    string TransAmount = 3;
+    string PaymentReference = 4;
+    string Status = 5;
+    string TransDate = 6;
+  }
+  optional Data data = 3;
+}
+
+message ListWithdrawalRequests {
+  int32 clientId = 1;
+  string from = 2;
+  string to = 3;
+  int32 status = 4;
+  int32 userId = 5;
+}
+
+message ListWithdrawalRequestResponse {
+  bool success = 1;
+  int32 status = 2;
+  string message = 3;
+  repeated WithdrawalRequest data = 4;
+}
+
+message WithdrawalRequest {
+  int32 id = 1;
+  int32 userId = 2;
+  string username = 3;
+  float amount = 4;
+  string accountNumber = 5;
+  string accountName = 6;
+  string bankName = 7;
+  string updatedBy = 8;
+  int32 status = 9;
+  string created = 10;
+}
+
+message UserTransactionRequest {
+  int32 clientId = 1;
+  int32 userId = 2;
+  string startDate = 3;
+  string endDate = 4;
+  optional int32 page = 5;
+  optional int32 limit = 6;
+}
+
+message UserTransactionResponse {
+  bool success = 1;
+  string message = 2;
+  repeated TransactionData data = 3;
+  optional MetaData meta = 4;
+}
+
+message TransactionData {
+  int32 id = 1;
+  string referenceNo = 2;
+  float amount = 3;
+  float balance = 4;
+  string subject = 5;
+  string type = 6;
+  string description = 7;
+  string transactionDate = 8;
+  string channel = 9;
+  int32 status = 10;
+  string wallet = 11;
+}
+
+message UpdateWithdrawalRequest {
+  int32 clientId = 1;
+  int32 withdrawalId = 2;
+  string action = 3;
+  string comment = 4;
+  string updatedBy = 5;
+}
+
+message CommonResponseObj {
+  bool success = 1;
+  string message = 2;
+  int32 status = 3;
+  optional google.protobuf.Struct data = 4;
+}
+
+message CommonResponseArray {
+  bool success = 1;
+  string message = 2;
+  int32 status = 3;
+  repeated google.protobuf.Struct data = 4;
+}
+
+message PlayerWalletData {
+  float sportBalance = 1;
+  float totalDeposits = 2;
+  float sportBonusBalance = 3;
+  float totalWithdrawals = 4;
+  float pendingWithdrawals = 5;
+  float avgWithdrawals = 6;
+  string lastDepositDate = 7;
+  string lastWithdrawalDate = 8;
+  float lastDepositAmount = 9;
+  float lastWithdrawalAmount = 10;
+  string firstActivityDate = 11;
+  string lastActivityDate = 12;
+  int32 noOfDeposits = 13;
+  int32 noOfWithdrawals = 14;
+}
+
+message ListDepositRequests {
+  int32 clientId = 1;
+  string startDate = 2;
+  string endDate = 3;
+  string paymentMethod = 4;
+  int32 status = 5;
+  string username = 6;
+  string transactionId = 7;
+  int32 page = 8;
+}
+
+message PaginationResponse {
+  string message = 1;
+  int32 count = 2;
+  int32 currentPage = 3;
+  int32 nextPage = 4;
+  int32 prevPage = 5;
+  int32 lastPage = 6;
+  repeated google.protobuf.Struct data = 7;
+}
+
+message MetaData {
+  int32 page = 1;
+  int32 perPage = 2;
+  int32 total = 3;
+  int32 lastPage = 4;
+  int32 nextPage = 5;
+  int32 prevPage = 6;
+}
