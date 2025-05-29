@@ -67,7 +67,7 @@ func (a *App) setRouters() {
 // Run the app on it's router
 func (a *App) Run() {
 
-	server := fmt.Sprintf("%s:%s", os.Getenv("feeds_system_host"), os.Getenv("feeds_system_port"))
+	server := fmt.Sprintf("%s:%s", os.Getenv("wallet_system_host"), os.Getenv("wallet_system_port"))
 	log.Printf(" HTTP listening on %s ", server)
 	a.E.Logger.Fatal(a.E.Start(server))
 }

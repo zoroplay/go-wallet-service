@@ -222,8 +222,8 @@ func GetBalance(db *sql.DB, in *pbWallet.GetBalanceRequest) (success bool, statu
 		" FROM wallets " +
 		" WHERE user_id = ? ")
 
-	err := db.QueryRow(queryString, userId).Scan(&row.Balance, &row.AvailableBalance, &row.SportBonusBalance, &row.CasinoBonusBalance,
-		&row.VirtualBonusBalance, &row.TrustBalance)
+	err := db.QueryRow(queryString, userId).Scan(&row.Balance, &row.AvailableBalance, &row.SportBonusBalance, &row.VirtualBonusBalance,
+		&row.CasinoBonusBalance, &row.TrustBalance)
 
 	if err != nil {
 

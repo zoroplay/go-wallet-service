@@ -21,7 +21,7 @@ func DbInstance() *sql.DB {
 
 	dbURI := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=True&multiStatements=true", username, password, host, port, dbname, "utf8")
 
-	fmt.Println("db connection string %s", dbURI)
+	// fmt.Println("db connection string %s", dbURI)
 
 	Db, err := sql.Open("mysql", dbURI)
 
