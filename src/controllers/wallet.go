@@ -49,29 +49,30 @@ func CreditUser(db *sql.DB, in *pbWallet.CreditUserRequest) (success bool, statu
 	case "sport-bonus":
 		walletBalance = "sport_bonus_balance"
 		walletType = "Sport Bonus"
-		balance = row.SportBonusBalance + amount
 		break
 	case "virtual":
 		walletBalance = "virtual_bonus_balance"
 		walletType = "Virtual Bonus"
-		balance = row.VirtualBonusBalance + amount
 		break
 	case "casino":
 		walletBalance = "casino_bonus_balance"
 		walletType = "Casino Bonus"
-		balance = row.CasinoBonusBalance + amount
 		break
 	case "trust":
 		walletBalance = "trust_balance"
-		walletType = "Sport Bonus"
-		balance = row.SportBonusBalance + amount
+		walletType = "Trust"
 		break
 	default:
-		balance = row.AvailableBalance + amount
+		walletBalance = "available_balance"
 		break
 	}
-	// update user wallet
-	updateQuery = fmt.Sprintf("UPDATE wallets SET %s = %f WHERE user_id = %d AND client_id = %d ", walletBalance, balance, userId, in.ClientId)
+
+	// CRITICAL FIX: Use atomic SQL increment to prevent race conditions
+	// This ensures concurrent credits don't overwrite each other
+	// Instead of: Read balance -> Calculate -> Write (race condition!)
+	// We do: Atomically increment (safe for concurrency!)
+	updateQuery = fmt.Sprintf("UPDATE wallets SET %s = %s + %f WHERE user_id = %d AND client_id = %d",
+		walletBalance, walletBalance, amount, userId, in.ClientId)
 
 	_, err = db.Exec(updateQuery)
 
@@ -79,6 +80,29 @@ func CreditUser(db *sql.DB, in *pbWallet.CreditUserRequest) (success bool, statu
 
 		log.Printf("got error updating wallet\n%s\n%s", updateQuery, err.Error())
 		return false, 500, "Unable to update user wallet", nil
+	}
+
+	// Fetch updated balance after atomic increment
+	err = db.QueryRow(queryString, userId).Scan(&row.Balance, &row.AvailableBalance, &row.SportBonusBalance, &row.CasinoBonusBalance,
+		&row.VirtualBonusBalance, &row.TrustBalance)
+
+	if err != nil {
+		log.Printf("error fetching updated wallet with id %d  %s", userId, err.Error())
+		return false, 500, "Unable to fetch updated wallet", nil
+	}
+
+	// Get the updated balance for the correct wallet type
+	switch in.Wallet {
+	case "sport-bonus":
+		balance = row.SportBonusBalance
+	case "virtual":
+		balance = row.VirtualBonusBalance
+	case "casino":
+		balance = row.CasinoBonusBalance
+	case "trust":
+		balance = row.TrustBalance
+	default:
+		balance = row.AvailableBalance
 	}
 
 	var transaction_no = generateTrxNo()
@@ -144,33 +168,48 @@ func DebitUser(db *sql.DB, in *pbWallet.DebitUserRequest) (success bool, status 
 		return false, 404, "User not found", nil
 	}
 
+	// Check sufficient balance before debit
 	switch in.Wallet {
 	case "sport-bonus":
+		if row.SportBonusBalance < amount {
+			return false, 400, "Insufficient balance", nil
+		}
 		walletBalance = "sport_bonus_balance"
 		walletType = "Sport Bonus"
-		balance = row.SportBonusBalance - amount
 		break
 	case "virtual":
+		if row.VirtualBonusBalance < amount {
+			return false, 400, "Insufficient balance", nil
+		}
 		walletBalance = "virtual_bonus_balance"
 		walletType = "Virtual Bonus"
-		balance = row.VirtualBonusBalance - amount
 		break
 	case "casino":
+		if row.CasinoBonusBalance < amount {
+			return false, 400, "Insufficient balance", nil
+		}
 		walletBalance = "casino_bonus_balance"
 		walletType = "Casino Bonus"
-		balance = row.CasinoBonusBalance - amount
 		break
 	case "trust":
+		if row.TrustBalance < amount {
+			return false, 400, "Insufficient balance", nil
+		}
 		walletBalance = "trust_balance"
-		walletType = "Sport Bonus"
-		balance = row.SportBonusBalance - amount
+		walletType = "Trust"
 		break
 	default:
-		balance = row.AvailableBalance - amount
+		if row.AvailableBalance < amount {
+			return false, 400, "Insufficient balance", nil
+		}
+		walletBalance = "available_balance"
 		break
 	}
-	// update user wallet
-	updateQuery = fmt.Sprintf("UPDATE wallets SET %s = %f WHERE user_id = %d AND client_id = %d ", walletBalance, balance, userId, in.ClientId)
+
+	// CRITICAL FIX: Use atomic SQL decrement to prevent race conditions
+	// Same fix as CreditUser - atomic operations prevent lost updates
+	updateQuery = fmt.Sprintf("UPDATE wallets SET %s = %s - %f WHERE user_id = %d AND client_id = %d",
+		walletBalance, walletBalance, amount, userId, in.ClientId)
 
 	_, err = db.Exec(updateQuery)
 
@@ -178,6 +217,29 @@ func DebitUser(db *sql.DB, in *pbWallet.DebitUserRequest) (success bool, status 
 
 		log.Printf("got error updating wallet\n%s\n%s", updateQuery, err.Error())
 		return false, 500, "Unable to update user wallet", nil
+	}
+
+	// Fetch updated balance after atomic decrement
+	err = db.QueryRow(queryString, userId).Scan(&row.Balance, &row.AvailableBalance, &row.SportBonusBalance, &row.CasinoBonusBalance,
+		&row.VirtualBonusBalance, &row.TrustBalance)
+
+	if err != nil {
+		log.Printf("error fetching updated wallet with id %d  %s", userId, err.Error())
+		return false, 500, "Unable to fetch updated wallet", nil
+	}
+
+	// Get the updated balance for the correct wallet type
+	switch in.Wallet {
+	case "sport-bonus":
+		balance = row.SportBonusBalance
+	case "virtual":
+		balance = row.VirtualBonusBalance
+	case "casino":
+		balance = row.CasinoBonusBalance
+	case "trust":
+		balance = row.TrustBalance
+	default:
+		balance = row.AvailableBalance
 	}
 
 	var transaction_no = generateTrxNo()
