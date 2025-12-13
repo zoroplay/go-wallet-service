@@ -1,0 +1,703 @@
+syntax = "proto3";
+option go_package = "wallet-service/proto/gaming";
+// import "google/protobuf/any.proto";
+import "google/protobuf/struct.proto";
+
+package gaming;
+
+
+
+service GamingService {
+    rpc CreateGame (CreateGameDto) returns (Game) {}
+    rpc FindAllGames (Empty) returns (Games) {}
+    rpc FetchGames (FetchGamesRequest) returns (CommonResponseArray) {}
+    rpc FetchGamesByName (FetchGamesRequest) returns (Games) {}
+    rpc AdminFetchGamesByName (FetchGamesRequest) returns (CommonResponse) {}
+    rpc SyncGames (SyncGameDto) returns (Games) {}
+    rpc FindOneGame (FindOneGameDto) returns (Game) {}
+    rpc UpdateGame (UpdateGameDto) returns (Game) {}
+    rpc RemoveGame (UpdateGameDto) returns (Game) {}
+    rpc SaveCategory (SaveCategoryRequest) returns (Category) {}
+    rpc FetchCategories (Empty) returns (Categories) {}
+
+    rpc addGameToCategories(AddGameToCategoriesDto) returns (Game) {}
+    rpc removeGameToCategories(AddGameToCategoriesDto) returns (Game) {}
+
+    rpc addTournamentGame(AddGameToTournamentDto) returns (TournamentResponse) {}
+    rpc removeTournamentGame(AddGameToTournamentDto) returns (Empty) {}
+
+    rpc findOneCategory (FindOneCategoryDto) returns (Category) {}
+    rpc updateCategory (SaveCategoryRequest) returns (Category) {}
+    rpc deleteCategory (FindOneCategoryDto) returns (Empty) {}
+    rpc RegisterBonus (Empty) returns (CommonResponse) {}
+
+    rpc findOneTournament (FindOneTournamentDto) returns (Tournament) {}
+    rpc FindAllTournaments (Empty) returns (Tournaments) {}
+    rpc updateTournament (CreateTournamentDto) returns (Tournament) {}
+    rpc deleteTournament (FindOneTournamentDto) returns (Empty) {}
+    rpc createTournament (CreateTournamentDto) returns (Tournament) {}
+
+    rpc CreateProvider (CreateProviderDto) returns (CommonResponse) {}
+    rpc UpdateProvider (CreateProviderDto) returns (CommonResponse) {}
+    rpc FindOneProvider (FindOneGameDto) returns (CommonResponse) {}
+    rpc RemoveProvider  (CreateProviderDto) returns (CommonResponse) {}
+    rpc FindAllProviders (Empty) returns (CommonResponse) {}
+    rpc FindAdminProviders (Empty) returns (CommonResponse) {}
+
+    rpc getGames (GetGamesRequest) returns (CommonResponseArray) {}
+
+    rpc CreatePromotion (CreatePromotionRequest) returns (Promotion);
+    rpc FindPromotions (GetPromotions) returns (Promotions) {}
+    rpc FindOnePromotion (FindOnePromotionDto) returns (Promotion) {}
+    rpc UpdatePromotion (CreatePromotionRequest) returns (Promotion) {}
+    rpc RemovePromotion  (FindOnePromotionDto) returns (Empty) {}
+
+
+    rpc HandleCasinoBonus (CreateBonusRequest) returns (CommonResponse){}
+
+    rpc AddGameKeys (CreateGameKeyRequest) returns (CommonResponse){}
+    rpc fetchGameKeys (GetKeysRequest) returns (CommonResponse){}
+    rpc deleteGameKeys (FindOneGameDto) returns (CommonResponse){}
+
+    rpc fetchBonusGames (BonusGameRequest) returns (CommonResponse){}
+    
+
+    rpc HandleCasinoJackpot (SyncGameDto) returns (CommonResponse){}
+    rpc HandleCasinoJackpotWinners (SyncGameDto) returns (CommonResponse){}
+    
+    rpc StartGame (StartGameDto) returns (StartGameResponse) {}
+    rpc QtechLobby (StartGameDto) returns (StartGameResponse) {}
+    rpc QueryGames (stream PaginationDto) returns (stream Games) {}
+    rpc HandleCallback (CallbackGameDto) returns (CallbackResponse) {}
+    rpc HandleQtechCallback (QtechCallbackRequest) returns (CallbackResponse) {}
+    rpc HandleSpribeCallback (SpribeCallbackRequest) returns (CallbackResponse) {}
+    rpc HandleSmatVirtualCallback (SmatVirtualCallbackRequest) returns (CallbackResponse) {}
+
+    rpc XpressLogin (XpressRequest) returns (XpressResponse) {}
+    rpc XpressBalance (XpressRequest) returns (XpressResponse) {}
+    rpc XpressDebit (XpressRequest) returns (XpressResponse) {}
+    rpc XpressCredit (XpressRequest) returns (XpressResponse) {}
+    rpc XpressRollback (XpressRequest) returns (XpressResponse) {}
+    rpc XpressLogout (XpressRequest) returns (XpressResponse) {}
+
+    rpc StartSmatGame (StartDto) returns (StartGameResponse) {}
+
+}
+
+
+message GetGamesRequest {
+    optional int32 providerId = 1;
+    optional int32 categoryId = 2;
+    optional int32 page = 3;
+    optional int32 limit = 4;
+}
+
+message GetPromotions {
+    optional int32 clientId = 1;
+}
+
+message GetKeysRequest {
+    int32 clientId = 1;
+}
+
+message StartDto {
+     int32 clientId = 1;
+     int32 userId = 2;
+     string token = 3;
+}
+
+message CreateGameKeyRequest {
+     int32 clientId = 1;
+     repeated GameKeyEntry keys = 2;
+    
+}
+
+message GameKeyEntry {
+  string option = 1;
+  string value = 2;
+  string provider = 3;
+}
+
+
+message BonusGameRequest {
+     int32 clientId = 1;
+     int32 userId = 2;
+}
+
+
+message SmatVirtualCallbackRequest {
+    int32 clientId = 1;
+    optional string action = 2;
+    optional string body = 3;
+    optional string playerId = 4;
+    optional string sessionId = 5;
+};
+
+message CreateBonusRequest {
+    int32 clientId = 1;
+    string bonusType = 2;
+    optional string creditType = 3;
+    optional int32 duration = 4;
+    optional int32 minimumSelection = 5;
+    optional float minimumOddsPerEvent = 6;
+    optional float minimumTotalOdds = 7;
+    optional string applicableBetType = 8;
+    optional int32 maximumWinning = 9;
+    optional int32 bonusAmount = 10;
+    optional int32 status = 11;
+    optional string created = 12;
+    optional string updated = 13;
+    optional int32 id = 14;
+    optional int32 minimumLostGames = 15;
+    optional int32 rolloverCount = 16;
+    optional string name = 17;
+    optional float minimumEntryAmount = 18;
+    optional float maxAmount = 19;
+    optional string product = 20;
+    repeated string game_id = 21;
+    optional int32 casinoSpinCount = 22;
+    optional int32 providerId = 23;
+    optional int32 bonusId = 24;
+    repeated string userIds = 25;
+    optional string provider = 26;
+  }
+  
+  message CreateBonusResponse {
+    int32 bonusIdatad = 1;
+    int32 status = 2;
+    string description = 3;
+    bool success = 4;
+  }
+  
+
+message QtechCallbackRequest {
+    int32 clientId = 1;
+    string playerId = 2;
+    string gameId = 3;
+    string passkey = 4;
+    string walletSessionId = 5;
+    optional string body = 6;
+    string action = 7;    
+}
+
+
+
+message SpribeCallbackRequest {
+    int32 clientId = 1;
+    string provider = 2;
+    optional string signature = 3;
+    optional string body = 4;
+    string action = 5;    
+}
+
+message AddGameToCategoriesResponse {
+    repeated GameCategory gameCategories = 1;
+}
+
+message RegisterBonusRequest {
+    int32 clientId = 1;
+    string gameId = 2;
+    string userId = 3;
+    double betMoney = 4;
+    int32 freeSpinsCount = 5;
+    string expireDate = 6;
+    int32 bonusId = 7;
+    string promoCode = 8;
+}
+
+message PaginationDto {
+    int32 page = 1;
+    int32 skip = 2;
+};
+
+message FetchGamesRequest {
+    int32 clientId = 1;
+    optional int32 categoryId = 2;
+    optional int32 providerId = 3;
+    optional string gameName = 4;
+}
+
+message Empty {};
+
+message SyncGameDto {
+    string provider = 1;
+    optional int32 clientId = 2;
+};
+
+message CallbackGameDto {
+    int32 clientId = 1;
+    string provider = 2;
+    optional string action = 3;
+    optional string method = 4;
+    google.protobuf.Struct header = 5;
+    optional string body = 6;
+    optional string path = 7;
+};
+
+message FindOneGameDto {
+    int32 id = 1;
+};
+
+message Games {
+    repeated Game games = 1;
+};
+
+message Providers {
+    repeated Provider providers = 1;
+};
+
+message UpdateGameDto {
+    int32 id = 1;
+    string gameId = 2;
+    string title = 3;
+    string description = 4;
+    string url = 5;
+    string image_path = 6;
+    string banner_path = 7;
+    bool status = 8;
+    string type = 9;
+    int32 providerId = 10;
+    optional int32 priority = 11;
+}
+
+message CreateProviderDto {
+    optional int32 id = 1;
+    string slug = 2;
+    string name = 3;
+    string description = 4;
+    string imagePath = 5;
+    optional int32 status = 6;
+}
+
+message CreateGameDto {
+    string gameId = 1;
+    string title = 2;
+    string description = 3;
+    string url = 4;
+    string image_path = 5;
+    string banner_path = 6;
+    bool status = 7;
+    string type = 8;
+    int32 providerId = 9;
+    string bonusType = 10;
+}
+
+message StartGameDto {
+    int32 gameId = 1;
+    int32 clientId = 2;
+    int32 userId = 3;
+    string username = 4;
+    optional string email = 5;
+    optional string homeUrl = 6;
+    optional string depositUrl = 7;
+    optional bool demo = 8;
+    optional bool isMobile = 9;
+    optional string authCode = 10;
+    optional string balanceType = 11;
+    optional int32 bonusId = 12;
+    optional string language = 13;
+    optional bool isBonus = 14;
+    optional string bonusType = 15;
+    optional string type = 16;
+};
+
+message StartGameResponse {
+    string url = 1;
+}
+
+message Game {
+    int32 id = 1;
+    string gameId = 2;
+    string title = 3;
+    string description = 4;
+    string url = 5;
+    string imagePath = 6;
+    string bannerPath = 7;
+    bool status = 8;
+    string type = 9;
+    Provider provider = 10;
+    string createdAt = 11;
+    string updatedAt = 12;
+    repeated Category category = 13;
+}
+
+message IGame {
+    int32 id = 1;
+    string gameId = 2;
+    string title = 3;
+    string description = 4;
+    string url = 5;
+    string imagePath = 6;
+    string bannerPath = 7;
+    bool status = 8;
+    string type = 9;
+    Provider provider = 10;
+    string createdAt = 11;
+    string updatedAt = 12;
+    repeated string category = 13; // Fixed the category type to be a repeated string
+}
+
+
+message GamingServiceResponse {
+    repeated IGame games = 1;
+}
+
+message Provider {
+    int32 id = 1;
+    string slug = 2;
+    string name = 3;
+    string description = 4;
+    string imagePath = 5;
+    optional Games games = 6;
+    optional string parentProvider = 7;
+    string createdAt = 8;
+    string updatedAt = 9;
+}
+
+
+// Smart Soft TransactionInfo
+message SmartSoftTransactionInfo {
+    string Source = 1;
+    optional string GiftKey = 2;
+    string RoundId = 3;
+    string GameName = 4;
+    optional string Jackpots = 5;
+    optional string JetXBets = 6;
+    optional double TotalWon = 7;
+    string RoundDate = 8;
+    int32 RoundLong = 9;
+    string GameNumber = 10;
+    optional double GiftAmount = 11;
+    optional double RakeAmount = 12;
+    optional string RakeFromBet = 13;
+    optional string RakePercent = 14;
+    optional string GiftQuantity = 15;
+    optional string TournamentId = 16;
+    optional string RoundingDelta = 17;
+    optional double RakeBackAmount = 18;
+    optional string TotalPlacedBet = 19;
+    optional string TournamentType = 20;
+    string TransactionKey = 21;
+    optional string JetXCoefficient = 22;
+    string TransactionDate = 23;
+    optional string BetTransactionId = 24;
+    optional string TournamentNumber = 25;
+    optional string JetX3Coefficients = 26;
+    string OriginalSessionId = 27;
+    optional string TournamentGameType = 28;
+    optional string IsTournamentSpecial = 29;
+    int32 CashierTransacitonId = 30;
+    optional int32 TournamentPlayerRank = 31;
+    optional double TournamentEnterAmount = 32;
+    optional int32 JetXCashoutCoefficients = 33;
+    optional string TournamentRegistrationTyp = 34;
+}
+
+// SmartSoftCallback
+message SmartSoftCallback {
+    double Amount = 1;
+    string CurrencyCode = 2;
+    string TransactionId = 3;
+    SmartSoftTransactionInfo TransactionInfo = 4;
+    string TransactionType = 5;
+}
+
+
+// Tada Games Callback
+message TadaCallback {
+    string id = 1;
+    int32 game = 2;
+    string reqId = 3;
+    int32 round = 4;
+    string token = 5;
+    string currency = 6;
+    double betAmount = 7;
+    int32 wagersTime = 8;
+    double winloseAmount = 9;
+}
+
+// Shack Evolution Callback
+message ShackEvolutionCallback {
+    string type = 1;
+    double amount = 2;
+    string freebet = 3;
+    string roundId = 4;
+    string gameType = 5;
+    string playerId = 6;
+    string signature = 7;
+    optional string gameOutcome = 8;
+    bool gameRoundEnded = 9;
+}
+
+// Evoplay Data 
+message EvoplayData {
+    optional string id= 1;
+    optional string user_id= 2;
+    optional string round_id= 3;
+    optional string action_id= 4;
+    optional string refund_round_id= 5;
+    optional string refund_action_id= 6;
+    optional string refund_callback_id= 7;
+    optional string final_action= 8;
+    optional string type= 9;
+    optional string event_id= 10;
+    string currency= 11;
+    string amount= 12;
+    optional string details = 13;
+    optional string user_message= 14;
+    optional string wallet_type= 15;
+}
+
+
+// Evoplay Callback
+message EvoplayCallback {
+    string token = 1;
+    string callback_id = 2;
+    string name = 3;
+    optional EvoplayData data = 4;
+    string signature = 5;
+}
+
+//EVOLUTION CALLBACK
+message EvolutionCallback {
+    int32 operatorId = 1;
+    optional string uid = 2;
+    optional string transactionId = 3;
+    optional int32 gameId = 4;
+    string token = 5;
+    optional double debitAmount = 6;
+    optional int32 betTypeID = 7;
+    optional int32 serverId = 8;
+    optional int32 roundId = 9;
+    optional string currency = 10;
+    optional string seatId = 11;
+    int32 platformId = 12;
+    optional int32 tableId = 13;
+    int32 timestamp = 14;
+}
+
+message CallbackResponse {
+    bool success = 1;
+    string message = 2;
+    optional int32 status = 3;
+    google.protobuf.Struct data = 4;
+}
+
+message Pagination {
+    optional int32 page = 1;
+    optional int32 limit = 2;
+    optional int32 total = 3;
+    optional int32 totalPages = 4;
+}
+
+message CommonResponseArray {
+    optional int32 status = 1;
+    optional bool success = 2;
+    string message = 3;
+    repeated google.protobuf.Struct data = 4;
+    optional Pagination pagination = 5;
+}
+
+message XpressRequest {
+    int32 clientId = 1;
+    string action = 2;
+    optional string token = 3;
+    string gameId = 4;
+    string clientPlatform = 5;
+    string clientIp = 6;
+    string timestamp = 7;
+    string requestId = 8;
+    string siteId = 9;
+    string fingerprint = 10;
+    optional string sessionId = 11;
+    optional string currency = 12;
+    optional string group = 13;
+    optional string playerId = 14;
+    optional string gameCycle = 15;
+    optional string transactionId = 16;
+    optional float transactionAmount = 17;
+    optional string transactionCategory = 18;
+    optional bool gameCycleClosed = 19;
+    optional string transactionType = 20;
+}
+
+message XpressResponse {
+    bool status = 1;
+    int32 code = 2;
+    string message = 3;
+    optional XpressData data = 4;
+}
+
+message XpressData {
+    string playerId = 1;
+    string currency = 2;
+    string balance = 3;
+    string sessionId = 4;
+    string group = 5;
+    string timestamp = 6;
+    string requestId = 7;
+    string fingerprint = 8;
+    optional string playerNickname = 9;
+    optional string oldBalance = 10;
+    optional string gameCycle = 11;
+    optional string transactionId = 12;
+    optional float transactionAmount = 13;
+    optional string transactionCategory = 14;
+    optional string transactionType = 15;
+}
+
+message CommonResponse {
+    optional int32 status = 1;
+    optional bool success = 2;
+    string message = 3;
+    optional google.protobuf.Struct data = 4;
+}
+
+message SaveCategoryRequest {
+    int32 clientId = 1;
+    optional int32 id = 2;
+    string name = 3;
+    optional string imagePath = 4;
+    optional int32 priority = 5;
+    optional string status = 6;
+}
+
+message Category {
+    int32 id = 1;
+    string slug = 2;
+    string name = 3;
+    optional int32 priority = 4;
+    optional string status = 5;
+}
+
+message Categories {
+    repeated Category data = 1;
+}
+
+message FindOneCategoryDto {
+    int32 id = 1;
+};
+
+message MetaData {
+    int32 page = 1;
+    int32 perPage = 2;
+    int32 total = 3;
+    int32 lastPage = 4;
+    int32 nextPage = 5;
+    int32 prevPage = 6;
+};
+
+
+message Promotion1 {
+    // int32 clientId = 1;
+    string title = 1;
+    string imageUrl = 2;
+    string status = 3;
+    string content = 4;
+    string startDate = 5;
+    string endDate = 6;
+    string type = 7;
+
+}
+
+message Promotion {
+    int32 id = 1;
+    string title = 2;
+    string imageUrl = 3;
+    string content = 4;
+    string type = 5;
+    string startDate = 6;
+    string endDate = 7;
+    string status = 8;
+    optional string targetUrl = 9;
+    int32 clientId = 10;
+  }
+
+  message CreatePromotionDto {
+    optional int32 id = 1;
+    string title = 2;
+    string imageUrl = 3;
+    string content = 4;
+    string startDate = 5;
+    string endDate = 6;
+    string type = 7;
+    optional string targetUrl = 8;
+    optional string file = 9;
+    int32 clientId = 10;
+}
+
+message CreatePromotionRequest {
+    optional int32 id = 1;
+    CreatePromotionDto metadata = 2;
+    optional string file = 3;
+}
+
+message Promotions {
+    repeated Promotion data = 1;
+}
+
+message FindOnePromotionDto {
+    int32 id = 1;
+};
+
+
+message AddGameToCategoriesDto {
+    int32 gameId = 1;
+    repeated int32 categories = 2;
+}
+
+message AddGameToTournamentDto {
+    int32 tournamentId = 2;
+    repeated int32 gameId  = 3;
+}
+
+
+message GameCategory {
+    int32 gameId = 1;
+    string gameTitle = 2;
+    int32 categoryId = 3;
+    string categoryName = 4;
+}
+
+message GameTournament {
+    int32 gameId = 1;
+    string gameTitle = 2;
+    int32 tournamentId = 3;
+    string tournamentTitle = 4;
+}
+  
+message TournamentResponse {
+    repeated GameTournament gameTournament = 1;
+}
+
+message Tournament {
+int32 id = 1;
+string title = 2;
+string imageUrl = 3;
+string content = 4;
+string type = 5;
+string startDate = 6;
+string endDate = 7;
+string status = 8;
+int32 categoryId = 9;
+}
+
+message CreateTournamentDto {
+    // int32 clientId = 1;
+    optional int32 id = 1;
+    string title = 2;
+    string imageUrl = 3;
+    string content = 4;
+    string startDate = 5;
+    string endDate = 6;
+    string type = 7;
+
+}
+
+message Tournaments {
+    repeated Tournament data = 1;
+}
+
+  message FindOneTournamentDto {
+    int32 id = 1;
+}

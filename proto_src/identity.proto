@@ -1,0 +1,1467 @@
+syntax = "proto3";
+option go_package = "wallet-service/proto/identity";
+
+import "google/protobuf/struct.proto";
+
+
+package identity;
+
+service IdentityService {
+  
+  rpc HandleDailyTransactions (DailyTransactionsRequest) returns (CommonResponseObj) {}
+
+  rpc HandlePin (HandlePinRequest) returns (CommonResponseObj) {}
+
+  rpc HandleTransfer (HandleTransferRequest) returns (CommonResponseObj) {}
+
+  rpc Register (CreateUserRequest) returns (RegisterResponse) {}
+  rpc RegisterAffiliate (CreateUserRequest) returns (RegisterResponse) {}
+  rpc Login (LoginRequest) returns (LoginResponse) {}
+  rpc XpressGameLogin (XpressLoginRequest) returns (XpressLoginResponse) {}
+  rpc ValidateAuthCode (XpressLoginRequest) returns (CommonResponseObj) {}
+  rpc XpressGameLogout (SessionRequest) returns (XpressLoginResponse) {}
+  rpc Validate (ValidateRequest) returns (ValidateResponse) {}
+  rpc ValidateGroupCode (GetClientRequest) returns (ValidateGroupCodeResponse) {}
+  rpc ValidateClient (ValidateRequest) returns (ValidateClientResponse) {}
+  rpc ListTestAccount (ListTestAccountsRequest) returns (CommonResponseObj) {}
+  rpc ToggleAccount (ValidateTestRequest) returns (ValidateTestResponse) {}
+
+  rpc GetUserDetails (GetUserDetailsRequest) returns (GetUserDetailsResponse) {}
+  rpc GetUserLogs ( GetUserDetailsRequest ) returns ( GetUserLogResponse ) {}
+  rpc CreateClient (ClientRequest) returns (CommonResponseObj) {}
+  rpc CreatePermission (PermissionRequest) returns (CommonResponseObj) {}
+  rpc AssignRolePermission ( AssignRolePermissionRequest ) returns (CommonResponseObj) {}
+  rpc GetAuthPermission(SingleItemRequest) returns (CommonResponseObj) {}
+  rpc FindUser (FindUserRequest) returns (CommonResponseObj) {}
+  rpc SaveRole (RoleRequest) returns (SaveRoleResponse) {}
+  rpc GetRoles (EmptyRequest) returns (CommonResponseArray) {}
+  rpc GetAgencyRoles (EmptyRequest) returns (GetRolesResponse) {}
+  rpc RemoveRole (RemoveRoleRequest) returns (CommonResponseObj) {}
+  rpc FindAllPermissions (EmptyRequest) returns (CommonResponseArray) {}
+  rpc FindAllClients (EmptyRequest) returns (CommonResponseArray) {}
+  rpc RemoveClient (RemoveClientRequest) returns (CommonResponseObj) {}
+  rpc RemovePermission (RemovePermissionRequest) returns (CommonResponseObj) {}
+  rpc UpdateDetails (UpdateUserRequest) returns (CommonResponseObj) {}
+  rpc CreateRetailUser (CreateUserRequest) returns (CommonResponseObj) {}
+  rpc UpdateRetailUser (UpdateUserRequest) returns (CommonResponseObj) {}
+  rpc CreateAdminUser (CreateUserRequest) returns (CommonResponseObj) {}
+  rpc GetAdminUsers (ClientIdRequest) returns (CommonResponseArray) {}
+  rpc DeleteUser (SingleItemRequest) returns (CommonResponseObj) {}
+  rpc ChangeUserTypeStatus (ChangeUserTypeStatusRequest) returns (CommonResponseObj) {}
+  rpc GetClient (GetClientRequest) returns (GetClientResponse) {}
+  rpc GetPaymentData (GetPaymentDataRequest) returns (GetPaymentDataResponse) {}
+  rpc SearchPlayers (SearchPlayerRequest) returns (SearchPlayerResponse) {}
+  rpc UpdateUserDetails (UpdateUserRequest) returns (CommonResponseObj) {}
+  rpc GetUserByUsername (GetUserByUsernameRequest) returns (GetUserByUsernameResponse) {}
+  rpc OnlinePlayersReport (OnlinePlayersRequest) returns (PlayersListResponse) {}
+  rpc RegistrationReport (RegistrationReportRequest) returns (PlayersListResponse) {}
+  rpc FetchPlayerFilters (FetchPlayerFilterRequest) returns (PaginationResponse) {} 
+  rpc GetPlayerData (GetPlayerDataRequest) returns (GetPlayerDataResponse) {}
+  rpc UpdatePlayerData (UpdatePlayerDataRequest) returns (CommonResponseObj) {}
+  rpc UpdatePlayerStatus (FindUserRequest) returns (CommonResponseObj) {}
+  rpc ChangePassword (ChangePasswordRequest) returns (CommonResponseObj) {}
+  rpc ResetPassword (ResetPasswordRequest) returns (CommonResponseObj) {}
+  rpc SavePlayerSegment (SaveSegmentRequest) returns (CommonResponseObj) {}
+  rpc FetchPlayerSegment (FetchPlayerSegmentRequest) returns (CommonResponseArray) {}
+  rpc AddToSegment (AddToSegmentRequest) returns (CommonResponseObj) {}
+  rpc UploadToSegment (UploadPlayersToSegment) returns (CommonResponseObj) {}
+  rpc DeletePlayerSegment (DeleteItemRequest) returns (CommonResponseObj) {}
+  rpc RemovePlayerFromSegment (DeleteItemRequest) returns (CommonResponseObj) {}
+  rpc GetSegmentPlayers (GetSegmentPlayerRequest) returns (CommonResponseArray) {}
+  rpc GrantBonusToSegment (GrantBonusRequest) returns (CommonResponseObj) {}
+  rpc GetCountries (EmptyRequest) returns (GetCountryResponse) {}
+  rpc GetStatesByCountry (GetStatesRequest) returns (StateResponse) {}
+  rpc ValidateXpressSession (SessionRequest) returns (CommonResponseObj) {}
+  rpc SaveSettings (SettingsRequest) returns (CommonResponseObj) {}
+  rpc SaveRiskSettings (SettingsRequest) returns (CommonResponseObj) {}
+  rpc SaveUserRiskSettings (UserRiskSettingsRequest) returns (CommonResponseObj) {}
+  rpc GetSettings (GetSettingsRequest) returns (CommonResponseArray) {}
+  rpc GetGlobalVariables (GetSettingsRequest) returns (CommonResponseObj) {}
+  rpc ValidateBet (PlaceBetRequest) returns (CommonResponseObj) {}
+  rpc GetWithdrawalSettings (GetWithdrawalSettingsRequest) returns (WithdrawalSettingsResponse) {}
+  rpc GetUserIdandName (GetUserIdNameRequest) returns (GetUserIdNameResponse) {}
+  rpc GetUserRiskSettings (GetRiskSettingRequest) returns (CommonResponseObj) {}
+  rpc FetchPlayerLosersByBetCount (FetchPlayerFilterRequest) returns (PaginationResponse) {}
+
+  // retail services
+  rpc createAgentUser (CreateAgentRequest) returns (CommonResponseObj) {}
+  rpc GetPendingAgent (GetAgentUsersRequest) returns (CommonResponseObj) {}
+  rpc ListAgentUsers (GetAgentUsersRequest) returns (CommonResponseArray) {}
+  rpc ListAgents (GetAgentUsersRequest) returns (CommonResponseObj) {}
+  rpc ApproveAgentRegistration (ApprovalRequest) returns (CommonResponseObj) {}
+  rpc GetAgentUser (GetAgentUserRequest) returns (CommonResponseArray) {}
+  rpc getCommissionProfiles(GetCommissionsRequest) returns (CommonResponseArray) {}
+  rpc createCommissionProfile(CommissionProfile) returns (CommonResponseObj) {}
+  rpc updateCommissionProfile(CommissionProfile) returns (CommonResponseObj) {}
+  rpc assignUserCommissionProfile(AssignUserCommissionProfile) returns (CommonResponseObj) {}
+  rpc getUserCommissionProfiles(SingleItemRequest) returns (CommonResponseArray) {}
+  rpc removeUserCommissionProfile(AssignUserCommissionProfile) returns (CommonResponseArray) {}
+  rpc getCommissionProfile(SingleItemRequest) returns (CommonResponseObj) {}
+  rpc deleteCommissionProfile(SingleItemRequest) returns (CommonResponseObj) {}
+  rpc getCommissionProfileUsers(GetCommissionsRequest) returns (CommonResponseArray) {}
+  rpc calculateCommission(CalculateCommissionRequest) returns (CommonResponseObj) {}
+  rpc payoutCommission(PayoutCommissionRequest) returns (CommonResponseObj) {}
+  rpc getAgentTree(GetAgentUsersRequest) returns (CommonResponseObj) {}
+  rpc getAgentPlayers(GetAgentUsersRequest) returns (CommonResponseObj) {}
+  
+
+  rpc getBonusGroups(SingleItemRequest) returns (BonusGroupResponse) {}
+  rpc createBonusGroups(BonusGroups) returns (BonusGroupResponse) {}
+  rpc createPowerBonus(PowerRequest) returns (PowerBonusResponse) {}
+  rpc getPowerBonus(PowerRequest) returns (PowerBonusResponse) {}
+  rpc payOutPowerBonus(PayPowerRequest) returns (PowerResponse) {}
+  rpc getNormalBonus(GetNormalRequest) returns (NormalResponse) {}
+  rpc calculateNormalBonus(PayNormalRequest) returns (PayNormalResponse) {}
+  rpc payOutNormalBonus(PayNormalRequest) returns (PayNormalResponse) {}
+  rpc getNetworkSalesReport(GetNetworkSalesRequest) returns (CommonResponseObj) {}
+  rpc getTrackierKeys(SingleItemRequest) returns (CommonResponseObj) {}
+
+
+  rpc getAllLogs(GetAllLogsRequest) returns (GetAllLogsResponse) {}
+  rpc createLog(CreateLogRequest) returns (CreateLogResponse) {}
+
+  rpc ClintUsers (ClientIdRequest) returns (CommonResponseArray) {}
+
+  rpc getPlayerStatistics (ClientIdRequest) returns (CommonResponseObj) {}
+
+  rpc findOneBanner (FindOneRequest) returns (CommonResponseObj) {}
+  rpc FindAllBanners (ClientIdRequest) returns (CommonResponseObj) {}
+  rpc userFetchBanner (ClientIdRequest) returns (CommonResponseObj) {}
+  rpc updateBanner (CreateBannerRequest) returns (CommonResponseObj) {}
+  rpc deleteBanner (FindOneRequest) returns (CommonResponseObj) {}
+  rpc createBanner (CreateBannerRequest) returns (CommonResponseObj) {}
+
+  rpc findOnePage (FindOneRequest) returns (CommonResponseObj) {}
+  rpc FindAllPages (ClientIdRequest) returns (CommonResponseObj) {}
+  rpc userFetchPage (ClientIdRequest) returns (CommonResponseObj) {}
+  rpc updatePage (CreatePageRequest) returns (CommonResponseObj) {}
+  rpc deletePage (FindOneRequest) returns (CommonResponseObj) {}
+  rpc createPage (CreatePageRequest) returns (CommonResponseObj) {}
+
+  rpc findOneMenu (FindOneRequest) returns (CommonResponseObj) {}
+  rpc FindAllMenu (ClientIdRequest) returns (CommonResponseObj) {}
+  rpc userFetchMenu (ClientIdRequest) returns (CommonResponseObj) {}
+  rpc updateMenu (CreateMenuRequest) returns (CommonResponseObj) {}
+  rpc deleteMenu (FindOneRequest) returns (CommonResponseObj) {}
+  rpc createMenu (CreateMenuRequest) returns (CommonResponseObj) {}
+
+
+  //Kyc
+  rpc CreateKyc (KycRequest) returns (CommonResponseObj) {} 
+  rpc CheckKyc  (FindOneRequest) returns (CommonResponseObj) {}
+  rpc ListAllKyc (ClientIdRequest) returns (CommonResponseArray) {}
+  rpc ListBanks (ListBanksRequest) returns (CommonResponseArray) {}
+
+
+  rpc FetchAgents (ClientIdRequest) returns (CommonResponseObj) {}
+  rpc FetchUsersId (FindUserIdRequest) returns (CommonResponseObj) {}
+  rpc FetchUserReferralId (FindUserIdRequest) returns (CommonResponseArray) {}
+  rpc AddAndRemoveUser (AddAndRemoveUserRequest) returns (CommonResponseObj) {}
+  rpc GetAffiliateIds (EmptyRequest) returns (CommonResponseArray) {}
+  rpc GetAffiliateUsers (AffiliateRequest) returns (AffiliateResponse) {}
+  rpc GetAffiliateData (AffiliateRequest) returns (CommonResponseObj) {}
+  rpc GetSuperAgents (ClientIdRequest) returns (CommonResponseObj) {}
+  rpc GetReferralUserIdsForCommission(FindUserIdRequest) returns (CommonResponseArray) {}
+  rpc ListSuperAgentsUsers(GetAgentUsersRequest) returns (ArrayResponse) {}
+  rpc GetClientAffiliates(ClientIdRequest) returns (CommonResponseArray) {}
+
+}
+
+
+
+message ArrayResponse {
+  int32 status = 1;
+  bool success = 2;
+  string message = 3;
+  repeated int32 data = 4;
+}
+
+message AffiliateRequest {
+  int32 clientId = 1;
+  optional int32 affiliateId = 2;
+  optional string startDate = 3;
+  optional string endDate = 4;
+  optional int32 page = 5;
+  optional int32 limit = 6;
+  optional string search = 7;
+}
+
+message Pagination {
+  int32 page = 1;
+  int32 limit = 2;
+  int32 total = 3;
+  int32 totalPages = 4;
+}
+
+message AffiliateResponse {
+  optional int32 status = 1;
+  optional bool success = 2;
+  string message = 3;
+  repeated google.protobuf.Struct data = 4;
+  optional int32 totalUsers = 5;
+  optional int32 activeUsers = 6;
+  optional int32 dormantUsers = 7;
+  optional int32 totalDepositAmount = 8;
+  optional int32 totalWithdrawAmount = 9;
+  optional Pagination pagination = 10;
+}
+
+
+message AddAndRemoveUserRequest {
+  int32 clientId = 1;
+  int32 agentId = 2;
+  int32 userId = 3;
+  string type = 4;
+}
+ 
+message FindUserIdRequest {
+  int32 affiliateId = 1;
+}
+
+message ListBanksRequest {
+  int32 page = 1;
+  int32 limit = 2;
+}
+
+message KycRequest {
+  int32 clientId = 1;
+  int32 userId = 2;
+  string documentType = 3;
+  string documentNumber = 4;
+  string userName = 5;
+  optional string lastName = 6;
+  optional string bankCode = 7;
+  
+}
+message BasicUser {
+  int32 id = 1;
+  string username = 2;
+  string role = 3;
+  int32 client_id = 4;
+}
+
+message ClientIdRequest {
+  int32 clientId = 1;
+  optional string slug = 2;
+}
+
+message FindOneRequest {
+  int32 clientId = 1;
+  int32 id = 2;
+}
+
+message ApprovalRequest {
+  int32 agent_id = 1;
+  int32 user_id = 2;
+}
+
+// Additional Audit Info
+message AdditionalInfo {
+  string browser = 1;
+  string os = 2;
+  string platform = 3;
+}
+
+// Banner
+message CreateBannerRequest {
+  string title = 1;
+  string bannerType = 2;
+  int32 clientId = 3;
+  string target = 4;
+  string position = 5;
+  optional string slug = 6;
+  string link = 7;
+  string content = 8;
+  string image = 9;
+  optional string sport = 10;
+  optional string category = 11;
+  optional string tournament = 12;
+  optional string event = 13;
+  optional int32 id = 14;
+}
+
+
+// Pages
+message CreatePageRequest {
+  string title = 1;
+  int32 clientId = 2;
+  optional string url = 3;
+  string content = 4;
+  optional string slug = 5;
+  string createdBy = 6;
+  string target = 7;
+  optional int32 id = 8;
+}
+
+// Menu
+message CreateMenuRequest {
+  string title = 1;
+  int32 clientId = 2;
+  string link = 3;
+  bool newWindow = 4;
+  optional string slug = 5;
+  bool status = 6;
+  string target = 7;
+  optional int32 id = 8;
+  optional string order = 9;
+  optional string parentId = 10;
+}
+
+message AuditLog {
+  int32 id = 1;
+  int32 userId = 2;
+  string userName = 3;
+  int32 clientId = 4;
+  string action = 5;
+  string endpoint = 6;
+  string method = 7;
+  int32 statusCode = 8;
+  string payload = 9;
+  string response = 10;
+  AdditionalInfo additionalInfo = 11;
+  string ipAddress = 12;
+  string userAgent = 13;
+  string timestamp = 14;
+  string target = 15;
+}
+
+// Request message for creating an audit log
+message CreateLogRequest {
+  AuditLog auditLog = 1;
+}
+
+// audit User
+message AuditUser {
+  int32 roleId = 1;
+  string username = 2;
+}
+
+// Response message for creating an audit log
+message CreateLogResponse {
+  bool success = 1;
+  int32 status = 2;
+  string message = 3;
+}
+
+message AuditQuery {
+  optional string startDate = 1;
+  optional string endDate = 2;
+  optional int32 page = 3; 
+  optional int32 perPage = 4;
+  optional string username = 5;
+  optional string platform = 6;
+  optional string ipAddress = 7;
+}
+
+// GetAllLogs
+message GetAllLogsRequest {
+  optional int32 clientId = 1;
+  optional string userName = 2;
+  optional int32 page = 3;  
+  optional int32 limit = 4;
+  string ipAddress = 5;
+  string userAgent = 6;
+  string os = 7;
+  string browser = 8;
+  string platform = 9;
+  string endpoint = 10;
+  string method = 11;
+  AuditQuery auditQuery = 12;
+}
+
+// GetAllLogsResponse
+message GetAllLogsResponse {
+  repeated AuditLog logs = 1;
+  optional Meta meta = 2; 
+}
+
+// HandlePin
+message HandlePinRequest {
+  int32 pin = 1; 
+  optional int32 confirmPin = 2; 
+  int32 userId = 3;
+  string type = 4;
+}
+
+message GetNetworkSalesRequest {
+  int32 clientId = 1;
+  string from = 2;
+  string to = 3;
+  string product = 4;
+}
+
+message DailyTransactionsRequest {
+  int32 userId = 1;
+  optional int32 normalSales = 2;
+  optional int32 normalPayout = 3;
+  optional int32 onlineSales = 4;
+  optional int32 onlinePayout = 5;
+  optional int32 cashIn = 6;
+  optional int32 cashOut = 7;
+  optional int32 expenses = 8;
+  optional int32 openingbalance = 9;
+  optional int32 closingbalance = 10;
+  string date = 11;
+}
+
+// HandleTransfer
+message HandleTransferRequest {
+  int32 pin = 1; 
+  int32 clientId = 2;
+  int32 fromUserId = 3;
+  string toUsername = 4;
+  int32 amount = 5;
+}
+
+// Power Bonus
+message PowerRequest {
+  repeated int32 agentIds = 1;
+  int32 clientId = 2;
+  string fromDate = 3;
+  string toDate = 4;
+}
+
+message BetData {
+  optional int32 id = 1;
+  int32 betId = 2;
+  int32 userId = 3;
+  int32 clientId = 4;
+  int32 selectionCount = 5;
+  optional string cancelledDate = 6;
+  optional string settledDate = 7;
+  int32 stake = 8;
+  int32 commission = 9;
+  double winnings = 10;
+  double weightedStake = 11;
+  double odds = 12;
+  optional string createdAt = 13;
+  optional string updatedAt = 14;
+}
+
+message Response {
+  bool success = 1;
+  string message = 2;
+}
+
+message CurrentWeekData {
+  int32 totalWeeks = 1;
+  int32 current_week= 2;
+  int32 no_of_tickets = 3;
+  int32 played = 4;
+  int32 won = 5;
+  int32 net = 6;
+  int32 commission = 7;
+}
+message CurrentMonth {
+  string month = 1;
+}
+
+message Meta {
+  optional int32 total = 1;
+  optional int32 totalPages = 2;
+  int32 currentPage = 3;
+  int32 itemsPerPage = 4;
+}
+
+message NormalResponse {
+  optional bool success = 1;
+  optional string message = 2;
+  repeated NormalPayout data = 3;
+  optional Meta meta = 4;
+}
+
+message PayNormalResponse {
+  bool success = 1;
+  string message = 2;
+  double data = 3;
+}
+
+message NormalPayout {
+  optional int32 id = 1;
+  int32 betId = 2;
+  int32 selectionsCount = 3;
+  double totalOdds = 4;
+  double stake = 5;
+  int32 cashierId = 6;
+  int32 profileId = 7;
+  string profileGroup = 8;
+  double commission = 9;
+  bool isPaid = 10;
+  optional string createdAt = 11;
+  optional string updatedAt = 12;
+}
+
+
+message PowerBonusData {
+  optional int32 id = 1;
+  double totalStake = 2;
+  int32 totalTickets = 3;
+  double totalWeightedStake = 4;
+  double averageNoOfSelections = 5;
+  double grossProfit = 6;
+  double ggrPercent = 7;
+  double rateIsLess = 8;
+  double rateIsMore = 9;
+  double rate = 10;
+  double turnoverCommission = 11;
+  double monthlyBonus = 12;
+  double totalWinnings = 13;
+  repeated BetData bets = 14;
+  optional string createdAt = 15;
+  optional string updatedAt = 16;
+}
+
+message PayPowerRequest {
+  int32 clientId = 1;
+  repeated int32 agentIds = 2;
+  string fromDate = 3;
+  string toDate = 4;
+  string provider = 5;
+}
+message PowerCountData {
+  repeated string paidUsers = 1;
+  repeated string unPaidUsers = 2;
+  repeated string errors = 3;
+}
+message PowerResponse {
+  bool success = 1;
+  string message = 2;
+  PowerCountData data = 3;
+}
+
+message PowerBonusResponse {
+  bool success = 1;
+  string message = 2;
+  PowerBonusData data = 3;
+}
+
+// Normal Bonus
+message GetNormalRequest {
+  int32 clientId = 1;
+  string fromDate = 2;
+  string toDate = 3;
+  string provider = 4;
+  optional Meta meta = 5;
+}
+
+message PayNormalRequest {
+  optional int32 id = 1;
+  int32 betId = 2;
+  int32 selectionsCount = 3;
+  double totalOdds = 4;
+  double stake = 5;
+  int32 clientId = 6;
+  int32 cashierId = 7;
+  optional int32 profileId = 8;
+  optional double commission = 9;
+  string profileGroup = 10;
+  optional bool isPaid = 11;
+}
+
+// Bonus
+message BonusGroup {
+  string group = 1;
+  double maxSelection = 2;
+  double minSelection = 3;
+  double rate = 4;
+  double rateIsLess = 5;
+  double rateIsMore = 6;
+  int32 targetCoupon = 7;
+  double targetStake = 8;
+  optional string createdAt = 9;
+  optional string updatedAt = 10;
+}
+
+message BonusGroups {
+  int32 clientId = 1;
+  repeated BonusGroup bonusGroups = 2;
+}
+
+message BonusGroupResponse {
+  bool success = 1;
+  string message = 2;
+  repeated BonusGroup  data = 3;
+}
+
+message GetAgentUserRequest {
+  int32 clientId = 1; 
+  int32 userId = 2; 
+}
+
+message GetAgentUsersRequest {
+  int32 clientId = 1;
+  optional int32 userId = 2;
+  optional string username = 3;
+  optional int32 roleId = 4;
+  optional int32 state = 5;
+  optional int32 page = 6;
+  optional int32 pageSize = 7;
+  optional string search = 8;
+  optional string order = 9;
+  optional string orderBy = 10;
+}
+
+message GetCommissionsRequest {
+  int32 clientId = 1;
+  optional string provider = 2;
+}
+
+message CalculateCommissionRequest {
+  int32 clientId = 1;
+  int32 userId = 2;
+  double stake = 3;
+  double totalOdds = 4;
+  string provider = 5;
+  int32 noOfSelections = 6;
+}
+
+message PayoutCommissionRequest {
+  repeated PayoutCommissionData data = 1;
+}
+
+message PayoutCommissionData {
+  int32 clientId = 1;
+  int32 userId = 2;
+  double stake = 3;
+  double totalSales = 4;
+  string provider = 5;
+  double totalWon = 6;
+  double totalTickets = 7;
+  double net = 8;
+  double commission = 9;
+  double profit = 10;
+  int32 commissionId = 11;
+  string startDate = 12;
+  string endDate = 13;
+}
+
+
+// Commission Profile
+message CommissionProfile {
+  int32 clientId = 1;
+  optional int32 id = 2;
+  string name = 3;
+  optional bool isDefault = 4;
+  string description = 5;
+  string providerGroup = 6;
+  string period = 7;
+  string calculationType = 8;
+  double percentage = 9;
+  int32 commissionType = 10;
+  repeated CommissionTurnover turnovers = 11;
+  optional string createdAt = 12;
+  optional string updatedAt = 13;
+}
+
+message SingleItemRequest {
+  int32 itemId = 1;
+}
+
+// message CommissionProfilesResponse {
+//   bool success = 1;
+//   string message = 2;
+//   repeated CommissionProfile  data = 3;
+// }
+
+message AssignUserCommissionProfile {
+  int32 profileId = 1;
+  int32 userId = 2;
+  optional string createdAt = 3;
+  optional string updatedAt = 4;
+}
+
+
+message Commission {
+  optional int32 id = 1;
+  int32 userId = 2;
+  int32 totalTickets = 3;
+  double totalSales = 4;
+  double totalWon = 5;
+  double net = 6;
+  double commission = 7;
+  string startDate = 8;
+  string endDate = 9;
+  bool isPaid = 10;
+  int32 userCommissionProfileId = 11;
+  optional string createdAt = 12;
+  optional string updatedAt = 13;
+}
+
+message CommissionTurnover {
+  optional int32 id = 1;
+  int32 event = 2;
+  optional CommissionProfile commissionProfile = 3;
+  double percentage = 4;
+  double maxOdd = 5;
+  double minOdd = 6;
+  bool oddSet = 7;
+  optional string createdAt = 8;
+  optional string updatedAt = 9;
+}
+
+message GetRiskSettingRequest {
+  int32 clientId = 1;
+  int32 userId = 2;
+}
+
+// message GetAgentUserRequest {
+//   int32 branchId = 1; 
+//   int32 cashierId = 2; 
+// }
+
+message FindUserRequest {
+  int32 userId = 1; 
+  optional int32 status = 2;
+}
+
+message GetUserIdNameRequest {
+  string username = 1;
+  optional int32 clientId = 2;
+}
+
+message GetUserIdNameResponse {
+  message Users {
+    int32 id = 1;
+    string username = 2;
+  }
+  repeated Users data = 1;
+}
+
+message GetWithdrawalSettingsRequest {
+  int32 clientId = 1;
+  optional int32 userId = 2;
+}
+
+message WithdrawalSettingsResponse {
+  int32 autoDisbursement = 1;
+  float autoDisbursementMin = 2;
+  float autoDisbursementMax = 3;
+  int32 autoDisbursementCount = 4;
+  float minimumWithdrawal = 5;
+  float maximumWithdrawal = 6;
+  int32 allowWithdrawalComm = 7;
+  float withdrawalComm = 8;
+}
+
+message PlaceBetRequest {
+  repeated BetSelection selections = 1;
+  int32 clientId = 2;
+  optional int32 userId = 3;
+  float stake = 4;
+  string source = 5;
+  string ipAddress = 6;
+  string betType = 7;
+  optional string username = 8;
+  float minBonus = 9;
+  float maxBonus = 10;
+  float minOdds = 11;
+  float totalOdds = 12;
+  string type = 13;
+  int32 isBooking = 15;
+  optional int32 bonusId = 16;
+  optional bool useBonus = 17; 
+}
+
+message BetSelection {
+  string eventName = 1;
+  string eventType = 2;
+  int32 eventId = 3;
+  int32 producerId = 4;
+  int32 marketId = 5;
+  string marketName = 6;
+  string specifier = 7;
+  string outcomeId = 8;
+  string outcomeName = 9;
+  float odds = 10;
+  int32 sportId = 11;
+  string sport = 12;
+  string tournament = 13;
+  string category = 14;
+  int32 matchId = 15;
+  string awayTeam = 16;
+  string homeTeam = 17;
+  string type = 18;
+  bool fixed = 19;
+  string selectionId = 20;
+  string eventDate = 21;
+  string eventPrefix = 22;
+  optional bool isBonus = 23;
+
+}
+
+message GetSettingsRequest {
+  int32 clientId = 1;
+  string category = 2;
+}
+
+message SettingsRequest {
+  int32 clientId = 1;
+  string inputs = 2;
+  optional string category = 3;
+  optional string period = 4;
+}
+
+message UserRiskSettingsRequest {
+  int32 userId = 1;
+  string inputs = 2;
+  string period = 4;
+}
+
+message SaveSegmentRequest {
+  int32 clientId = 1;
+  int32 userId = 2;
+  string title = 3;
+  float minOdd = 4;
+  int32 minSelection = 5;
+  string message = 6;
+  optional int32 id = 7;
+}
+
+message GrantBonusRequest {
+  int32 clientId = 1;
+  int32 segmentId = 2;
+  int32 bonusId = 3;
+  float amount = 4;
+}
+
+message FetchPlayerSegmentRequest {
+  int32 clientId = 1;
+}
+
+message GetSegmentPlayerRequest {
+  int32 segmentId = 1;
+}
+
+message DeleteItemRequest {
+  int32 id = 1;
+}
+
+message AddToSegmentRequest {
+  int32 clientId = 1;
+  int32 playerId = 2;
+  int32 segmentId = 3;
+}
+
+message UploadPlayersToSegment {
+  int32 clientId = 1;
+  int32 segmentId = 2;
+  repeated string players = 3;
+}
+
+message FetchPlayerFilterRequest {
+  int32 clientId = 1;
+  string startDate = 2;
+  string endDate = 3;
+  int32 minAmount = 4;
+  int32 maxAmount = 5;
+  int32 depositCount = 6;
+  int32 filterType = 7;
+  int32 page = 8;
+}
+
+message FetchPlayerFilterResponse {
+  int32 status = 1;
+  bool success = 2;
+  repeated UserInfo data = 3;
+  optional string error = 4;
+}
+
+message TransactionEntity {
+  int32   id =1;
+  int32 clientId =2;
+  int32 userId=3;
+  string username =4;
+  string transactionNo=5;
+  int32  amount =6;
+  string  transactionType =7;
+  string  subject =8;
+  string  description =9;
+  string  source =10;
+  string  channel=11;
+  int32  balance =12;
+  int32  status =13;
+  string createdAt =14;
+  string updatedAt =15;
+}
+
+message UserInfo {
+  int32 id =1;
+  string roleId = 2;
+  string code =3;
+  string email =4;
+  string username =5;
+  string password =6;
+  string lastLogin =7;
+  string authCode =8;
+  string virtualToken =9;
+  string registrationSource =10;
+  bool verified =11;
+  int32 status =12;
+  bool isActive =13;
+  string createdAt =14;
+  string updatedAt =15;
+  int32 lossCount =16;
+  int32 betCount = 17;
+  int32 stakeAmount = 18;
+  string lastPlayed = 19;
+  int32 totalBalance = 20;
+
+  
+}
+
+message UserData {
+  int32 id = 1;
+  string username = 2;
+  float balance = 3;
+  optional string code = 4;
+  string firstName = 5;
+  optional string lastName = 6;
+  optional string email = 7;
+  optional string phone = 8;
+  optional string role = 9;
+  optional int32 roleId = 10;
+  optional float availableBalance = 12;
+  optional float sportBonusBalance = 13;
+  optional float casinoBonusBalance = 14;
+  optional float virtualBonusBalance = 15;
+  optional float trustBalance = 16;
+  string token = 17;
+  string registered = 18;
+  string authCode = 19;
+  string country = 20;
+  string currency = 21;
+  string city = 22;
+  string address = 23;
+  string gender = 24;
+  string dateOfBirth = 25;
+  int32 status = 26;
+  string group = 27;
+  optional string virtualToken = 28;
+  optional bool affiliateAccess = 29;
+}
+
+message ChangeUserTypeStatusRequest {
+  int32 userId = 1;
+  int32 initialType = 2;
+  int32 currentType = 3;
+}
+
+message CreateUserRequest {
+  int32 clientId = 1;
+  string username = 2;
+  string password = 3;
+  optional string email = 4;
+  optional int32 roleId = 5;
+  optional string firstName = 6;
+  optional string lastName = 7;
+  optional string phoneNumber = 8;
+  optional string gender = 9;
+  optional string dateOfBirth = 10;
+  optional string country = 11;
+  optional string state = 12;
+  optional string city = 13;
+  optional string address = 14;
+  optional string language = 15;
+  optional string currency = 16;
+  optional int32 parent = 17;
+  optional string promoCode = 18;
+  optional string trackingToken = 19;
+  optional int32 parentId = 20;
+  optional float balance = 21;
+  optional bool isTest = 22;
+  optional int32 affiliateId = 23;
+}
+
+message CreateAgentRequest {
+  int32 clientId = 1;
+  string username = 2;
+  string password = 3;
+  optional string email = 4;
+  optional int32 roleId = 5;
+  optional string firstName = 6;
+  optional string lastName = 7;
+  optional string phoneNumber = 8;
+  optional string city = 9;
+  optional string address = 10;
+  optional bool isApproved = 11;
+}
+
+message UpdateUserRequest {
+  int32 clientId = 1;
+  int32 userId = 2;
+  optional string username = 3;
+  optional string password = 4;
+  optional string email = 5;
+  optional int32 roleId = 6;
+  optional string firstName = 7;
+  optional string lastName = 8;
+  optional string phoneNumber = 9;
+  optional string gender = 10;
+  optional string dateOfBirth = 11;
+  optional string country = 12;
+  optional string state = 13;
+  optional string city = 14;
+  optional string address = 15;
+  optional string language = 16;
+  optional string currency = 17;
+  optional int32 parent = 18;
+  optional string promoCode = 19;
+  optional string trackingToken = 20;
+  optional string parentId = 21;
+  optional string lga = 22;
+  optional int32 status = 23;
+}
+
+// user
+message User {
+  string userID = 1;
+  string firstName =2 ;
+  string lastName =3 ;
+  string email= 4;
+  string city =5;
+  string country= 6;
+  string gender= 7;
+  string currency = 8;
+  string phone =9;
+  string roleId =10;
+  string username = 11;
+  string address = 12;
+  string state = 13;
+}
+
+message RegisterResponse {
+  int32 status = 1;
+  bool success = 2;
+  UserData data = 3;
+  optional string error = 4;
+}
+// Login
+message LoginRequest {
+  int32 clientId = 1;
+  string username = 2;
+  string password = 3;
+  optional string source = 4;
+}
+
+message LoginResponse {
+  int32 status = 1;
+  bool success = 2;
+  UserData data = 3;
+  optional string error = 4;
+}
+
+message GetUserDetailsRequest {
+  int32 clientId = 1;
+  int32 userId = 2;
+}
+
+message GetUserDetailsResponse {
+  int32 status = 1;
+  bool success = 2;
+  string message = 3;
+  UserData data = 4;
+}
+
+// Validate
+message ValidateRequest {
+  string token = 1;
+}
+
+message ValidateTestRequest {
+  int32 account_id = 1;
+}
+
+message ValidateTestResponse {
+  bool is_test = 1;
+  int32 status = 2;
+  bool success = 3;
+  string message = 4;
+}
+
+message ListTestAccountsRequest {
+  int32 clientId = 1;
+  optional int32 page = 2;
+  optional int32 PerPage = 3;
+}
+
+message ValidateResponse {
+  int32 status = 1;
+  string error = 2;
+  message User {
+    int32 id = 1;
+    string username = 2;
+    optional string role = 3;
+  }
+  optional User user = 3;
+}
+
+message ValidateClientResponse {
+  int32 status = 1;
+  string error = 2;
+  int32 clientId = 3;
+}
+
+message ValidateGroupCodeRequest {
+  string groupName = 1;
+}
+
+message ValidateGroupCodeResponse {
+  int32 status = 1;
+  string error = 2;
+  string groupName = 3;
+  int32 clientId = 4;
+}
+
+message ClientRequest {
+  string name = 1;
+  string country = 2;
+  string currency = 3;
+  string apiUrl = 4;
+  string webUrl = 5;
+  string mobileUrl = 6;
+  string shopUrl = 7;
+  string contactNumber = 8;
+  string contactEmail = 9;
+  string clientID = 10;
+}
+
+message RemoveClientRequest {
+  string clientID = 1;
+}
+
+message RemovePermissionRequest {
+  string permissionID = 1;
+}
+
+message RoleRequest {
+  optional string name = 1;
+  optional string description = 2;
+  optional string type = 3;
+  optional string roleID = 4;
+}
+
+message SaveRoleResponse {
+  bool status = 1;
+  string message = 2;
+  Role data = 3;
+  optional string errors = 4;
+}
+
+message GetRolesResponse {
+  bool status = 1;
+  string message = 2;
+  repeated Role data = 3;
+  optional string errors = 4;
+}
+
+message RemoveRoleRequest {
+  string roleID = 1;
+}
+
+message Role {
+  int32 id = 1;
+  string name = 2;
+  string description = 3;
+  string type = 4;
+}
+
+message PermissionRequest {
+  string name = 1;
+  string description = 2;
+  string permissionID = 3;
+  string roleID = 4;
+}
+
+
+message AssignRolePermissionRequest {
+  int32 roleID = 1;
+  repeated int32 permissionIDs = 2;
+}
+
+message GetPaymentDataRequest {
+  int32 clientId = 1;
+  int32 userId = 2;
+  string source = 3;
+}
+
+message GetPaymentDataResponse {
+  string username = 1;
+  string email = 2;
+  string callbackUrl = 3;
+  string siteUrl = 4;
+  optional string currency = 5;
+  optional string country = 6;
+  optional string pin = 7;
+}
+
+message GetClientRequest {
+  int32 id = 1;
+}
+
+message GetClientResponse {
+  bool status = 1;
+  string message = 2;
+  ClientData data = 3;
+  optional string errors = 4;
+}
+
+message CommonResponseArray {
+  optional int32 status = 1;
+  optional bool success = 2;
+  string message = 3;
+  repeated google.protobuf.Struct data = 4;
+  optional string errors = 5;
+}
+
+message CommonResponseObj{
+  optional int32 status = 1;
+  optional bool success = 2;
+  string message = 3;
+  optional google.protobuf.Struct data = 4;
+  optional string errors = 5;
+}
+
+message ClientData {
+  string name = 1;
+  string country = 2;
+  string currency = 3;
+  string website = 4;
+  string contactNumber = 5;
+  string contactEmail = 6;
+}
+
+message SearchPlayerRequest {
+  int32 clientId = 1;
+  string searchKey = 2;
+}
+
+message SearchPlayerResponse {
+  bool success = 1;
+  string message = 2;
+  repeated Player data = 3;
+}
+
+message Player {
+  int32 id = 1;
+  string code = 2;
+  string username = 3;
+  string email = 4;
+  string firstName = 5;
+  string lastName = 19;
+  string phoneNumber = 6;
+  string registered = 7;
+  string country = 8;
+  string currency = 9;
+  int32 status = 10;
+  int32 verified = 11;
+  float balance = 12;
+  float bonus = 13;
+  float lifeTimeDeposit = 14;
+  float lifeTimeWithdrawal = 15;
+  int32 openBets = 16;
+  string role = 17;
+  string lastLogin = 18;
+}
+
+message GetUserByUsernameRequest {
+  int32 clientId = 1;
+  string username = 2;
+}
+
+message GetUserByUsernameResponse {
+  string responseCode = 1;
+  string responseMessage = 2;
+  message Data {
+    optional string referenceID = 1;
+    optional string CustomerName = 2;
+    optional string Phoneno = 3;
+    optional string Status = 4;
+  }
+  Data data = 3;
+}
+
+message LoggedInUserData {
+  string timestamp = 1;
+  string ipAddress =  2;
+  string userAgent = 3;
+  int32  action = 4;
+  string description = 5;
+  int32 userId = 6;
+}
+
+message GetUserLogResponse {
+  string message = 1;
+  int32 status = 2;
+  repeated LoggedInUserData loggedInUserData = 3;
+  MetaData metaData = 4;
+}
+
+message OnlinePlayersRequest {
+  int32 clientId = 1;
+  string username = 2;
+  string country = 3;
+  string state = 4;
+  string source = 5;
+  optional int32 page = 6;
+  optional int32 limit = 7;
+  optional string type = 8;
+}
+
+message RegistrationReportRequest {
+  int32 clientId = 1;
+  string from = 2;
+  string to = 3;
+  string source = 4;
+  optional int32 page = 5;
+  optional int32 limit = 6;
+  optional string reportType = 7;
+}
+
+message PlayersListResponse {
+  int32 from = 1;
+  int32 to = 2;
+  int32 total = 3;
+  int32 currentPage = 4;
+  int32 perPage = 5;
+  repeated Player data = 6;
+}
+
+message GetPlayerDataRequest {
+  int32 clientId = 1;
+  int32 userId = 2;
+}
+
+message GetPlayerDataResponse {
+  bool success = 1;
+  string message = 2;
+  message PlayerData {
+    Player user = 1;
+    PlayerWalletData wallet = 2;
+    PlayerBonusData bonus = 3;
+  }
+  optional PlayerData data = 3;
+}
+
+message UpdatePlayerDataRequest {
+  int32 clientId = 1;
+  int32 userId = 2;
+  string username = 3;
+  string country = 4;
+  string state = 5;
+  string address = 6;
+  string email = 7;
+  string dateOfBirth = 8;
+  string phoneNumber = 9;
+  string currency = 10;
+  string language = 11;
+  string firstName = 12;
+  string lastName = 13;
+}
+
+message PlayerWalletData {
+  float sportBalance = 1;
+  float totalDeposits = 2;
+  float sportBonusBalance = 3;
+  float totalWithdrawals = 4;
+  float pendingWithdrawals = 5;
+  float avgWithdrawals = 6;
+  string lastDepositDate = 7;
+  string lastWithdrawalDate = 8;
+  float lastDepositAmount = 9;
+  float lastWithdrawalAmount = 10;
+  string firstActivityDate = 11;
+  string lastActivityDate = 12;
+  int32 noOfDeposits = 13;
+  int32 noOfWithdrawals = 14;
+}
+
+message PlayerBonusData {
+  
+}
+
+message ChangePasswordRequest {
+  int32 clientId = 1;
+  int32 userId = 2;
+  string oldPassword = 3;
+  string password = 4;
+}
+
+message ResetPasswordRequest {
+  int32 clientId = 1;
+  string username = 2;
+  string password = 3;
+}
+
+message PaginationResponse {
+  string message = 1;
+  int32 count = 2;
+  int32 currentPage = 3;
+  int32 nextPage = 4;
+  int32 prevPage = 5;
+  int32 lastPage = 6;
+  repeated google.protobuf.Struct data = 7;
+}
+
+message Country {
+  int32 id = 1;
+  string name = 2;
+  string countryCodeLong = 3;
+  string countryCode = 4;
+  string dialCode = 5;
+  string currencyName = 6;
+  string currencySymbol = 7;
+}
+
+message GetStatesRequest {
+  int32 countryId = 1;
+}
+
+message SessionRequest {
+  int32 clientId = 1;
+  string sessionId = 2;
+}
+
+message State {
+  int32 id = 1;
+  string name = 2;
+}
+
+message GetCountryResponse {
+  repeated Country countries = 1;
+}
+
+message StateResponse {
+  repeated State states = 1;
+}
+
+message XpressLoginRequest {
+  uint32 clientId = 1;
+  string token = 2;
+}
+
+message XpressLoginResponse {
+  bool status = 1;
+  int32 code = 2;
+  string message = 3;
+  message XpressData {
+    string playerId = 1;
+    string playerNickname = 2;
+    float balance = 3;
+    string sessionId = 4;
+    string group = 5;
+    string currency = 6;
+    optional string country = 7;
+  }
+  optional XpressData data = 4;
+}
+
+message EmptyRequest {}
+
+message MetaData {
+  int32 page = 1;
+  int32 perPage = 2;
+  int32 total = 3;
+  int32 lastPage = 4;
+  int32 nextPage = 5;
+  int32 prevPage = 6;
+}

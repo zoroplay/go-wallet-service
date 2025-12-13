@@ -1,0 +1,537 @@
+syntax = "proto3";
+option go_package = "wallet-service/proto/bonus";
+
+import "google/protobuf/struct.proto";
+
+package bonus;
+
+service BonusService {
+  rpc fetchBonusReport (FetchReportRequest) returns (FetchReportResponse){}
+
+  rpc CreateBonus (CreateBonusRequest) returns (CreateBonusResponse){}
+
+  rpc UpdateBonus (CreateBonusRequest) returns (CreateBonusResponse){}
+
+  rpc GetCampaign (GetCampaignRequest) returns (GetCampaignResponse){}
+
+  rpc ValidateBetSelections (UserBet) returns (ValidateBetResponse){}
+
+  rpc CheckDepositBonus (CheckDepositBonusRequest) returns (CheckDepositBonusResponse){}
+
+  rpc CheckRegisterBonus (GetBonusRequest) returns (CommonResponseObj){}
+
+  rpc CheckAffiliateRegisterBonus (GetBonusRequest) returns (CommonResponseObj){}
+
+  rpc SettleBet (SettleBetRequest) returns (CommonResponseObj){}
+
+  rpc SearchBonus (GetBonusByClientID) returns (SearchBonusResponse){}
+
+  rpc GetActiveUserBonus (CheckDepositBonusRequest) returns (CommonResponseObj){}
+
+  rpc SaveAccaBonus (SaveAccaBonusRequest) returns (CommonResponseObj){}
+
+  rpc GetAccaBonuses (GetAllBonusRequest) returns (CommonResponseArray){}
+
+  rpc GetBonus (GetBonusRequest) returns (GetBonusResponse){}
+
+  rpc GetAffiliateBonus (GetAffiliateBonusRequest) returns (GetBonusResponse){}
+
+  rpc GetAffiliateWithBonus (AffiliateBonusRequest) returns (CommonResponseObj){}
+
+  rpc CheckCashBackBonus (GetBonusRequest) returns (CommonResponseObj){}
+
+  rpc GetAllAwardedBonus (GetAllBonusRequest) returns (CommonResponseObj){}
+
+  rpc GetBonusWithPromoCode (GetBonusWithPromoCodeRequest) returns (CommonResponseObj){}
+
+  rpc DeleteBonus (DeleteBonusRequest) returns (BonusResponse){}
+
+  rpc GetUserBonus (GetUserBonusRequest) returns (GetUserBonusResponse){}
+
+  rpc AwardBonus (AwardBonusRequest) returns (UserBonusResponse){}
+
+  rpc AssignAffiliateBonus (AssignBonusRequest) returns (CommonResponseObj){}
+
+  rpc DeactivateUserBonus (BonusRequest) returns (CommonResponseObj){}
+
+  rpc PlaceBonusBet(UserBet) returns (PlaceBetResponse){}
+
+  rpc UpdateBonusStatus (BonusStatusRequest) returns (CreateBonusResponse){}
+
+  rpc CreateCampaignBonus(CreateCampaignBonusDto) returns (CreateBonusResponse){}
+
+  rpc UpdateCampaignBonus(UpdateCampaignBonusDto) returns (CreateBonusResponse){}
+
+  rpc DeleteCampaignBonus(DeleteBonusRequest) returns (CreateBonusResponse){}
+
+  rpc RedeemCampaignBonus(RedeemCampaignBonusDto) returns (CreateBonusResponse){}
+
+  rpc GetCampaignBonus(GetBonusByClientID) returns (AllCampaignBonus){}
+
+  rpc DeletePlayerData(GetBonusRequest) returns (EmptyResponse) {}
+}
+
+
+message CommonResponseObj{
+  optional int32 status = 1;
+  optional bool success = 2;
+  string message = 3;
+  optional google.protobuf.Struct data = 4;
+}
+
+message CommonResponseArray{
+  optional int32 status = 1;
+  optional bool success = 2;
+  string message = 3;
+  repeated google.protobuf.Struct data = 4;
+}
+
+message SaveAccaBonusRequest {
+  int32 clientId = 1;
+  string section = 2;
+  message BonusItem {
+    string ticketLength = 1;
+    string bonus = 2;
+  }
+
+  repeated BonusItem items = 3;
+}
+
+message CheckDepositBonusRequest {
+  int32 clientId = 1;
+  int32 userId = 2;
+}
+
+message BonusRequest {
+  int32 clientId = 1;
+  int32 userId = 2;
+}
+
+message CheckDepositBonusResponse {
+  bool success = 1;
+  float value = 2;
+  optional FirstDepositBonus data = 3;
+}
+
+message FirstDepositBonus {
+  int32 bonusId = 1;
+  float value = 2;
+  string type = 3;
+  string name = 4;
+  optional string gameId = 5;
+}
+
+message CreateReferralBonusRequest {
+  int32 clientId = 1;
+  int32 expiryInHours = 2;
+  int32 minimumEvents = 3;
+  float minimumOddsPerEvent = 4;
+  float minimumTotalOdds = 5;
+  string applicableBetType = 6;
+  int32 maximumWinning = 7;
+  int32 minimumEntryAmount = 8;
+  int32 bonusAmount = 9;
+  int32 bonusAmountMultiplier = 10;
+  int32 rolloverCount = 11;
+  string name = 12;
+  float minimumBettingStake = 13;
+  string product = 14;
+}
+
+message CreateShareBetBonusRequest {
+  int32 clientId = 1;
+  int32 expiryInHours = 2;
+  int32 minimumEvents = 3;
+  float minimumOddsPerEvent = 4;
+  float minimumTotalOdds = 5;
+  string applicableBetType = 6;
+  int32 maximumWinning = 7;
+  int32 minimumEntryAmount = 8;
+  int32 bonusAmount = 9;
+  int32 bonusAmountMultiplier = 10;
+  int32 rolloverCount = 11;
+  string name = 12;
+  float minimumBettingStake = 13;
+  string product = 14;
+
+}
+
+message CreateBonusRequest {
+  int32 clientId = 1;
+  string bonusType = 2;
+  string creditType = 3;
+  int32 duration = 4;
+  int32 minimumSelection = 5;
+  float minimumOddsPerEvent = 6;
+  float minimumTotalOdds = 7;
+  string applicableBetType = 8;
+  int32 maximumWinning = 9;
+  int32 bonusAmount = 10;
+  optional int32 status = 11;
+  optional string created = 12;
+  optional string updated = 13;
+  optional int32 id = 14;
+  int32 minimumLostGames = 15;
+  int32 rolloverCount = 16;
+  string name = 17;
+  float minimumEntryAmount = 18;
+  float maxAmount = 19;
+  string product = 20;
+  repeated string game_id = 21;
+  optional int32 casinoSpinCount = 22;
+  optional int32 providerId = 23;
+  optional int32 bonusId = 24;
+  repeated string userIds = 25;
+  optional string provider = 26;
+  optional string country = 27;
+  optional string tournament = 28;
+  optional string fixture = 29;
+  optional int32 percentageValue = 30;
+  repeated CashbackConfiguration cashbackConfigurationDto =31;
+  optional string startDate = 32;
+  optional string endDate = 33;
+  optional bool isAffiliate = 34;
+  optional int32 affiliateId = 35;
+  
+  // optional int32 minimumMatches = 31;
+  // optional int32 maximumLostGames = 32;
+  // optional float minimumOddsExcludingLosing = 33;
+  // optional int32 refundTimesOnStake = 34;
+}
+
+message CashbackConfiguration {
+    int32 minimumMatches = 1;
+    int32 maximumLostGames = 2;
+    float minimumOddsExcludingLosing = 3;
+    int32 refundTimesOnStake = 4;
+    int32 tierOrder = 5;
+}
+
+message CreateBonusResponse {
+  int32 bonusId = 1;
+  int32 status = 2;
+  string description = 3;
+  bool success = 4;
+}
+
+message GetBonusRequest {
+  int32 clientId = 1;
+  optional string bonus_type = 2;
+  optional bool is_affiliate = 3;
+}
+
+message GetAffiliateBonusRequest {
+  int32 clientId = 1;
+  optional int32 affiliate_id = 2;
+}
+
+message AffiliateBonusRequest {
+  int32 clientId = 1;
+  optional int32 affiliateId = 2;
+  optional int32 bonusId = 3;
+  optional int32 userId = 4;
+  optional string promoCode = 5;
+}
+
+message GetAllBonusRequest {
+  int32 clientId = 1;
+}
+
+message GetBonusWithPromoCodeRequest {
+  int32 clientId = 1;
+  int32 userId = 2;
+  string promoCode = 3;
+}
+
+message DeleteBonusRequest {
+  int32 clientId = 1;
+  int32 id = 2;
+}
+
+message GetBonusResponse {
+  repeated CreateBonusRequest bonus = 1;
+
+}
+
+message BonusResponse {
+  int32 status = 1;
+  string description = 2;
+  bool success = 3;
+}
+
+message GetUserBonusRequest {
+  int32 clientId = 1;
+  int64 userId = 2;
+  string bonusType = 3;
+  int32 id = 4;
+  int32 status = 5;
+}
+
+message UserBetData {
+  int32 betId = 1;
+  float stake = 2;
+  int32 rolloverCount = 3;
+  int32 status = 4;
+  int32 rolledAmount = 5;
+  int32 pendingAmount = 6;
+  string created = 7;
+}
+
+message Transaction {
+  float amount = 1;
+  float balance = 2;
+  string createdAt = 3;
+  string desc = 4;
+}
+
+
+message GetUserBonusResponse {
+
+  repeated UserBonus bonus = 1;
+
+}
+
+message UserBonus {
+  string bonusType = 1;
+  float amount = 2;
+  int32 expiryDateInTimestamp = 3;
+  string created = 4;
+  int32 id = 5;
+  string name = 6;
+  float rolledAmount = 7;
+  float pendingAmount = 8;
+  int32 totalRolloverCount = 9;
+  int32 completedRolloverCount = 10;
+  int32 status = 11;
+  repeated Transaction transactions = 12;
+}
+
+message UserBonusResponse {
+  string description = 1;
+  int32 status = 2;
+  UserBonus bonus = 3;
+}
+
+
+message AwardBonusRequest {
+  int32 clientId = 1;
+  int32 bonusId = 2;
+  string userId = 3;
+  optional string username = 4;
+  optional float amount = 5;
+  optional float baseValue = 6;
+  optional string promoCode = 7;
+  optional int32 status = 8;
+}
+
+message AssignBonusRequest {
+  int32 clientId = 1;
+  int32 bonusId = 2;
+  int32 affiliateId = 3;
+  string userId = 4;
+  optional string username = 5;
+  optional float amount = 6;
+  optional string promoCode = 7;
+}
+
+message UserBet {
+  repeated BetSlip selections = 1;
+  int32 clientId = 2;
+  int32 userId = 3;
+  float stake = 4;
+  float totalOdds = 5;
+  int32 bonusId = 6;
+  optional string betId = 7;
+}
+
+message BetSlip {
+  string eventName = 1;
+  string eventType = 2;
+  int64 eventId = 3;
+  int32 producerId = 4;
+  int32 marketId = 5;
+  string marketName = 6;
+  string specifier = 7;
+  string outcomeId = 8;
+  string outcomeName = 9;
+  float odds = 10;
+  int64 sportId = 11;
+  int32 matchId = 12;
+}
+
+message DebitBonusRequest {
+  int32 clientId = 1;
+  int32 userId = 2;
+  float amount = 3;
+  string bonusType = 4;
+}
+
+message HasBonusBetResponse {
+  int32 status = 1;
+  string description = 2;
+  UserBonus bonus = 3;
+}
+
+
+message BonusStatusRequest {
+  int32 bonusId = 1;
+  int32 status = 2;
+}
+
+message CreateCampaignBonusDto {
+  int32 clientId = 1;
+  string name = 2;
+  string bonusCode = 3;
+  int32 bonusId = 4;
+  string startDate = 5;
+  string endDate = 6;
+  optional string affiliateIds = 7;
+  optional string trackierCampaignId = 8;
+}
+
+message UpdateCampaignBonusDto {
+  int32 clientId = 1;
+  string name = 2;
+  string bonusCode = 3;
+  int32 bonusId = 4;
+  string startDate = 5;
+  int32 id = 6;
+  optional string affiliateIds = 7;
+  optional string trackierCampaignId = 8;
+  string endDate = 9;
+}
+
+message RedeemCampaignBonusDto {
+  int32 clientId = 1;
+  string bonusCode = 2;
+  int32 userId = 3;
+}
+
+message CampaignBonusData {
+  int32 id = 1;
+  int32 clientId = 2;
+  string name = 3;
+  string bonusCode = 4;
+  CreateBonusRequest bonus = 5 ;
+  string startDate = 6;
+  string endDate = 7;
+}
+
+message AllCampaignBonus {
+  repeated CampaignBonusData bonus = 1;
+}
+
+message GetBonusByClientID {
+  int32 clientId = 1;
+  optional string searchKey = 2;
+}
+
+message GetCampaignRequest {
+  int32 clientId = 1;
+  string promoCode = 2;
+}
+
+message GetCampaignResponse {
+  bool success = 1;
+  string message = 2;
+  CampaignBonusData data = 3;
+}
+
+message PlaceBetResponse {
+  bool success = 1;
+  string betId = 2;
+  int32 status = 3;
+  string statusDescription = 4;
+}
+
+message ValidateBetResponse {
+  bool success = 1;
+  int32 id = 2;
+  string message = 3;
+}
+
+message FetchReportRequest {
+  string bonusType = 1;
+  string from = 2;
+  string to = 3;
+  int32 clientId = 4;
+}
+
+message PlayerBonusData {
+  int32  id =1;
+  int32 userId =2;
+  int32 clientId =3;
+  string username =4;
+  int32 wageringRequirement =5;
+  string bonusId = 6;
+  string bonusType = 7;
+  string name = 8;
+  string expiryDate =9;
+  int32 status =10;
+  int32 amount =11;
+  int32 balance =12;
+  int32 usedAmount =13;
+  int32 rolled_amount = 14;
+  int32 wageringRequirementRemaining = 15;
+  int32 wageringRequirementAchieved =16;
+  string promoCode =17;
+  string created=18;
+  string updated =19;
+}
+    
+message FetchReportResponse {
+  string message = 1;
+  bool status = 2;
+  repeated PlayerBonusData data = 3;
+}
+
+message SettleBetRequest {
+  int32 clientId = 1;
+  string betId = 2;
+  int32 status = 3;
+  optional float amount = 4;
+  repeated Selection selections = 5;
+  optional string betslipId = 6;
+}
+
+message Selection {
+  string eventName = 1;
+  string eventType = 2;
+  int32 eventId = 3;
+  int32 producerId = 4;
+  int32 marketId = 5;
+  string marketName = 6;
+  string specifier = 7;
+  string outcomeId = 8;
+  string outcomeName = 9;
+  float odds = 10;
+  int32 sportId = 11;
+  string status = 12;
+  string statusDescription = 13;
+  int32 won = 14;
+  string type = 15;
+  string sport = 16;
+  string tournament = 17;
+  string category = 18;
+  string matchId = 19;
+  string eventDate = 20;
+  string selectionId = 21;
+  string eventPrefix = 22;
+  string score = 23;
+  string htScore = 24;
+  int32 id = 25;
+  float currentOdds = 26;
+  string eventTime = 27;
+  string matchStatus = 28;
+  int32 isLive = 29;
+}
+
+message SearchBonusResponse {
+  message Bonus {
+    int32 id = 1;
+    string name = 2;
+  }
+  repeated Bonus data = 1;
+}
+
+message EmptyResponse {}

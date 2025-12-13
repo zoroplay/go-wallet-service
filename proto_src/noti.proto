@@ -1,0 +1,194 @@
+syntax = "proto3";
+option go_package = "wallet-service/proto/noti";
+
+import "google/protobuf/struct.proto";
+
+package notification;
+
+service NotificationService {
+  rpc SetReadNotifications (SetReadNotificationsRequest) returns (SetReadNotificationsResponse);
+  rpc GetUserNotifications (GetUserNotificationsRequest) returns (GetUserNotificationsResponse);
+  rpc HandleNotifications (HandleNotificationsRequest) returns (HandleNotificationsResponse);
+  rpc SaveSettings (SaveSettingsRequest) returns (SaveSettingsResponse);
+  rpc GetSettings (GetSettingsRequest) returns (GetSettingsResponse);
+  rpc SendSms (SendSmsRequest) returns (SendSmsResponse);
+  rpc SendOtp (SendOtpRequest) returns (SendSmsResponse);
+  rpc verifyOtp (VerifyOtpRequest) returns (SendSmsResponse);
+  rpc GetDeliveryReport (DeliveryReportRequest) returns (DeliveryReportResponse);
+
+  rpc findOneMessage (FindOneMessage) returns (CommonResponseObj) {}
+  rpc FindAllMessages (ClientIdRequest) returns (CommonResponseObj) {}
+  rpc updateMessage (CreateMessageRequest) returns (CommonResponseObj) {}
+  rpc deleteMessage (FindOneMessage) returns (CommonResponseObj) {}
+  rpc createMessage (CreateMessageRequest) returns (CommonResponseObj) {}
+
+
+  rpc sendMessage (SendMessageRequest) returns (CommonResponseObj) {}
+
+  rpc findUserMessages (GetUserNotificationsRequest) returns (CommonResponseObj) {}
+  rpc updateUserMessage (FindOneMessage) returns (CommonResponseObj) {}
+  rpc deleteUserMessage (FindOneMessage) returns (CommonResponseObj) {}
+}
+
+
+// Menu
+message CreateMessageRequest {
+  string title = 1;
+  int32 clientId = 2;
+  string content = 3;
+  bool status = 4;
+  optional int32 id = 6;
+  optional string createdAt = 7;
+  optional string updatedAt = 8;
+}
+
+message FindOneMessage {
+  int32 clientId = 1;
+  int32 id = 2;
+}
+
+message ClientIdRequest {
+  int32 clientId = 1;
+}
+
+message CommonResponseObj{
+  optional int32 status = 1;
+  optional bool success = 2;
+  string message = 3;
+  optional google.protobuf.Struct data = 4;
+  optional string errors = 5;
+}
+
+message SendMessageRequest {
+  int32 clientId = 1;
+  int32 messageId = 2;
+  string userId = 3;
+}
+
+
+message HandleNotificationsRequest {
+  int32 userId = 1;
+  string description = 2;
+  string title = 3;
+}
+message GetUserNotificationsRequest {
+  int32 userId = 1;
+}
+message SetReadNotificationsRequest {
+  int32 id = 1;
+}
+
+
+message HandleNotificationsResponse {
+  string message = 1;
+  bool   status = 2;
+  optional Notifications data = 3;
+}
+
+message SetReadNotificationsResponse {
+  string message = 1;
+  bool   status = 2;
+  Notifications  data = 3;
+}
+
+message GetUserNotificationsResponse {
+  string message = 1;
+  bool   status = 2;
+  repeated Notifications  data = 3;
+}
+message Notifications {
+  int32 userId = 1;
+  string description = 2;
+  string title = 3;
+  int32 status = 4;
+  string createdAt = 5;
+  int32 id = 6;
+}
+
+message SaveSettingsRequest {
+  optional int32  settingsID = 1;
+  int32  clientId = 2;
+  bool   enable = 3;
+  string displayName = 4;
+  string gatewayName = 5;
+  string senderID = 6;
+  optional string apiKey = 7;
+  optional string username = 8;
+  optional string password = 9;
+}
+
+message SaveSettingsResponse {
+  string message = 1;
+  bool   status = 2;
+}
+
+message GetSettingsRequest {
+  int32 clientId = 1;
+}
+
+message GetSettingsResponse {
+  string message = 1;
+  bool   status = 2;
+  repeated SettingData data = 3;
+}
+
+message SettingData {
+  int32  id = 1;
+  bool   status = 2;
+  string displayName = 3;
+  string gatewayName = 4;
+  string senderID = 5;
+  string apiKey = 6;
+  string username = 7;
+  string password = 8;
+}
+
+
+message SendSmsRequest {
+  string msisdn = 1;
+  string text = 2;
+  string senderID = 3;
+  string name = 4;
+  string from = 5;
+  string status = 6;
+  repeated string phoneNumbers = 7;
+  string schedule = 8;
+  string channel = 9;
+  string mode = 10;
+  string campaignType = 11;
+  int32 clientID = 12;
+  string operator = 13;
+}
+
+message SendOtpRequest {
+  int32 clientID = 1;
+  string phoneNumber = 2;
+  string operator = 3;
+  optional string countryCode = 4;
+}
+
+message VerifyOtpRequest {
+  int32 clientID = 1;
+  string phoneNumber = 2;
+  string code =3 ;
+}
+
+message SendSmsResponse {
+  string message = 1;
+  bool   status = 2;
+}
+
+message DeliveryReportRequest {
+  string username = 1;
+  string password = 2;
+  string messageId = 3;
+}
+
+message DeliveryReportResponse {
+  string status = 1;
+  string timeSubmitted = 2;
+  string timeDelivered = 3;
+  string message = 4;
+  string sender = 5;
+  string messageId = 6;
+}
