@@ -33,6 +33,7 @@ func NewPaystackService(db *gorm.DB, helper *HelperService, identityClient *Iden
 // paystackSettings fetches payment method settings for Paystack
 func (s *PaystackService) paystackSettings(clientId int) (*models.PaymentMethod, error) {
 	var pm models.PaymentMethod
+	fmt.Println("client id: ", pm)
 	err := s.DB.Where("provider = ? AND client_id = ?", "paystack", clientId).First(&pm).Error
 	if err != nil {
 		return nil, err
@@ -58,6 +59,8 @@ func (s *PaystackService) GeneratePaymentLink(data map[string]interface{}, clien
 		fmt.Printf("paystack error: %v\n", err)
 		return common.SuccessResponse{Success: false, Message: "Unable to initiate deposit with paystack"}, nil
 	}
+
+	fmt.Println("Paystack response: ", resp)
 
 	return common.SuccessResponse{Success: true, Data: resp}, nil
 }

@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"wallet-service/internal/services"
+	"wallet-service/pkg/common"
 	pb "wallet-service/proto/wallet"
 
 	"google.golang.org/grpc"
@@ -122,15 +123,19 @@ func (s *Server) CreateWallet(ctx context.Context, req *pb.CreateWalletRequest) 
 }
 
 func (s *Server) GetBalance(ctx context.Context, req *pb.GetBalanceRequest) (*pb.WalletResponse, error) {
-	resp, err := s.Wallet.GetBalance(services.GetBalanceDTO{
-		UserId:   int(req.UserId),
-		ClientId: int(req.ClientId),
-	})
+	sqlDB, err := s.Wallet.DB.DB()
 	if err != nil {
-		return &pb.WalletResponse{Success: false, Message: err.Error()}, nil
+		return &pb.WalletResponse{Success: false, Message: "Database connection error", Status: 500}, nil
 	}
-	// Need to map data
-	return &pb.WalletResponse{Success: true, Message: resp.Message}, nil
+
+	success, statusCode, msg, data := services.GetBalance(sqlDB, req)
+
+	return &pb.WalletResponse{
+		Success: success,
+		Status:  statusCode,
+		Message: msg,
+		Data:    data,
+	}, nil
 }
 
 func (s *Server) CreditUser(ctx context.Context, req *pb.CreditUserRequest) (*pb.WalletResponse, error) {
@@ -197,6 +202,51 @@ func (s *Server) InititateDeposit(ctx context.Context, req *pb.InitiateDepositRe
 			Link:           &link,
 			TransactionRef: &ref,
 		},
+	}, nil
+}
+
+func (s *Server) VerifyDeposit(ctx context.Context, req *pb.VerifyDepositRequest) (*pb.VerifyDepositResponse, error) {
+	transactionRef := ""
+	if req.TransactionRef != nil {
+		transactionRef = *req.TransactionRef
+	} else if req.OrderReference != nil {
+		transactionRef = *req.OrderReference
+	}
+
+	resp, err := s.Payment.VerifyDeposit(services.VerifyDepositDTO{
+		ClientId:       int(req.ClientId),
+		PaymentChannel: req.PaymentChannel,
+		TransactionRef: transactionRef,
+	})
+	if err != nil {
+		return &pb.VerifyDepositResponse{Success: false, Message: err.Error()}, nil
+	}
+
+	// Helper usually returns SuccessResponse or map or standard response.
+	// VerifyDeposit in PaymentService returns interface{} from respective service.
+	// Usually common.SuccessResponse or map.
+
+	// Default success if no error
+	success := true
+	message := "Verified"
+
+	// Try to parse more details if possible
+	if rStats, ok := resp.(common.SuccessResponse); ok {
+		success = rStats.Success
+		message = rStats.Message
+	} else if rMap, ok := resp.(map[string]interface{}); ok {
+		if s, ok := rMap["success"].(bool); ok {
+			success = s
+		}
+		if m, ok := rMap["message"].(string); ok {
+			message = m
+		}
+	}
+
+	return &pb.VerifyDepositResponse{
+		Success: success,
+		Message: message,
+		Status:  200,
 	}, nil
 }
 

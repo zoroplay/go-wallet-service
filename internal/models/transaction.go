@@ -6,10 +6,10 @@ import (
 
 type Transaction struct {
 	ID                     int       `gorm:"primaryKey;autoIncrement" json:"id"`
-	ClientId               int       `gorm:"column:client_id;not null" json:"client_id"`
-	UserId                 int       `gorm:"column:user_id;not null" json:"user_id"`
+	ClientId               int       `gorm:"column:client_id;not null;index:idx_trx_user_client" json:"client_id"`
+	UserId                 int       `gorm:"column:user_id;not null;index:idx_trx_user_client" json:"user_id"`
 	Username               string    `gorm:"column:username;size:255;not null" json:"username"`
-	TransactionNo          string    `gorm:"column:transaction_no;size:255;not null" json:"transaction_no"`
+	TransactionNo          string    `gorm:"column:transaction_no;size:255;not null;index" json:"transaction_no"`
 	Amount                 float64   `gorm:"column:amount;type:decimal(20,2);not null" json:"amount"`
 	TrxType                string    `gorm:"column:tranasaction_type;size:50;not null" json:"tranasaction_type"` // Note: typo in TS entity preserved
 	Subject                string    `gorm:"column:subject;size:255;not null" json:"subject"`
@@ -27,5 +27,5 @@ type Transaction struct {
 }
 
 func (Transaction) TableName() string {
-	return "transaction"
+	return "transactions"
 }

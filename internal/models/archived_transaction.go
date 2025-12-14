@@ -9,14 +9,14 @@ type ArchivedTransaction struct {
 	ClientId      int     `gorm:"index"`
 	UserId        int     `gorm:"index"`
 	Username      string  `gorm:"type:varchar(100);index"`
-	TransactionNo string  `gorm:"type:varchar(100);uniqueIndex"`
+	TransactionNo string  `gorm:"type:varchar(100);index"`
 	Amount        float64 `gorm:"type:decimal(20,2)"`
 	TrxType       string  `gorm:"index;column:tranasaction_type"` // DB column name from TS entity
 	Status        int     `gorm:"default:0"`
-	Channel       string
-	Subject       string
-	Description   string
-	Source        string
+	Channel       string  `gorm:"type:varchar(50)"`
+	Subject       string  `gorm:"type:varchar(100)"`
+	Description   string  `gorm:"type:text"`
+	Source        string  `gorm:"type:varchar(50)"`
 	Balance       float64 `gorm:"type:decimal(20,2)"`
 	Wallet        string  `gorm:"default:Main"`
 	SettlementId  *string

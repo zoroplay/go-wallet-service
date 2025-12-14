@@ -146,6 +146,11 @@ func (s *PaymentService) InitiateDeposit(param InitiateDepositRequestDTO) (inter
 	siteUrl := userResp.SiteUrl
 	callbackUrl := userResp.CallbackUrl
 
+	fmt.Println("User Email: ", userEmail)
+	fmt.Println("Username: ", username)
+	fmt.Println("Site URL: ", siteUrl)
+	fmt.Println("Callback URL: ", callbackUrl)
+
 	switch param.PaymentMethod {
 	case "paystack":
 		// Paystack Logic
@@ -166,10 +171,12 @@ func (s *PaymentService) InitiateDeposit(param InitiateDepositRequestDTO) (inter
 			return common.NewErrorResponse("Paystack error", nil, 500), nil
 		}
 
-		if pMap, ok := pRes.(map[string]interface{}); ok {
-			if data, ok := pMap["data"].(map[string]interface{}); ok {
-				if url, ok := data["authorization_url"].(string); ok {
-					link = url
+		if pResStruct, ok := pRes.(common.SuccessResponse); ok {
+			if pMap, ok := pResStruct.Data.(map[string]interface{}); ok {
+				if data, ok := pMap["data"].(map[string]interface{}); ok {
+					if url, ok := data["authorization_url"].(string); ok {
+						link = url
+					}
 				}
 			}
 		}

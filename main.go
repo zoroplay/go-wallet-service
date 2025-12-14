@@ -29,6 +29,7 @@ func main() {
 
 	// Initialize Database
 	database.Connect()
+	database.Migrate()
 	db := database.DB
 
 	// Init Services

@@ -1,8 +1,11 @@
 package services
 
 import (
+	"database/sql"
+	"fmt"
 	"wallet-service/internal/models"
 	"wallet-service/pkg/common"
+	walletBuffer "wallet-service/proto/wallet"
 
 	"gorm.io/gorm"
 )
@@ -78,6 +81,7 @@ type GetBalanceDTO struct {
 
 func (s *WalletService) GetBalance(data GetBalanceDTO) (common.SuccessResponse, error) {
 	var wallet models.Wallet
+	fmt.Printf("data: %+v\n", data)
 	if err := s.DB.Where("user_id = ? AND client_id = ?", data.UserId, data.ClientId).First(&wallet).Error; err != nil {
 		return common.SuccessResponse{}, err
 	}
@@ -691,4 +695,33 @@ func (s *WalletService) DeletePlayerData(userId int) (common.SuccessResponse, er
 	}
 
 	return common.NewSuccessResponse(nil, "Successful"), nil
+}
+
+func GetBalance(db *sql.DB, in *walletBuffer.GetBalanceRequest) (bool, int32, string, *walletBuffer.Wallet) {
+
+	var row models.Wallet
+	query := `
+	SELECT balance, available_balance, sport_bonus_balance,
+	       virtual_bonus_balance, casino_bonus_balance, trust_balance
+	FROM wallets WHERE user_id = ? AND client_id = ? LIMIT 1
+	`
+
+	err := db.QueryRow(query, in.UserId, in.ClientId).Scan(
+		&row.Balance, &row.AvailableBalance, &row.SportBonus,
+		&row.VirtualBonus, &row.CasinoBonus, &row.TrustBalance,
+	)
+
+	if err != nil {
+		return false, 404, "Wallet not found", nil
+	}
+
+	return true, 200, "Balance retrieved", &walletBuffer.Wallet{
+		UserId:              in.UserId,
+		Balance:             row.Balance,
+		AvailableBalance:    row.AvailableBalance,
+		SportBonusBalance:   row.SportBonus,
+		VirtualBonusBalance: row.VirtualBonus,
+		CasinoBonusBalance:  row.CasinoBonus,
+		TrustBalance:        row.TrustBalance,
+	}
 }

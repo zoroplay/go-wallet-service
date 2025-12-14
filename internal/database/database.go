@@ -7,6 +7,8 @@ import (
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+
+	"wallet-service/internal/models"
 )
 
 var DB *gorm.DB
@@ -27,4 +29,21 @@ func Connect() {
 	}
 
 	log.Println("Database connection established")
+}
+
+func Migrate() {
+	err := DB.AutoMigrate(
+		&models.Wallet{},
+		&models.PaymentMethod{},
+		&models.Transaction{},
+		&models.ArchivedTransaction{},
+		&models.Bank{},
+		&models.CallbackLog{},
+		&models.Withdrawal{},
+		&models.WithdrawalAccount{},
+	)
+	if err != nil {
+		log.Fatal("Failed to migrate database: ", err)
+	}
+	log.Println("Database migration completed")
 }

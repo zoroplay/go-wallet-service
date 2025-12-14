@@ -6,9 +6,9 @@ import (
 
 type Wallet struct {
 	ID                     int       `gorm:"primaryKey;autoIncrement" json:"id"`
-	UserId                 int       `gorm:"column:user_id;not null" json:"user_id"`
+	UserId                 int       `gorm:"column:user_id;not null;index:idx_wallet_user_client" json:"user_id"`
 	Username               string    `gorm:"column:username;size:255;not null" json:"username"`
-	ClientId               int       `gorm:"column:client_id;not null" json:"client_id"`
+	ClientId               int       `gorm:"column:client_id;not null;index:idx_wallet_user_client" json:"client_id"`
 	Balance                float64   `gorm:"column:balance;type:decimal(20,2);default:0.00" json:"balance"`
 	AvailableBalance       float64   `gorm:"column:available_balance;type:decimal(20,2);default:0.00" json:"available_balance"`
 	TrustBalance           float64   `gorm:"column:trust_balance;type:decimal(20,2);default:0.00" json:"trust_balance"`
@@ -31,5 +31,5 @@ type Wallet struct {
 }
 
 func (Wallet) TableName() string {
-	return "wallet"
+	return "wallets"
 }
