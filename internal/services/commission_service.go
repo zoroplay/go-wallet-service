@@ -1060,3 +1060,137 @@ func (s *CommissionService) ListAffiliateTotalDepositsAndWithdrawals(data *walle
 		},
 	}, nil
 }
+// AdminAffiliateReferralDashboardData
+func (s *CommissionService) AdminAffiliateReferralDashboardData(data *wallet.AffiliateDashboardData) (interface{}, error) {
+	clientId := int32(data.ClientId)
+	from := data.From
+	to := data.To
+	applyDateFilter := from != nil && to != nil
+
+	// 1. Get all affiliates
+	affiliatesRes, err := s.IdentityClient.GetClientAffiliates(&identity.ClientIdRequest{
+		ClientId: clientId,
+	})
+	if err != nil {
+		return common.NewErrorResponse("Unable to fetch affiliates", nil, 500), nil
+	}
+
+	affiliates := affiliatesRes.GetData()
+	if len(affiliates) == 0 {
+		return map[string]interface{}{
+			"success": true,
+			"status":  200,
+			"message": "No affiliates found for this client",
+			"data": map[string]interface{}{
+				"affiliates":           []interface{}{},
+				"grandTotalDeposit":    0,
+				"grandTotalWithdrawal": 0,
+			},
+		}, nil
+	}
+
+	var result []map[string]interface{}
+	var grandTotalDeposit float64
+	var grandTotalWithdrawal float64
+
+	for _, affiliate := range affiliates {
+		affMap := affiliate.AsMap()
+		var affID int32
+		var affUsername string
+		var affIdInterface interface{}
+
+		if val, ok := affMap["affiliateId"]; ok {
+			if idFloat, ok := val.(float64); ok {
+				affID = int32(idFloat)
+				affIdInterface = val
+			}
+		} else if val, ok := affMap["id"]; ok {
+			if idFloat, ok := val.(float64); ok {
+				affID = int32(idFloat)
+				affIdInterface = val
+			}
+		}
+
+		if val, ok := affMap["username"]; ok {
+			if s, ok := val.(string); ok {
+				affUsername = s
+			}
+		}
+
+		referralRes, err := s.IdentityClient.GetAffiliateUsers(&identity.AffiliateRequest{
+			AffiliateId: &affID,
+		})
+		if err != nil {
+			continue
+		}
+
+		referrals := referralRes.GetData()
+		referralIds := make([]int, 0, len(referrals))
+		for _, ref := range referrals {
+			refMap := ref.AsMap()
+			if val, ok := refMap["userId"]; ok {
+				if idFloat, ok := val.(float64); ok {
+					referralIds = append(referralIds, int(idFloat))
+				}
+			}
+		}
+
+		if len(referralIds) == 0 {
+			result = append(result, map[string]interface{}{
+				"affiliateId":      affIdInterface,
+				"affiliateName":    affUsername,
+				"referralCount":    0,
+				"totalDeposits":    0,
+				"totalWithdrawals": 0,
+			})
+			continue
+		}
+
+		// Calculate Total Deposits
+		depositQuery := s.DB.Table("transactions").
+			Select("COALESCE(SUM(amount), 0)").
+			Where("client_id = ? AND user_id IN ? AND subject = ? AND tranasaction_type = ?", clientId, referralIds, "Deposit", "credit")
+
+		if applyDateFilter {
+			depositQuery = depositQuery.Where("created_at BETWEEN ? AND ?", *from, *to)
+		}
+
+		var totalDeposits float64
+		depositQuery.Scan(&totalDeposits)
+
+		// Calculate Total Withdrawals
+		withdrawalQuery := s.DB.Table("transactions").
+			Select("COALESCE(SUM(amount), 0)").
+			Where("client_id = ? AND user_id IN ? AND subject = ? AND tranasaction_type = ?", clientId, referralIds, "Withdrawal", "debit")
+
+		if applyDateFilter {
+			withdrawalQuery = withdrawalQuery.Where("created_at BETWEEN ? AND ?", *from, *to)
+		}
+
+		var totalWithdrawals float64
+		withdrawalQuery.Scan(&totalWithdrawals)
+
+		// Update Global Totals
+		grandTotalDeposit += totalDeposits
+		grandTotalWithdrawal += totalWithdrawals
+
+		result = append(result, map[string]interface{}{
+			"affiliateId":      affIdInterface,
+			"affiliateName":    affUsername,
+			"referralCount":    len(referrals),
+			"totalDeposits":    totalDeposits,
+			"totalWithdrawals": totalWithdrawals,
+		})
+	}
+
+	return map[string]interface{}{
+		"success": true,
+		"status":  200,
+		"message": "Affiliate referral dashboard data fetched successfully",
+		"data": map[string]interface{}{
+			"affiliates":           result,
+			"grandTotalDeposit":    grandTotalDeposit,
+			"grandTotalWithdrawal": grandTotalWithdrawal,
+		},
+	}, nil
+}

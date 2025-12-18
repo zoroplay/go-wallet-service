@@ -1,4 +1,5 @@
 syntax = "proto3";
+
 option go_package = "wallet-service/proto/wallet";
 
 import "google/protobuf/struct.proto";
@@ -201,8 +202,16 @@ service WalletService {
   rpc AdminGetAffiliateReferralWithdrawals(ClientAffiliateRequest) returns (CommonResponseObj) {}
   rpc AdminGetAffiliateReferralDeposits(ClientAffiliateRequest) returns (CommonResponseObj) {}
   rpc AdminDailyAndMontlyAffiliateSummary(ClientAffiliateRequest) returns (CommonResponseObj) {}
-  rpc ListAffiliateTotalDepositsAndWithdrawals(DepositeWithdrawls) returns (CommonResponseObj) {}
+  rpc ListAffiliateTotalDepositsAndWithdrawals(DepositWithdrawals) returns (CommonResponseObj) {}
+  rpc AdminAffiliateReferralDashboardData(AffiliateDashboardData) returns (CommonResponseObj) {}
 }
+
+message AffiliateDashboardData {
+  int32 clientId = 1;
+  optional string from = 2;
+  optional string to = 3; 
+}
+
 
 message ClientAffiliateRequest {
   int32 clientId = 1;
@@ -212,7 +221,7 @@ message ClientAffiliateRequest {
   optional string to = 5;
 }
 
-message DepositeWithdrawls {
+message DepositWithdrawals {
   int32 clientId = 1;
   int32 affiliateId =2;
  optional string from = 3;
