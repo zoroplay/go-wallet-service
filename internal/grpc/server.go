@@ -41,6 +41,7 @@ type Server struct {
 	Smile       *services.SmileAndPayService
 	Payonus     *services.PayonusService
 	Dashboard   *services.DashboardService
+	Retail      *services.RetailService
 }
 
 // StartGRPCServer initializes and starts the gRPC server
@@ -66,6 +67,7 @@ func StartGRPCServer(
 	smile *services.SmileAndPayService,
 	payonus *services.PayonusService,
 	dashboard *services.DashboardService,
+	retail *services.RetailService,
 ) {
 	lis, err := net.Listen("tcp", ":"+port)
 	if err != nil {
@@ -93,6 +95,7 @@ func StartGRPCServer(
 		Smile:       smile,
 		Payonus:     payonus,
 		Dashboard:   dashboard,
+		Retail:      retail,
 	})
 
 	log.Printf("gRPC server listening at %v", lis.Addr())
@@ -1222,6 +1225,22 @@ func (s *Server) ListAffiliateTotalDepositsAndWithdrawals(ctx context.Context, r
 		return &pb.CommonResponseObj{Success: false, Message: err.Error()}, nil
 	}
 	return commonResponseToProto(resp)
+}
+
+func (s *Server) ListRetailTransactions(ctx context.Context, req *pb.RetailDataRequest) (*pb.CommonResponseArray, error) {
+	return s.Retail.ListRetailTransactions(req)
+}
+
+func (s *Server) ListClientRetailTransactions(ctx context.Context, req *pb.RetailDataRequest) (*pb.CommonResponseArray, error) {
+	return s.Retail.ListClientRetailTransactions(req)
+}
+
+func (s *Server) ListRetailData(ctx context.Context, req *pb.RetailDataRequest) (*pb.CommonResponseArray, error) {
+	return s.Retail.ListRetailTransactions(req)
+}
+
+func (s *Server) ListRetailDataListRetailData(ctx context.Context, req *pb.RetailDataRequest) (*pb.CommonResponseArray, error) {
+	return s.Retail.ListRetailTransactions(req)
 }
 
 // Helper function to marshal map[string]interface{} to CommonResponseObj

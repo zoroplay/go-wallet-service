@@ -697,6 +697,8 @@ func (s *WalletService) DeletePlayerData(userId int) (common.SuccessResponse, er
 	return common.NewSuccessResponse(nil, "Successful"), nil
 }
 
+
+
 func GetBalance(db *sql.DB, in *walletBuffer.GetBalanceRequest) (bool, int32, string, *walletBuffer.Wallet) {
 
 	var row models.Wallet

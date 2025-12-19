@@ -112,6 +112,7 @@ func main() {
 	commissionService := services.NewCommissionService(db, helperService, identityClient, playerService)
 	dashboardService := services.NewDashboardService(db, identityClient)
 	summaryService := services.NewSummaryService(db, identityClient)
+	retailService := services.NewRetailService(db, identityClient)
 
 	// Suppress unused variable error until injection
 	_ = summaryService
@@ -166,6 +167,7 @@ func main() {
 		smileAndPayService,
 		payonusService,
 		dashboardService,
+		retailService,
 	)
 
 	// Start Cron Schedulers

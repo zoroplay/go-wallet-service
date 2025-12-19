@@ -92,3 +92,9 @@ func (c *IdentityClient) GetAgents(req *identity.ClientIdRequest) (*identity.Com
 	defer cancel()
 	return c.client.FetchAgents(ctx, req)
 }
+
+func (c *IdentityClient) ListAgentUsers(req *identity.GetAgentUsersRequest) (*identity.CommonResponseArray, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	return c.client.ListAgentUsers(ctx, req)
+}
