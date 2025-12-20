@@ -178,7 +178,7 @@ func (s *DashboardService) Balances(clientId int, rangeZ string, from, to string
 	var totalRetailBalance float64
 	if len(retailUserIds) > 0 {
 		s.DB.Model(&models.Wallet{}).
-			Select("COALESCE(SUM(balance), 0)").
+			Select("COALESCE(SUM(available_balance), 0)").
 			Where("user_id IN ?", retailUserIds).
 			Scan(&totalRetailBalance)
 	}
@@ -211,10 +211,6 @@ type ProductStat struct {
 }
 
 func (s *DashboardService) GetGamingSummary(clientId int, rangeZ string, from, to string) (interface{}, error) {
-	// ... Logic very similar to GamingSummaryForOnline but for ALL transactions?
-	// The TS implementation iterates products and queries transactions directly based on clientId and dates.
-	// It does NOT filter by user IDs in the base GetGamingSummary method.
-
 	start, end, err := s.parseDateRange(rangeZ, from, to)
 	if err != nil {
 		return common.NewErrorResponse(err.Error(), nil, http.StatusBadRequest), nil
@@ -235,26 +231,6 @@ func (s *DashboardService) GetGamingSummary(clientId int, rangeZ string, from, t
 		// Live Transactions
 		s.DB.Model(&models.Transaction{}).Select("COALESCE(SUM(amount), 0)").Where("client_id = ? AND subject = ? AND created_at BETWEEN ? AND ?", clientId, p.StakeSubject, start, end).Scan(&stake)
 		s.DB.Model(&models.Transaction{}).Select("COALESCE(SUM(amount), 0)").Where("client_id = ? AND subject = ? AND created_at BETWEEN ? AND ?", clientId, p.WinningSubject, start, end).Scan(&winnings)
-		// Assuming Bonus Played is tracked via winningSubject (from TS code: andWhere('tx.subject = :subject', { subject: product.winningSubject })) ??
-		// Wait, TS code uses `winningSubject` for both "Winnings" query AND "Bonus Played" query? That seems odd in TS, let's re-read carefully.
-		// TS line 354: winningSubject. TS line 364: winningSubject.
-		// Ah, likely one is mapping to a different logic or it's a copy-paste error in TS or specific logic in DB.
-		// In TS:
-		// 1. winnings: subject = winningSubject
-		// 2. bonusPlayed: subject = winningSubject (SAME SUBJECT!)
-		// This implies the TS code might be fetching the same thing twice or I missed a detail like a different WHERE clause.
-		// Let's look closer at TS.
-		// Query 2 (Winnings) and Query 3 (BonusPlayed) look IDENTICAL in TS.
-		// Check lines 349-357 vs 359-367.
-		// 353: .where('tx.client_id = :clientId')
-		// 363: .where('tx.client_id = :clientId')
-		// Identical.
-		// This suggests `bonusPlayed` in TS is just a duplicate of `winnings` for that product, OR I should likely use `walletField` for Bonus Given?
-		// Actually, let's look at `bonusGiven` query in TS (Lines 399-407). It sums `wallet.${product.walletField}`.
-
-		// For now I will replicate the queries, but distinct if needed.
-		// For Bonus Played, I'll use the same subject as TS.
-
 		s.DB.Model(&models.Transaction{}).Select("COALESCE(SUM(amount), 0)").Where("client_id = ? AND subject = ? AND created_at BETWEEN ? AND ?", clientId, p.WinningSubject, start, end).Scan(&bonusPlayed)
 
 		// Archived
@@ -267,8 +243,7 @@ func (s *DashboardService) GetGamingSummary(clientId int, rangeZ string, from, t
 
 		totalStake := stake + archStake
 		totalWinnings := winnings + archWinnings
-		totalBonusPlayed := bonusPlayed + archBonusPlayed // This will likely be same as totalWinnings if queries are identical
-		// totalBonusGiven is bonusGiven
+		totalBonusPlayed := bonusPlayed + archBonusPlayed
 
 		ggr := totalStake - totalWinnings
 		margin := "0%"
@@ -289,8 +264,8 @@ func (s *DashboardService) GetGamingSummary(clientId int, rangeZ string, from, t
 	}
 
 	return map[string]interface{}{
-		"startDate": start,
-		"endDate":   end,
+		"startDate": start.Format(time.RFC3339),
+		"endDate":   end.Format(time.RFC3339),
 		"data":      summary,
 	}, nil
 }
@@ -349,25 +324,36 @@ func (s *DashboardService) GamingSummaryForOnline(clientId int, rangeZ, from, to
 		}
 	}
 
-	if len(playerUserIds) == 0 {
-		return map[string]interface{}{
-			"startDate": start,
-			"endDate":   end,
-			"data":      []interface{}{},
-		}, nil
-	}
-
 	products := []ProductStat{
 		{"Sport", "Bet Deposit (Sport)", "Sport Win", "sport_bonus_balance"},
 		{"Casino", "Bet Deposit (Casino)", "Bonus Bet (Casino)", "casino_bonus_balance"},
 		{"Virtual Sport", "Bet Deposit (Virtual)", "Bonus Bet (Virtual)", "virtual_bonus_balance"},
 	}
 
+	if len(playerUserIds) == 0 {
+		var summary []map[string]interface{}
+		for _, p := range products {
+			summary = append(summary, map[string]interface{}{
+				"product":    p.Name,
+				"turnover":   0.0,
+				"margin":     "0%",
+				"ggr":        0.0,
+				"bonusGiven": 0.0,
+				"bonusSpent": 0.0,
+				"ngr":        0.0,
+			})
+		}
+		return map[string]interface{}{
+			"startDate": start.Format(time.RFC3339),
+			"endDate":   end.Format(time.RFC3339),
+			"data":      summary,
+		}, nil
+	}
+
 	var summary []map[string]interface{}
 
 	for _, p := range products {
 		var stake, winnings, bonusPlayed, bonusGiven float64
-		// ... (Archived vars)
 		var archStake, archWinnings, archBonusPlayed float64
 
 		// Filtering by UserIDs
@@ -410,8 +396,8 @@ func (s *DashboardService) GamingSummaryForOnline(clientId int, rangeZ, from, to
 	}
 
 	return map[string]interface{}{
-		"startDate": start,
-		"endDate":   end,
+		"startDate": start.Format(time.RFC3339),
+		"endDate":   end.Format(time.RFC3339),
 		"data":      summary,
 	}, nil
 }
@@ -456,8 +442,8 @@ func (s *DashboardService) GetSportSummary(clientId int, rangeZ, from, to string
 	}
 
 	return map[string]interface{}{
-		"startDate": start,
-		"endDate":   end,
+		"startDate": start.Format("Mon Jan 02 2006 15:04:05 GMT-0700 (Coordinated Universal Time)"),
+		"endDate":   end.Format("Mon Jan 02 2006 15:04:05 GMT-0700 (Coordinated Universal Time)"),
 		"data": []interface{}{
 			map[string]interface{}{
 				"product":    sportProduct.Name,

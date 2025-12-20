@@ -151,7 +151,7 @@ func (s *DepositService) FetchPlayerDeposit(req *wallet.FetchPlayerDepositReques
 
 		data := map[string]interface{}{
 			"userId":              wallet.UserId, // Corrected from UserID
-			"balance":             wallet.Balance,
+			"balance":             wallet.AvailableBalance,
 			"availableBalance":    wallet.AvailableBalance,
 			"trustBalance":        wallet.TrustBalance,
 			"sportBonusBalance":   wallet.SportBonus,   // Corrected from SportBonusBalance

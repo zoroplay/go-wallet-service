@@ -64,7 +64,7 @@ func (s *CommissionService) UpdateCommissionWallet(data CommissionRequestDTO) (i
 		Description:   data.Description,
 		Source:        "internal",
 		Channel:       "commission",
-		Balance:       wallet.CommissionBalance + data.Amount, // Aprrox
+		AvailableBalance: wallet.AvailableBalance + data.Amount, // Aprrox
 		Status:        1,
 		Wallet:        "Commission",
 	}
@@ -108,7 +108,7 @@ func (s *CommissionService) DebitCommissionWallet(data CommissionRequestDTO) (in
 		Description:   data.Description,
 		Source:        "internal",
 		Channel:       "commission",
-		Balance:       wallet.CommissionBalance - data.Amount,
+		AvailableBalance: wallet.CommissionBalance - data.Amount,
 		Status:        1,
 		Wallet:        "Commission",
 	}
@@ -240,7 +240,7 @@ func (s *CommissionService) WithdrawCommissionBalance(data WithdrawCommissionDTO
 			Description:   "Transfer to Main Wallet",
 			Wallet:        "Commission",
 			Status:        1,
-			Balance:       wallet.CommissionBalance - data.Amount, // Approx
+			AvailableBalance: wallet.AvailableBalance, // Approx
 		})
 
 		// Record Credit on Main
@@ -255,7 +255,7 @@ func (s *CommissionService) WithdrawCommissionBalance(data WithdrawCommissionDTO
 			Description:   "Transfer from Commission Wallet",
 			Wallet:        "Main",
 			Status:        1,
-			Balance:       wallet.AvailableBalance + data.Amount,
+			AvailableBalance: wallet.AvailableBalance + data.Amount,
 		})
 
 		return nil
@@ -359,7 +359,7 @@ func (s *CommissionService) RequestCommissionByAffiliate(data RequestCommissionB
 			Description:   "Commission Withdrawal",
 			Wallet:        "Commission",
 			Status:        0, // Pending
-			Balance:       wallet.CommissionBalance - data.Amount,
+			AvailableBalance: wallet.AvailableBalance,
 		}
 
 		if data.TransactionNo != "" {

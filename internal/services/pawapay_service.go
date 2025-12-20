@@ -71,43 +71,40 @@ func (s *PawapayService) GeneratePaymentLink(data map[string]interface{}, client
 func (s *PawapayService) VerifyTransaction(param map[string]interface{}) (interface{}, error) {
 	clientIdFloat, _ := param["clientId"].(float64)
 	clientId := int(clientIdFloat)
-
 	depositId, _ := param["depositId"].(string)
+
+	var transaction models.Transaction
+	if err := s.DB.Where("client_id = ? AND transaction_no = ? AND tranasaction_type = ?", clientId, depositId, "credit").First(&transaction).Error; err != nil {
+		return map[string]interface{}{"success": false, "message": "Transaction not found"}, nil
+	}
+
+	if transaction.Status == 1 {
+		return map[string]interface{}{"success": true, "message": "Verified"}, nil
+	}
+	if transaction.Status == 2 {
+		return map[string]interface{}{"success": false, "message": "Transaction failed"}, nil
+	}
+
 	status, _ := param["status"].(string)
 	rawBody, _ := param["rawBody"].(map[string]interface{})
 
-	_, err := s.pawapaySettings(clientId)
-	if err != nil {
-		return common.SuccessResponse{Success: false, Message: "Config error"}, nil
-	}
-
-	if depositId != "" {
-		var transaction models.Transaction
-		if err := s.DB.Where("client_id = ? AND transaction_no = ? AND tranasaction_type = ?", clientId, depositId, "credit").First(&transaction).Error; err != nil {
-			s.logCallback(clientId, "Transaction not found", rawBody, 0, depositId, "PawaPay")
-			return map[string]interface{}{"success": false, "message": "Transaction not found"}, nil
+	if status == "COMPLETED" {
+		// Update Wallet
+		if err := s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance + ?", transaction.Amount)).Error; err != nil {
+			s.logCallback(clientId, "Wallet not found", rawBody, 0, depositId, "PawaPay")
+			return map[string]interface{}{"success": false, "message": "Wallet not found"}, nil
 		}
 
-		if status == "COMPLETED" {
-			if transaction.Status == 1 {
-				s.logCallback(clientId, "Transaction already successful", rawBody, 1, depositId, "PawaPay")
-				return map[string]interface{}{"success": true, "message": "Transaction already successful"}, nil
-			}
+		var wallet models.Wallet
+		s.DB.Where("user_id = ?", transaction.UserId).First(&wallet)
 
-			// Update Wallet
-			if err := s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance + ?", transaction.Amount)).Error; err != nil {
-				s.logCallback(clientId, "Wallet not found", rawBody, 0, depositId, "PawaPay")
-				return map[string]interface{}{"success": false, "message": "Wallet not found"}, nil
-			}
+		s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Updates(map[string]interface{}{
+			"status":            1,
+			"available_balance": wallet.AvailableBalance,
+		})
 
-			s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Updates(map[string]interface{}{
-				"status":  1,
-				"balance": 0, // Should fetch wallet balance... omitting for brevity unless critical
-			})
-
-			s.logCallback(clientId, "Completed", rawBody, 1, depositId, "PawaPay")
-			return map[string]interface{}{"success": true, "message": "Transaction successfully verified and processed"}, nil
-		}
+		s.logCallback(clientId, "Completed", rawBody, 1, depositId, "PawaPay")
+		return map[string]interface{}{"success": true, "message": "Transaction successfully verified and processed"}, nil
 	}
 
 	return map[string]interface{}{"success": false, "message": "Unable to verify transaction"}, nil

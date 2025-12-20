@@ -89,6 +89,18 @@ func (s *WayaQuickService) VerifyTransaction(data map[string]interface{}) (inter
 	clientId := int(clientIdFloat)
 	transactionRef, _ := data["transactionRef"].(string)
 
+	var transaction models.Transaction
+	if err := s.DB.Where("client_id = ? AND transaction_no = ? AND tranasaction_type = ?", clientId, transactionRef, "credit").First(&transaction).Error; err != nil {
+		return map[string]interface{}{"success": false, "message": "Transaction not found", "status": 404}, nil
+	}
+
+	if transaction.Status == 1 {
+		return map[string]interface{}{"success": true, "message": "Verified", "status": 200}, nil
+	}
+	if transaction.Status == 2 {
+		return map[string]interface{}{"success": false, "message": "Transaction failed", "status": 406}, nil
+	}
+
 	settings, err := s.getSettings(clientId)
 	if err != nil {
 		return map[string]interface{}{"success": false, "message": "Settings not found"}, nil
@@ -98,15 +110,14 @@ func (s *WayaQuickService) VerifyTransaction(data map[string]interface{}) (inter
 	if baseUrl == "" {
 		baseUrl = "https://services.wayapay.com/payment-gateway/api/v1"
 	}
-	// Verify Payment
-	// SDK: verifyPayment(ref)
+	
 	url := fmt.Sprintf("%s/transaction/verify/%s", baseUrl, transactionRef)
 	headers := map[string]string{
 		"Authorization": settings.PublicKey,
 		"MerchantId":    settings.MerchantId,
 	}
 
-	resp, err := common.Get(url, headers) // Assuming GET
+	resp, err := common.Get(url, headers)
 	if err != nil {
 		return map[string]interface{}{"success": false, "message": "Error verifying transaction"}, nil
 	}
@@ -117,27 +128,18 @@ func (s *WayaQuickService) VerifyTransaction(data map[string]interface{}) (inter
 	remoteStatus, _ := dataMap["Status"].(string)
 
 	if status && remoteStatus == "SUCCESSFUL" {
-		var transaction models.Transaction
-		if err := s.DB.Where("client_id = ? AND transaction_no = ? AND tranasaction_type = ?", clientId, transactionRef, "credit").First(&transaction).Error; err != nil {
-			return map[string]interface{}{"success": false, "message": "Transaction not found", "status": 404}, nil
-		}
-
-		if transaction.Status == 1 {
-			return map[string]interface{}{"success": true, "message": "Transaction was successful", "status": 200}, nil
-		}
-
 		// Update Wallet
+		if err := s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance + ?", transaction.Amount)).Error; err != nil {
+			return map[string]interface{}{"success": false, "status": 500}, nil
+		}
+
 		var wallet models.Wallet
 		s.DB.Where("user_id = ?", transaction.UserId).First(&wallet)
-		balance := wallet.AvailableBalance + transaction.Amount
-		s.HelperService.UpdateWallet(balance, transaction.UserId)
 
 		s.DB.Model(&transaction).Updates(map[string]interface{}{
-			"status":  1,
-			"balance": balance,
+			"status":            1,
+			"available_balance": wallet.AvailableBalance,
 		})
-
-		// Trackier logic omitted or moved to helper
 
 		return map[string]interface{}{"success": true, "message": "Transaction was successful", "status": 200}, nil
 	} else if status && remoteStatus != "SUCCESSFUL" {

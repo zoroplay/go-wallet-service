@@ -201,7 +201,15 @@ func (s *OpayService) HandleWebhook(data map[string]interface{}) (interface{}, e
 			return map[string]interface{}{
 				"statusCode": 200,
 				"success":    true,
-				"message":    "Transaction already successful",
+				"message":    "Verified",
+			}, nil
+		}
+
+		if transaction.Status == 2 {
+			return map[string]interface{}{
+				"statusCode": 406,
+				"success":    false,
+				"message":    "Transaction failed",
 			}, nil
 		}
 
@@ -219,8 +227,8 @@ func (s *OpayService) HandleWebhook(data map[string]interface{}) (interface{}, e
 		s.DB.Where("user_id = ?", transaction.UserId).First(&wallet)
 
 		s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Updates(map[string]interface{}{
-			"status":  1,
-			"balance": wallet.AvailableBalance,
+			"status":            1,
+			"available_balance": wallet.AvailableBalance,
 		})
 
 		s.logCallback(clientId, "Completed", rawBody, 1, ref, "Opay")

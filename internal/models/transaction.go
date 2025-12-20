@@ -16,7 +16,7 @@ type Transaction struct {
 	Description            string    `gorm:"column:description;type:text" json:"description"`
 	Source                 string    `gorm:"column:source;size:50" json:"source"`
 	Channel                string    `gorm:"column:channel;size:50" json:"channel"`
-	Balance                float64   `gorm:"column:balance;type:decimal(20,2);default:0.00" json:"balance"`
+	AvailableBalance       float64   `gorm:"column:available_balance;type:decimal(20,2);default:0.00" json:"available_balance"`
 	Wallet                 string    `gorm:"column:wallet;size:50;default:main" json:"wallet"`
 	Status                 int       `gorm:"column:status;default:0" json:"status"` // 0: pending, 1: success, 2: failed
 	SettlementId           *string   `gorm:"column:settlementId;size:255" json:"settlementId"`

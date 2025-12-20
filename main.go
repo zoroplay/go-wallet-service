@@ -96,7 +96,7 @@ func main() {
 	)
 
 	walletService := services.NewWalletService(db, helperService)
-	withdrawalService := services.NewWithdrawalService(db)
+	withdrawalService := services.NewWithdrawalService(db, identityClient)
 
 	// Redis/Asynq Client
 	redisAddr := os.Getenv("REDIS_URL")

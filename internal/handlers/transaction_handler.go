@@ -34,7 +34,7 @@ func CreditUser(c *gin.Context) {
 		return
 	}
 
-	wallet.Balance += req.Amount
+	wallet.AvailableBalance += req.Amount
 	if err := tx.Save(&wallet).Error; err != nil {
 		tx.Rollback()
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update wallet"})
@@ -51,7 +51,7 @@ func CreditUser(c *gin.Context) {
 		Subject:       "deposit",
 		Description:   req.Description,
 		Source:        req.Source,
-		Balance:       wallet.Balance,
+		AvailableBalance: wallet.AvailableBalance,
 		Status:        1,
 	}
 
@@ -62,7 +62,7 @@ func CreditUser(c *gin.Context) {
 	}
 
 	tx.Commit()
-	c.JSON(http.StatusOK, gin.H{"message": "User credited successfully", "balance": wallet.Balance})
+	c.JSON(http.StatusOK, gin.H{"message": "User credited successfully", "balance": wallet.AvailableBalance})
 }
 
 func DebitUser(c *gin.Context) {
@@ -81,13 +81,13 @@ func DebitUser(c *gin.Context) {
 		return
 	}
 
-	if wallet.Balance < req.Amount {
+	if wallet.AvailableBalance < req.Amount {
 		tx.Rollback()
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Insufficient balance"})
 		return
 	}
 
-	wallet.Balance -= req.Amount
+	wallet.AvailableBalance -= req.Amount
 	if err := tx.Save(&wallet).Error; err != nil {
 		tx.Rollback()
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update wallet"})
@@ -104,7 +104,7 @@ func DebitUser(c *gin.Context) {
 		Subject:       "withdrawal",
 		Description:   req.Description,
 		Source:        req.Source,
-		Balance:       wallet.Balance,
+		AvailableBalance: wallet.AvailableBalance,
 		Status:        1,
 	}
 
@@ -115,7 +115,7 @@ func DebitUser(c *gin.Context) {
 	}
 
 	tx.Commit()
-	c.JSON(http.StatusOK, gin.H{"message": "User debited successfully", "balance": wallet.Balance})
+	c.JSON(http.StatusOK, gin.H{"message": "User debited successfully", "balance": wallet.AvailableBalance})
 }
 
 func GetTransactions(c *gin.Context) {

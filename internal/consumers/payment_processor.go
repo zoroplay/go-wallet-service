@@ -228,6 +228,10 @@ func (p *PaymentProcessor) ProcessWithdrawal(data WithdrawalJobDTO) {
 		AffiliateTransactionNo: data.AffiliateTransactionNo,
 	})
 
+	if data.Type == "bank" {
+		p.saveUserBankAccount(data)
+	}
+
 	if data.AutoDisbursement.AutoDisbursement == 1 && data.Type != "cash" {
 		count, err := p.PaymentService.CheckNoOfWithdrawals(data.UserId)
 		if err == nil {
@@ -383,6 +387,8 @@ func (p *PaymentProcessor) processPayoutCommon(data WithdrawalJobDTO) {
 		Status:         0,
 	}
 	p.DB.Create(&withdrawal)
+
+	p.saveUserBankAccount(data)
 
 	p.Helper.SaveTransaction(services.TransactionData{
 		ClientId:        data.ClientId,
@@ -578,6 +584,24 @@ func (p *PaymentProcessor) ProcessAffiliateCommission(data AffiliateCommissionDT
 				TransactionNo: data.WithdrawalCode,
 				UserId:        data.UserId,
 			})
+		}
+	}
+}
+
+func (p *PaymentProcessor) saveUserBankAccount(data WithdrawalJobDTO) {
+	var count int64
+	p.DB.Model(&models.WithdrawalAccount{}).Where("user_id = ? AND bank_code = ?", data.UserId, data.BankCode).Count(&count)
+
+	if count == 0 {
+		bankAccount := models.WithdrawalAccount{
+			ClientId:      data.ClientId,
+			UserId:        data.UserId,
+			BankCode:      data.BankCode,
+			AccountName:   data.AccountName,
+			AccountNumber: data.AccountNumber,
+		}
+		if err := p.DB.Create(&bankAccount).Error; err != nil {
+			log.Printf("error saving bank account: %v", err)
 		}
 	}
 }

@@ -32,7 +32,6 @@ func (s *WalletService) CreateWallet(data CreateWalletDTO) (common.SuccessRespon
 		UserId:           data.UserId,
 		Username:         data.Username,
 		ClientId:         data.ClientId,
-		Balance:          data.Amount, // Initial balance
 		AvailableBalance: data.Amount,
 		SportBonus:       data.Bonus,
 		Currency:         "NGN", // Default
@@ -146,20 +145,9 @@ func (s *WalletService) CreditUser(data CreditUserDTO) (common.SuccessResponse, 
 	case "trust":
 		newBalance = wallet.TrustBalance
 	default:
-		// Logic update for main wallet: In TS it updates 'available_balance',
-		// but `Wallet` struct has `Balance` and `AvailableBalance`.
-		// Go model maps `Balance` -> `balance` column, `AvailableBalance` -> `available_balance` column.
-		// TS updates `available_balance`.
-		// However, typical wallet logic might require updating BOTH if they are separate.
-		// TS `app.service.ts` line 400 updates `[walletBalance]` which defaults to `available_balance`.
-		// It does NOT update `balance` column explicitly in that query.
-		// But later at line 474 `wallet.balance = balance`.
-
-		// For now, I will follow TS strictly: Update mapped column.
+		// Logic update for main wallet: In TS it updates 'available_balance'.
+		// We use AvailableBalance for the main balance.
 		newBalance = wallet.AvailableBalance
-
-		// If data.Wallet is default, we might also want to update `balance` column if business logic dictates so?
-		// TS code only updates one column in `createQueryBuilder`.
 	}
 
 	// Save transaction
@@ -486,7 +474,7 @@ func (s *WalletService) DebitAgentBalance(data DebitUserDTO) (common.SuccessResp
 	// Logic: balance -= amount.
 	tx := s.DB.Model(&models.Wallet{}).
 		Where("user_id = ? AND client_id = ?", data.UserId, data.ClientId).
-		UpdateColumn("balance", gorm.Expr("balance - ?", data.Amount))
+		UpdateColumn("available_balance", gorm.Expr("available_balance - ?", data.Amount))
 
 	if tx.Error != nil {
 		return common.SuccessResponse{}, tx.Error
@@ -670,7 +658,7 @@ func (s *WalletService) GetNetworkBalance(data GetNetworkBalanceDTO) (map[string
 		"networkTrustBalance": res.TrustBal + agentWallet.TrustBalance,
 		"trustBalance":        agentWallet.TrustBalance,
 		"availableBalance":    agentWallet.AvailableBalance,
-		"balance":             agentWallet.Balance,
+		"balance":             agentWallet.AvailableBalance,
 		"commissionBalance":   agentWallet.CommissionBalance,
 	}, nil
 }
@@ -703,13 +691,13 @@ func GetBalance(db *sql.DB, in *walletBuffer.GetBalanceRequest) (bool, int32, st
 
 	var row models.Wallet
 	query := `
-	SELECT balance, available_balance, sport_bonus_balance,
+	SELECT available_balance, sport_bonus_balance,
 	       virtual_bonus_balance, casino_bonus_balance, trust_balance
 	FROM wallets WHERE user_id = ? AND client_id = ? LIMIT 1
 	`
 
 	err := db.QueryRow(query, in.UserId, in.ClientId).Scan(
-		&row.Balance, &row.AvailableBalance, &row.SportBonus,
+		&row.AvailableBalance, &row.SportBonus,
 		&row.VirtualBonus, &row.CasinoBonus, &row.TrustBalance,
 	)
 
@@ -719,7 +707,7 @@ func GetBalance(db *sql.DB, in *walletBuffer.GetBalanceRequest) (bool, int32, st
 
 	return true, 200, "Balance retrieved", &walletBuffer.Wallet{
 		UserId:              in.UserId,
-		Balance:             row.Balance,
+		Balance:             row.AvailableBalance,
 		AvailableBalance:    row.AvailableBalance,
 		SportBonusBalance:   row.SportBonus,
 		VirtualBonusBalance: row.VirtualBonus,

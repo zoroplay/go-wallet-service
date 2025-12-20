@@ -104,49 +104,58 @@ func (s *TigoService) HandleW2aWebhook(data map[string]interface{}) (interface{}
 	msisdn, _ := data["msisdn"].(string)
 	txnId, _ := data["txnId"].(string)
 	amount, _ := data["amount"].(float64)
+	status, _ := data["status"].(string)
 
-	settings, err := s.tigoSettings(clientId)
-	if err != nil {
-		return map[string]interface{}{"success": false, "message": "Tigo not configured"}, nil
+	var transaction models.Transaction
+	if err := s.DB.Where("client_id = ? AND transaction_no = ? AND tranasaction_type = ?", clientId, txnId, "credit").First(&transaction).Error; err == nil {
+		if transaction.Status == 1 {
+			return map[string]interface{}{"success": true, "message": "Verified"}, nil
+		}
+		if transaction.Status == 2 {
+			return map[string]interface{}{"success": false, "message": "Transaction failed"}, nil
+		}
+	} else {
+		// If not found, create as pending if status is success or just record it
+		transaction = models.Transaction{
+			Amount:        amount,
+			Channel:       "tigo-w2a",
+			ClientId:      clientId,
+			TransactionNo: txnId,
+			TrxType:       "credit",
+			Status:        0,
+			Username:      msisdn,
+		}
+		// Find user via msisdn if possible
+		var wallet models.Wallet
+		if err := s.DB.Where("username = ?", msisdn).First(&wallet).Error; err == nil {
+			transaction.UserId = wallet.UserId
+		}
+		s.DB.Create(&transaction)
 	}
-	_ = settings
 
-	// Find user
-	var wallet models.Wallet
-	if err := s.DB.Where("username = ?", msisdn).First(&wallet).Error; err != nil {
-		s.logCallback(clientId, "User not found", data["rawBody"], 1, txnId, "Tigo") // rawBody handling approximated
-		return map[string]interface{}{"success": false, "message": "User not found"}, nil
+	if status == "success" {
+		if transaction.UserId == 0 {
+			return map[string]interface{}{"success": false, "message": "User not found"}, nil
+		}
+
+		// Fund
+		if err := s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance + ?", transaction.Amount)).Error; err != nil {
+			return map[string]interface{}{"success": false}, nil
+		}
+
+		var wallet models.Wallet
+		s.DB.Where("user_id = ?", transaction.UserId).First(&wallet)
+
+		s.DB.Model(&models.Transaction{}).Where("id = ?", transaction.ID).Updates(map[string]interface{}{
+			"status":            1,
+			"available_balance": wallet.AvailableBalance,
+		})
+
+		s.logCallback(clientId, "Completed", data, 1, txnId, "Tigo")
+		return map[string]interface{}{"success": true}, nil
 	}
 
-	// Check existing
-	var existing models.Transaction
-	if err := s.DB.Where("client_id = ? AND transaction_no = ? AND tranasaction_type = ?", clientId, txnId, "credit").First(&existing).Error; err == nil && existing.Status == 1 {
-		s.logCallback(clientId, "Transaction already successful", data["rawBody"], 1, txnId, "Tigo")
-		return map[string]interface{}{"success": false, "refId": txnId, "message": "Transaction already successful"}, nil
-	}
-
-	// Save Transaction via Helper
-	// s.HelperService.SaveTransaction(...)
-	// Implementing inline for now to save time or calling helper
-	trx := models.Transaction{
-		Amount:        amount,
-		Channel:       "tigo-w2a",
-		ClientId:      clientId,
-		UserId:        wallet.UserId,
-		TransactionNo: txnId,
-		TrxType:       "credit",
-		Status:        0,
-		// ... other fields
-	}
-	s.DB.Create(&trx)
-
-	// Process
-	balance := wallet.AvailableBalance + amount
-	s.HelperService.UpdateWallet(balance, wallet.UserId)
-	s.DB.Model(&trx).Updates(map[string]interface{}{"status": 1, "balance": balance})
-
-	s.logCallback(clientId, "Completed", data["rawBody"], 1, txnId, "Tigo")
-	return map[string]interface{}{"success": true, "refId": txnId, "message": "Transaction successfully verified"}, nil
+	return map[string]interface{}{"success": false}, nil
 }
 
 func (s *TigoService) HandleWebhook(data map[string]interface{}) (interface{}, error) {
@@ -161,19 +170,25 @@ func (s *TigoService) HandleWebhook(data map[string]interface{}) (interface{}, e
 	}
 
 	if transaction.Status == 1 {
-		s.logCallback(clientId, "Transaction already successful", data, 1, reference, "Tigo")
-		return map[string]interface{}{"success": true, "message": "Transaction already successful"}, nil
+		return map[string]interface{}{"success": true, "message": "Verified"}, nil
+	}
+	if transaction.Status == 2 {
+		return map[string]interface{}{"success": false, "message": "Transaction failed"}, nil
+	}
+
+	// Fund
+	if err := s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance + ?", transaction.Amount)).Error; err != nil {
+		s.logCallback(clientId, "Update failed", data, 0, reference, "Tigo")
+		return map[string]interface{}{"success": false}, nil
 	}
 
 	var wallet models.Wallet
-	if err := s.DB.Where("user_id = ?", transaction.UserId).First(&wallet).Error; err != nil {
-		s.logCallback(clientId, "Wallet not found", data, 0, reference, "Tigo")
-		return map[string]interface{}{"success": false, "message": "Wallet not found"}, nil
-	}
+	s.DB.Where("user_id = ?", transaction.UserId).First(&wallet)
 
-	balance := wallet.AvailableBalance + transaction.Amount
-	s.HelperService.UpdateWallet(balance, transaction.UserId)
-	s.DB.Model(&transaction).Updates(map[string]interface{}{"status": 1, "balance": balance})
+	s.DB.Model(&transaction).Updates(map[string]interface{}{
+		"status":            1,
+		"available_balance": wallet.AvailableBalance,
+	})
 
 	s.logCallback(clientId, "Completed", data, 1, reference, "Tigo")
 	return map[string]interface{}{"success": true, "message": "Transaction successfully verified"}, nil

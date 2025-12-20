@@ -100,6 +100,8 @@ func (s *PaystackService) VerifyTransaction(param VerifyTransactionDTO) (interfa
 	dataMap, _ := respMap["data"].(map[string]interface{})
 	gatewayStatus, _ := dataMap["status"].(string)
 
+	fmt.Println("Gateway status: ", gatewayStatus)
+
 	// Findings transaction
 	var transaction models.Transaction
 	if err := s.DB.Where("client_id = ? AND transaction_no = ? AND subject IN (?)", param.ClientId, param.TransactionRef, []string{"Deposit", "Credit"}).First(&transaction).Error; err != nil {
@@ -108,17 +110,22 @@ func (s *PaystackService) VerifyTransaction(param VerifyTransactionDTO) (interfa
 		return common.NewErrorResponse("Transaction not found", nil, 404), nil
 	}
 
+	fmt.Println("Transaction found: ", transaction.Status)
+
+	if transaction.Status == 1 {
+		s.logCallback(param.ClientId, "Transaction already processed", respMap, 1, param.TransactionRef, "Paystack")
+		return common.NewSuccessResponse(nil, "Transaction already processed"), nil
+	}
+	if transaction.Status == 2 {
+		s.logCallback(param.ClientId, "Transaction already verified or processed", respMap, 1, param.TransactionRef, "Paystack")
+		return common.NewSuccessResponse(nil, "Verified"), nil
+	}
+
 	if gatewayStatus == "success" {
+
 		if transaction.Status == 1 {
-			s.logCallback(param.ClientId, "Transaction already processed", respMap, 1, param.TransactionRef, "Paystack")
 			return common.NewSuccessResponse(nil, "Transaction already processed"), nil
 		}
-		if transaction.Status == 2 {
-			s.logCallback(param.ClientId, "Transaction failed previously", respMap, 0, param.TransactionRef, "Paystack")
-			// TS returns 406 Not Acceptable
-			return common.NewErrorResponse("Transaction failed. Try again", nil, 406), nil
-		}
-
 		if transaction.Status == 0 {
 			// Fund Wallet
 			var wallet models.Wallet
@@ -129,6 +136,8 @@ func (s *PaystackService) VerifyTransaction(param VerifyTransactionDTO) (interfa
 
 			newBal := wallet.AvailableBalance + transaction.Amount
 
+			fmt.Println("New balance: ", newBal)
+
 			// Update Wallet using Helper (or direct atomic update, but helper has UpdateWallet)
 			// TS uses `this.helperService.updateWallet`. Let's use atomic update here to be safe and consistent.
 			if err := s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance + ?", transaction.Amount)).Error; err != nil {
@@ -138,7 +147,7 @@ func (s *PaystackService) VerifyTransaction(param VerifyTransactionDTO) (interfa
 			// Update Transaction
 			s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Updates(map[string]interface{}{
 				"status":  1,
-				"balance": newBal,
+				"available_balance": newBal,
 			})
 
 			// Trackier (Stub)

@@ -123,6 +123,19 @@ type MonnifyVerifyDTO struct {
 }
 
 func (s *MonnifyService) VerifyTransaction(param MonnifyVerifyDTO) (interface{}, error) {
+	var transaction models.Transaction
+	if err := s.DB.Where("client_id = ? AND transaction_no = ? AND tranasaction_type = ?", param.ClientId, param.TransactionRef, "credit").First(&transaction).Error; err != nil {
+		return common.NewErrorResponse("Transaction not found", nil, 404), nil
+	}
+
+	if transaction.Status == 1 {
+		return common.NewSuccessResponse(nil, "Verified"), nil
+	}
+
+	if transaction.Status == 2 {
+		return common.NewErrorResponse("Transaction failed. Try again", nil, 406), nil
+	}
+
 	settings, err := s.monnifySettings(param.ClientId)
 	if err != nil {
 		return common.NewErrorResponse("Config error", nil, 400), nil
@@ -152,12 +165,6 @@ func (s *MonnifyService) VerifyTransaction(param MonnifyVerifyDTO) (interface{},
 		dataReqSuccess, _ := data["requestSuccessful"].(bool)
 		dataMsg, _ := data["responseMessage"].(string) // "success"
 
-		var transaction models.Transaction
-		if err := s.DB.Where("client_id = ? AND transaction_no = ? AND tranasaction_type = ?", param.ClientId, param.TransactionRef, "credit").First(&transaction).Error; err != nil {
-			s.logCallback(param.ClientId, "Transaction not found", param, 0, param.TransactionRef, "Monnify")
-			return common.NewErrorResponse("Transaction not found", nil, 404), nil
-		}
-
 		if dataReqSuccess && dataMsg == "success" {
 			dataBody, _ := data["responseBody"].(map[string]interface{})
 			paymentStatus, _ := dataBody["paymentStatus"].(string)
@@ -173,36 +180,23 @@ func (s *MonnifyService) VerifyTransaction(param MonnifyVerifyDTO) (interface{},
 			// Update status
 			s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Update("status", status)
 
-			if status == 1 && transaction.Status == 1 {
-				s.logCallback(param.ClientId, "Transaction already processed", param, 1, param.TransactionRef, "Monnify")
-				return common.NewSuccessResponse(nil, "Transaction already processed"), nil
-			}
-
-			if status == 2 {
-				s.logCallback(param.ClientId, "Transaction Not Accepted", param, 0, param.TransactionRef, "Monnify")
-				return common.NewErrorResponse("Transaction "+paymentStatus, nil, 406), nil
-			}
-
-			if transaction.Status == 0 && status == 1 {
+			if status == 1 {
 				// Fund wallet
 				if err := s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance + ?", transaction.Amount)).Error; err != nil {
-					s.logCallback(param.ClientId, "Wallet not found", param, 0, param.TransactionRef, "Monnify")
-					return common.NewErrorResponse("Wallet not found", nil, 404), nil
+					return common.NewErrorResponse("Update failed", nil, 500), nil
 				}
 
 				var wallet models.Wallet
 				s.DB.Where("user_id = ?", transaction.UserId).First(&wallet)
 
-				s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Update("balance", wallet.AvailableBalance)
+				s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Update("available_balance", wallet.AvailableBalance)
 
-				// Trackier stub
 				s.logCallback(param.ClientId, "Completed", param, 1, param.TransactionRef, "Monnify")
 				return common.NewSuccessResponse(nil, "Transaction was successful"), nil
-			} else if paymentStatus == "REVERSED" && transaction.Status == 1 {
-				// Reverse logic
-				// Deduct
-				s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance - ?", transaction.Amount))
-				return common.NewSuccessResponse(nil, "Transaction was reversed"), nil
+			} else if paymentStatus == "REVERSED" {
+				// Reverse logic if needed, but handled by status=2 above?
+				// Status 2 is generally failed. REVERSED is also status 2.
+				return common.NewErrorResponse("Transaction reversed", nil, 406), nil
 			}
 
 		} else {
@@ -264,18 +258,25 @@ func (s *MonnifyService) HandleWebhook(dto map[string]interface{}) (interface{},
 
 		}
 
+		if transaction.Status == 1 {
+			return map[string]interface{}{"success": true, "message": "Verified"}, nil
+		}
+		if transaction.Status == 2 {
+			return map[string]interface{}{"success": false, "message": "Transaction failed"}, nil
+		}
+
 		s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Update("status", status)
 
-		if status == 1 && transaction.Status == 0 {
+		if status == 1 {
 			if err := s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance + ?", transaction.Amount)).Error; err != nil {
 				return map[string]interface{}{"success": false}, nil
-
 			}
-			// Trackier stub
-		} else if paymentStatus == "REVERSED" && transaction.Status == 1 {
+			var wallet models.Wallet
+			s.DB.Where("user_id = ?", transaction.UserId).First(&wallet)
+			s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Update("available_balance", wallet.AvailableBalance)
+		} else if paymentStatus == "REVERSED" {
 			s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance - ?", transaction.Amount))
 			return map[string]interface{}{"success": true, "message": "Transaction reversed"}, nil
-
 		}
 
 	case "SUCCESSFUL_DISBURSEMENT", "FAILED_DISBURSEMENT", "REVERSED_DISBURSEMENT":

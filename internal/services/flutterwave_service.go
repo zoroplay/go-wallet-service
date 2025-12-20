@@ -90,6 +90,19 @@ type VerifyFlutterwaveDTO struct {
 }
 
 func (s *FlutterwaveService) VerifyTransaction(param VerifyFlutterwaveDTO) (interface{}, error) {
+	var transaction models.Transaction
+	if err := s.DB.Where("client_id = ? AND transaction_no = ? AND subject = ?", param.ClientId, param.TransactionRef, "Deposit").First(&transaction).Error; err != nil {
+		return common.NewErrorResponse("Transaction not found", nil, 404), nil
+	}
+
+	if transaction.Status == 1 {
+		return common.NewSuccessResponse(nil, "Verified"), nil
+	}
+
+	if transaction.Status == 2 {
+		return common.NewErrorResponse("Transaction failed. Try again", nil, 406), nil
+	}
+
 	settings, err := s.settings(param.ClientId)
 	if err != nil {
 		return common.NewErrorResponse("Flutterwave not configured", nil, 400), nil
@@ -99,7 +112,6 @@ func (s *FlutterwaveService) VerifyTransaction(param VerifyFlutterwaveDTO) (inte
 	headers := map[string]string{"Authorization": "Bearer " + settings.SecretKey}
 
 	resp, err := common.Get(url, headers)
-	// If verify fails or returns error status
 	if err != nil {
 		return common.NewErrorResponse("Verification failed", nil, 400), nil
 	}
@@ -108,38 +120,28 @@ func (s *FlutterwaveService) VerifyTransaction(param VerifyFlutterwaveDTO) (inte
 	dataMap, _ := respMap["data"].(map[string]interface{})
 	status, _ := dataMap["status"].(string)
 
-	var transaction models.Transaction
-	if err := s.DB.Where("client_id = ? AND transaction_no = ? AND subject = ?", param.ClientId, param.TransactionRef, "Deposit").First(&transaction).Error; err != nil {
-		s.logCallback(param.ClientId, "Transaction not found", respMap, 0, param.TransactionRef, "Flutterwave")
-		return common.NewErrorResponse("Transaction not found", nil, 404), nil
-	}
-
 	if status == "success" {
+
 		if transaction.Status == 1 {
-			s.logCallback(param.ClientId, "Transaction already processed", respMap, 1, param.TransactionRef, "Flutterwave")
-			return common.NewSuccessResponse(nil, "Transaction already processed"), nil
-		}
-		if transaction.Status == 2 {
-			s.logCallback(param.ClientId, "Transaction not Accepted", respMap, 0, param.TransactionRef, "Flutterwave")
-			return common.NewErrorResponse("Transaction failed. Try again", nil, 406), nil
+			return common.NewSuccessResponse(nil, "Already verified"), nil
 		}
 
-		if transaction.Status == 0 {
-			var wallet models.Wallet
-			if err := s.DB.Where("user_id = ?", transaction.UserId).First(&wallet).Error; err != nil {
-				return common.NewErrorResponse("Wallet not found", nil, 404), nil // Log skipped for brevity
-			}
+	
+		var wallet models.Wallet
+		if err := s.DB.Where("user_id = ?", transaction.UserId).First(&wallet).Error; err != nil {
+			return common.NewErrorResponse("Wallet not found", nil, 404), nil 
+		}
 
-			// Fund
-			if err := s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance + ?", transaction.Amount)).Error; err != nil {
-				return common.NewErrorResponse("Update failed", nil, 500), nil
-			}
+		// Fund
+		if err := s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance + ?", transaction.Amount)).Error; err != nil {
+			return common.NewErrorResponse("Update failed", nil, 500), nil
+		}
 
-			// Update Status
-			s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Updates(map[string]interface{}{
-				"status":  1,
-				"balance": wallet.AvailableBalance + transaction.Amount,
-			})
+		// Update Status
+		s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Updates(map[string]interface{}{
+			"status":            1,
+			"available_balance": wallet.AvailableBalance + transaction.Amount,
+		})
 
 			// Bonus Processing
 			if s.BonusClient != nil {
@@ -195,11 +197,6 @@ func (s *FlutterwaveService) VerifyTransaction(param VerifyFlutterwaveDTO) (inte
 			s.logCallback(param.ClientId, "Completed", respMap, 1, param.TransactionRef, "Flutterwave")
 			return common.NewSuccessResponse(nil, "Transaction was successful"), nil
 		}
-	} else {
-		// Failed
-		s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Update("status", 2)
-		return common.NewErrorResponse("Transaction was not successful", nil, 400), nil
-	}
 
 	return common.NewErrorResponse("Unknown state", nil, 500), nil
 }
@@ -262,8 +259,8 @@ func (s *FlutterwaveService) handleChargeCompleted(dto FlutterwaveWebhookDTO) (i
 	s.DB.Where("user_id = ?", transaction.UserId).First(&wallet)
 
 	s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", ref).Updates(map[string]interface{}{
-		"status":  1,
-		"balance": wallet.AvailableBalance,
+		"status":            1,
+		"available_balance": wallet.AvailableBalance,
 	})
 
 	s.logCallback(dto.ClientId, "Transaction successfully verified and processed", dto.Data, 1, ref, "Webhook")

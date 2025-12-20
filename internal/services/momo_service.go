@@ -160,26 +160,20 @@ func (s *MomoService) HandleWebhook(data map[string]interface{}) (interface{}, e
 	clientId := int(clientIdFloat)
 	rawBody, _ := data["rawBody"].(map[string]interface{})
 
-	_, err := s.mtnMomoSettings(clientId)
-	if err != nil {
-		return common.SuccessResponse{Success: false, Message: "Mtn MOMO has not been configured for client"}, nil
-	}
-
 	var transaction models.Transaction
 	if err := s.DB.Where("client_id = ? AND transaction_no = ? AND tranasaction_type = ?", clientId, externalId, "credit").First(&transaction).Error; err != nil {
 		s.logCallback(clientId, "Transaction not found", rawBody, 0, externalId, "Mtnmomo")
 		return common.NewErrorResponse("Transaction not found", nil, 404), nil
 	}
 
-	if status == "SUCCESSFUL" {
-		if transaction.Status == 1 {
-			s.logCallback(clientId, "Transaction already successful", rawBody, 1, externalId, "Mtnmomo")
-			return map[string]interface{}{
-				"success": true,
-				"message": "Transaction already successful",
-			}, nil
-		}
+	if transaction.Status == 1 {
+		return map[string]interface{}{"success": true, "message": "Verified"}, nil
+	}
+	if transaction.Status == 2 {
+		return map[string]interface{}{"success": false, "message": "Transaction failed"}, nil
+	}
 
+	if status == "SUCCESSFUL" {
 		// Update Wallet
 		if err := s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance + ?", transaction.Amount)).Error; err != nil {
 			s.logCallback(clientId, "Wallet not found", rawBody, 0, externalId, "Mtnmomo")
@@ -190,8 +184,8 @@ func (s *MomoService) HandleWebhook(data map[string]interface{}) (interface{}, e
 		s.DB.Where("user_id = ?", transaction.UserId).First(&wallet)
 
 		s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Updates(map[string]interface{}{
-			"status":  1,
-			"balance": wallet.AvailableBalance,
+			"status":            1,
+			"available_balance": wallet.AvailableBalance,
 		})
 
 		s.logCallback(clientId, "Completed", rawBody, 1, externalId, "Mtnmomo")

@@ -153,32 +153,39 @@ func (s *PalmPayService) HandleWebhook(data map[string]interface{}) (interface{}
 	rawBody, _ := data["rawBody"].(map[string]interface{})
 	payload, _ := rawBody["payload"].(map[string]interface{})
 	status, _ := payload["status"].(string)
+	ref, _ := payload["reference"].(string)
 
 	clientIdFloat, _ := data["clientId"].(float64)
 	clientId := int(clientIdFloat)
 
+	var transaction models.Transaction
+	if err := s.DB.Where("client_id = ? AND transaction_no = ? AND tranasaction_type = ?", clientId, ref, "credit").First(&transaction).Error; err != nil {
+		s.logCallback(clientId, "Transaction not found", rawBody, 0, ref, "PalmPay") 
+		return common.NewErrorResponse("Transaction not found", nil, 404), nil
+	}
+
+	if transaction.Status == 1 {
+		return map[string]interface{}{
+			"success": true,
+			"message": "Verified",
+			"status":  200,
+			"data":    map[string]interface{}{},
+		}, nil
+	}
+
+	if transaction.Status == 2 {
+		return map[string]interface{}{
+			"success": false,
+			"message": "Transaction failed",
+			"status":  406,
+			"data":    map[string]interface{}{},
+		}, nil
+	}
+
 	if status == "SUCCESS" {
-		ref, _ := payload["reference"].(string)
-
-		var transaction models.Transaction
-		if err := s.DB.Where("client_id = ? AND transaction_no = ? AND tranasaction_type = ?", clientId, ref, "credit").First(&transaction).Error; err != nil {
-			s.logCallback(clientId, "Transaction not found", rawBody, 0, ref, "Opay") // Original code said Opay?
-			return common.NewErrorResponse("Transaction not found", nil, 404), nil
-		}
-
-		if transaction.Status == 1 {
-			s.logCallback(clientId, "Transaction already processed", rawBody, 1, ref, "Opay")
-			return map[string]interface{}{
-				"success": true,
-				"message": "Transaction already successful",
-				"status":  200,
-				"data":    map[string]interface{}{},
-			}, nil
-		}
-
 		// Update Wallet
 		if err := s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance + ?", transaction.Amount)).Error; err != nil {
-			s.logCallback(clientId, "Wallet not found", rawBody, 0, ref, "Opay")
+			s.logCallback(clientId, "Wallet not found", rawBody, 0, ref, "PalmPay")
 			return common.NewErrorResponse("Wallet not found", nil, 404), nil
 		}
 
@@ -186,11 +193,11 @@ func (s *PalmPayService) HandleWebhook(data map[string]interface{}) (interface{}
 		s.DB.Where("user_id = ?", transaction.UserId).First(&wallet)
 
 		s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Updates(map[string]interface{}{
-			"status":  1,
-			"balance": wallet.AvailableBalance,
+			"status":            1,
+			"available_balance": wallet.AvailableBalance,
 		})
 
-		s.logCallback(clientId, "Completed", rawBody, 1, ref, "Opay")
+		s.logCallback(clientId, "Completed", rawBody, 1, ref, "PalmPay")
 
 		return map[string]interface{}{
 			"status":  200,
@@ -201,8 +208,8 @@ func (s *PalmPayService) HandleWebhook(data map[string]interface{}) (interface{}
 	}
 
 	// Error case from TS
-	ref, _ := payload["reference"].(string)
-	s.logCallback(clientId, "Failed", rawBody, 0, ref, "Opay")
+	ref, _ = payload["reference"].(string)
+	s.logCallback(clientId, "Failed", rawBody, 0, ref, "PalmPay")
 	return map[string]interface{}{
 		"success": false,
 		"message": "Error occurred during processing",

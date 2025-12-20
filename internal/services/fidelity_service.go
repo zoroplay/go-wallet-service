@@ -126,8 +126,6 @@ type FidelityWebhookDTO struct {
 // TS: handleCallback(data) has transactionRef...
 
 func (s *FidelityService) HandleWebhook(dto FidelityWebhookDTO) (interface{}, error) {
-	// Logic from handleWebhook in TS
-	// Check transaction
 	ref := dto.TransactionReference
 	if ref == "" {
 		ref = dto.TransactionRef
@@ -139,21 +137,24 @@ func (s *FidelityService) HandleWebhook(dto FidelityWebhookDTO) (interface{}, er
 		return common.NewErrorResponse("Transaction not found", nil, 404), nil
 	}
 
+	if transaction.Status == 1 {
+		return map[string]interface{}{"success": true, "message": "Verified"}, nil
+	}
+	if transaction.Status == 2 {
+		return map[string]interface{}{"success": false, "message": "Transaction failed"}, nil
+	}
+
 	rawBody := dto.RawBody
 	wbBody, _ := rawBody["webhookBody"].(map[string]interface{})
 
 	typeStr, _ := wbBody["type"].(string)
 	statusOk, _ := wbBody["statusOk"].(bool)
-	statusInt, _ := wbBody["status"].(float64) // JSON numbers are float64
+	statusInt, _ := wbBody["status"].(float64)
 
-	successCondition := typeStr == "success" && statusOk == true && statusInt == 201
+	successCondition := typeStr == "success" && statusOk == true && (statusInt == 201 || statusInt == 200)
 
 	if successCondition {
-		if transaction.Status == 1 {
-			s.logCallback(dto.ClientId, "Transaction already successful", dto.RawBody, 1, ref, "Fidelity")
-			return common.NewSuccessResponse(nil, "Transaction already successful"), nil
-		}
-
+		// Update Wallet
 		if err := s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance + ?", transaction.Amount)).Error; err != nil {
 			s.logCallback(dto.ClientId, "Wallet not found", dto.RawBody, 0, ref, "Fidelity")
 			return common.NewErrorResponse("Wallet not found for this user", nil, 404), nil
@@ -163,31 +164,18 @@ func (s *FidelityService) HandleWebhook(dto FidelityWebhookDTO) (interface{}, er
 		s.DB.Where("user_id = ?", transaction.UserId).First(&wallet)
 
 		s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Updates(map[string]interface{}{
-			"status":  1,
-			"balance": wallet.AvailableBalance,
+			"status":            1,
+			"available_balance": wallet.AvailableBalance,
 		})
 
-		s.logCallback(dto.ClientId, "Completed", dto.RawBody, 1, ref, "Fidelity") // Status was 0 in TS for some reason in one place, 1 in other. Using 1 for success.
+		s.logCallback(dto.ClientId, "Completed", dto.RawBody, 1, ref, "Fidelity")
 		return common.NewSuccessResponse(nil, "Transaction successfully verified and processed"), nil
 	}
 
-	return common.NewSuccessResponse(nil, "Transaction not successful"), nil // Or error? TS just returned bad request if not matching
+	return common.NewSuccessResponse(nil, "Transaction not successful"), nil
 }
 
 func (s *FidelityService) HandleCallback(dto FidelityWebhookDTO) (interface{}, error) {
-	// Logic from handleCallback
-	// Pretty much identical to HandleWebhook but without validting `webhookBody` structure explicitly...
-	// TS `handleCallback` just updates blindly if transaction found ???
-	// No, `handleCallback` in TS checks nothing about the payload content success! It blindly updates if transaction exists and not status 1.
-	// Wait, that's dangerous.
-	// `handleCallback(data)`:
-	// 1. Find transaction.
-	// 2. If status 1, return already partial.
-	// 3. Else, update wallet and transaction status to 1.
-	// 4. Log "Completed".
-	// It assumes simpler payload implies success or the caller checked it?
-	// I will stick to what TS does.
-
 	ref := dto.TransactionRef
 	var transaction models.Transaction
 	if err := s.DB.Where("client_id = ? AND transaction_no = ? AND tranasaction_type = ?", dto.ClientId, ref, "credit").First(&transaction).Error; err != nil {
@@ -196,8 +184,10 @@ func (s *FidelityService) HandleCallback(dto FidelityWebhookDTO) (interface{}, e
 	}
 
 	if transaction.Status == 1 {
-		s.logCallback(dto.ClientId, "Transaction already processed", dto, 1, ref, "Fidelity")
-		return common.NewSuccessResponse(nil, "Transaction already successful"), nil
+		return map[string]interface{}{"success": true, "message": "Verified"}, nil
+	}
+	if transaction.Status == 2 {
+		return map[string]interface{}{"success": false, "message": "Transaction failed"}, nil
 	}
 
 	if err := s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance + ?", transaction.Amount)).Error; err != nil {
@@ -209,8 +199,8 @@ func (s *FidelityService) HandleCallback(dto FidelityWebhookDTO) (interface{}, e
 	s.DB.Where("user_id = ?", transaction.UserId).First(&wallet)
 
 	s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Updates(map[string]interface{}{
-		"status":  1,
-		"balance": wallet.AvailableBalance,
+		"status":            1,
+		"available_balance": wallet.AvailableBalance,
 	})
 
 	s.logCallback(dto.ClientId, "Completed", dto, 1, ref, "Fidelity")

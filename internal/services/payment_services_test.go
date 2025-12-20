@@ -105,7 +105,7 @@ func TestPaystackHandleWebhook_ChargeSuccess(t *testing.T) {
 	var trx models.Transaction
 	db.Where("transaction_no = ?", trxNo).First(&trx)
 	assert.Equal(t, 1, trx.Status)
-	assert.Equal(t, 150.0, trx.Balance)
+	assert.Equal(t, 150.0, trx.AvailableBalance)
 
 	// Cleanup
 	db.Where("transaction_no = ?", trxNo).Delete(&models.Transaction{})

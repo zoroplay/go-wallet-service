@@ -99,56 +99,55 @@ func (s *SmileAndPayService) VerifyTransaction(data map[string]interface{}) (int
 	clientId := int(clientIdFloat)
 	transactionRef, _ := data["transactionRef"].(string)
 
-	settings, err := s.smileAndPaySettings(clientId)
-	if err != nil {
-		return map[string]interface{}{"success": false, "message": "SmileAndPay has not been configured for client"}, nil
+	var transaction models.Transaction
+	if err := s.DB.Where("client_id = ? AND transaction_no = ? AND subject = ?", clientId, transactionRef, "Deposit").First(&transaction).Error; err != nil {
+		return common.NewErrorResponse("Transaction not found", nil, 404), nil
 	}
 
-	url := fmt.Sprintf("%s/payments/transaction/%s/status/check", settings.BaseUrl, transactionRef)
-	headers := map[string]string{
-		"Content-Type": "application/json",
-		"x-api-key":    settings.PublicKey,
-		"x-api-secret": settings.SecretKey,
+	if transaction.Status == 1 {
+		return common.NewSuccessResponse(nil, "Verified"), nil
 	}
+	if transaction.Status == 2 {
+		return common.NewErrorResponse("Transaction failed. Try again", nil, 406), nil
+	}
+
+	settings, err := s.smileAndPaySettings(clientId)
+	if err != nil {
+		return common.NewErrorResponse("SmileAndPay not configured", nil, 400), nil
+	}
+
+	url := fmt.Sprintf("%s/api/v1/transaction/verify/%s", settings.BaseUrl, transactionRef)
+	headers := map[string]string{"Authorization": "Bearer " + settings.SecretKey}
 
 	resp, err := common.Get(url, headers)
 	if err != nil {
-		return map[string]interface{}{"success": false, "message": err.Error()}, nil
+		return common.NewErrorResponse("Verification failed", nil, 400), nil
 	}
 
-	resMap, _ := resp.(map[string]interface{})
-	status, _ := resMap["status"].(string)
+	respMap, _ := resp.(map[string]interface{})
+	dataVal, _ := respMap["data"].(map[string]interface{})
+	status, _ := dataVal["status"].(string) // "SUCCESS"
+	amountStr, _ := dataVal["amount"].(string)
+	amount, _ := strconv.ParseFloat(amountStr, 64)
 
-	if status == "PAID" {
-		var transaction models.Transaction
-		if err := s.DB.Where("client_id = ? AND transaction_no = ? AND tranasaction_type = ?", clientId, transactionRef, "credit").First(&transaction).Error; err != nil {
-			s.logCallback(clientId, "Transaction not found", data, 0, transactionRef, "SmileAndPay")
-			return map[string]interface{}{"success": false, "message": "Transaction not found", "statusCode": 404}, nil
-		}
-
-		if transaction.Status == 1 {
-			s.logCallback(clientId, "Transaction already successful", data, 1, transactionRef, "SmileAndPay")
-			return map[string]interface{}{"success": true, "message": "Transaction already successful", "statusCode": 200}, nil
-		}
-
+	if status == "SUCCESS" {
 		var wallet models.Wallet
-		if err := s.DB.Where("user_id = ?", transaction.UserId).First(&wallet).Error; err != nil {
-			s.logCallback(clientId, "Wallet not found", data, 0, transactionRef, "SmileAndPay")
-			return map[string]interface{}{"success": false, "message": "Wallet not found", "statusCode": 404}, nil
+		s.DB.Where("user_id = ?", transaction.UserId).First(&wallet)
+
+		if err := s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance + ?", transaction.Amount)).Error; err != nil {
+			return common.NewErrorResponse("Update failed", nil, 500), nil
 		}
 
-		balance := wallet.AvailableBalance + transaction.Amount
-		s.HelperService.UpdateWallet(balance, transaction.UserId)
 		s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Updates(map[string]interface{}{
-			"status":  1,
-			"balance": balance,
+			"status":            1,
+			"available_balance": wallet.AvailableBalance + amount,
 		})
 
-		s.logCallback(clientId, "Completed", data, 1, transactionRef, "SmileAndPay")
-		return map[string]interface{}{"success": true, "message": "Transaction successfully verified and processed", "statusCode": 200}, nil
+		s.logCallback(clientId, "Completed", respMap, 1, transactionRef, "SmileAndPay")
+		return common.NewSuccessResponse(nil, "Transaction successfully verified and processed"), nil
 	}
 
-	return map[string]interface{}{"success": false, "message": "Transaction check failed or not paid"}, nil
+	return common.NewErrorResponse("Transaction failed", nil, 400), nil
 }
 
 func (s *SmileAndPayService) InitiatePayout(data map[string]interface{}, clientId int) (interface{}, error) {

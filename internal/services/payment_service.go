@@ -620,7 +620,7 @@ func (s *PaymentService) InitiateDeposit(param InitiateDepositRequestDTO) (inter
 				"externalId": common.GenerateTrxNo(),
 			},
 			"redirectUrl":     fmt.Sprintf("%s/payment-verification/payonus", callbackUrl),
-			"notificationUrl": "https://dev.staging.sportsbookengine.com/api/v2/webhook/4/payonus/callback", // Check environment logic
+			"notificationUrl": fmt.Sprintf("%s/api/v2/webhook/%d/payonus/callback", s.getApiBaseUrl(param.ClientId), param.ClientId),
 		}, param.ClientId)
 
 		if err != nil {
@@ -733,18 +733,20 @@ func (s *PaymentService) InitiateDeposit(param InitiateDepositRequestDTO) (inter
 	}
 	// Save Transaction
 	s.Helper.SaveTransaction(TransactionData{
-		Amount:        param.Amount,
-		Channel:       param.PaymentMethod,
-		ClientId:      param.ClientId,
-		ToUserId:      param.UserId, // To User
-		ToUsername:    wallet.Username,
-		ToUserBalance: wallet.AvailableBalance, // This uses "toUserBalance" semantics
-		// From User is System (0)
-		Source:        param.Source,
-		Subject:       "Deposit",
-		Description:   description,
-		TransactionNo: transactionNo,
-		Status:        status,
+		Amount:          param.Amount,
+		Channel:         param.PaymentMethod,
+		ClientId:        param.ClientId,
+		ToUserId:        param.UserId, // To User
+		ToUsername:      wallet.Username,
+		ToUserBalance:   wallet.AvailableBalance,
+		FromUserId:      param.UserId,
+		FromUsername:    wallet.Username,
+		FromUserBalance: wallet.AvailableBalance,
+		Source:          param.Source,
+		Subject:         "Deposit",
+		Description:     description,
+		TransactionNo:   transactionNo,
+		Status:          status,
 	})
 
 	return map[string]interface{}{
@@ -864,20 +866,20 @@ func (s *PaymentService) UpdateWithdrawalStatus(param UpdateWithdrawalDTO) (inte
 
 		// Log Refund Transaction
 		s.Helper.SaveTransaction(TransactionData{
-			Amount:        withdrawal.Amount,
-			Channel:       "internal",
-			ClientId:      param.ClientId,
-			ToUserId:      wallet.UserId, // Corrected from TS _wallet.id vs user_id
-			ToUsername:    wallet.Username,
-			ToUserBalance: newBalance,
-			Source:        "internal",
-			Subject:       "Cancelled Request",
-			Description:   param.Comment,
-			TransactionNo: common.GenerateTrxNo(),
-			Status:        1,
-			// From fields stubbed
-			FromUserId:   0,
-			FromUsername: "System",
+			Amount:          withdrawal.Amount,
+			Channel:         "internal",
+			ClientId:        param.ClientId,
+			ToUserId:        wallet.UserId, // Corrected from TS _wallet.id vs user_id
+			ToUsername:      wallet.Username,
+			ToUserBalance:   newBalance,
+			FromUserId:      wallet.UserId,
+			FromUsername:    wallet.Username,
+			FromUserBalance: newBalance,
+			Source:          "internal",
+			Subject:         "Cancelled Request",
+			Description:     param.Comment,
+			TransactionNo:   common.GenerateTrxNo(),
+			Status:          1,
 		})
 
 		return map[string]interface{}{"success": true, "message": "Withdrawal request cancelled"}, nil
@@ -898,19 +900,20 @@ func (s *PaymentService) UpdateWithdrawalStatus(param UpdateWithdrawalDTO) (inte
 			s.DB.Model(&wallet).Update("available_balance", balance)
 
 			s.Helper.SaveTransaction(TransactionData{
-				Amount:        withdrawal.Amount,
-				Channel:       "internal",
-				ClientId:      param.ClientId,
-				ToUserId:      wallet.UserId,
-				ToUsername:    wallet.Username,
-				ToUserBalance: balance,
-				Source:        "internal",
-				Subject:       "Rejected Request",
-				Description:   param.Comment,
-				TransactionNo: common.GenerateTrxNo(),
-				Status:        1,
-				FromUserId:    0,
-				FromUsername:  "System",
+				Amount:          withdrawal.Amount,
+				Channel:         "internal",
+				ClientId:        param.ClientId,
+				ToUserId:        wallet.UserId,
+				ToUsername:      wallet.Username,
+				ToUserBalance:   balance,
+				FromUserId:      wallet.UserId,
+				FromUsername:    wallet.Username,
+				FromUserBalance: balance,
+				Source:          "internal",
+				Subject:         "Rejected Request",
+				Description:     param.Comment,
+				TransactionNo:   common.GenerateTrxNo(),
+				Status:          1,
 			})
 		}
 
@@ -1024,19 +1027,20 @@ func (s *PaymentService) ApproveAndRejectCommissionRequest(param CommissionAppro
 		s.DB.Model(&wallet).Update("commission_balance", newBalance)
 
 		s.Helper.SaveTransaction(TransactionData{
-			Amount:        withdrawal.Amount,
-			Channel:       "internal",
-			ClientId:      param.ClientId,
-			ToUserId:      wallet.UserId, // user_id
-			ToUsername:    wallet.Username,
-			ToUserBalance: newBalance, // commission_balance
-			Source:        "internal",
-			Subject:       "Cancelled Request",
-			Description:   "Withdrawal request was cancelled",
-			TransactionNo: common.GenerateTrxNo(),
-			Status:        1,
-			FromUserId:    0,
-			FromUsername:  "System",
+			Amount:          withdrawal.Amount,
+			Channel:         "internal",
+			ClientId:        param.ClientId,
+			ToUserId:        wallet.UserId, // user_id
+			ToUsername:      wallet.Username,
+			ToUserBalance:   newBalance, // commission_balance
+			FromUserId:      wallet.UserId,
+			FromUsername:    wallet.Username,
+			FromUserBalance: newBalance,
+			Source:          "internal",
+			Subject:         "Cancelled Request",
+			Description:     "Withdrawal request was cancelled",
+			TransactionNo:   common.GenerateTrxNo(),
+			Status:          1,
 		})
 
 		return map[string]interface{}{"success": true, "message": "Withdrawal request cancelled", "status": 201}, nil
@@ -1055,19 +1059,20 @@ func (s *PaymentService) ApproveAndRejectCommissionRequest(param CommissionAppro
 			s.DB.Model(&wallet).Update("available_balance", balance)
 
 			s.Helper.SaveTransaction(TransactionData{
-				Amount:        withdrawal.Amount,
-				Channel:       "internal",
-				ClientId:      param.ClientId,
-				ToUserId:      wallet.UserId,
-				ToUsername:    wallet.Username,
-				ToUserBalance: balance, // available_balance
-				Source:        "internal",
-				Subject:       "Rejected Request", // TS says "Rejected Request" for default case
-				Description:   "Withdrawal request was cancelled",
-				TransactionNo: common.GenerateTrxNo(),
-				Status:        1,
-				FromUserId:    0,
-				FromUsername:  "System",
+				Amount:          withdrawal.Amount,
+				Channel:         "internal",
+				ClientId:        param.ClientId,
+				ToUserId:        wallet.UserId,
+				ToUsername:      wallet.Username,
+				ToUserBalance:   balance, // available_balance
+				FromUserId:      wallet.UserId,
+				FromUsername:    wallet.Username,
+				FromUserBalance: balance,
+				Source:          "internal",
+				Subject:         "Rejected Request", // TS says "Rejected Request" for default case
+				Description:     "Withdrawal request was cancelled",
+				TransactionNo:   common.GenerateTrxNo(),
+				Status:          1,
 			})
 		}
 
@@ -1620,9 +1625,9 @@ func (s *PaymentService) CreateRequest(param CreateRequestDTO) (interface{}, err
 		ToUserId:        param.UserId,
 		ToUsername:      wallet.Username,
 		ToUserBalance:   wallet.AvailableBalance,
-		FromUserId:      0,
-		FromUsername:    "System",
-		FromUserBalance: 0,
+		FromUserId:      param.UserId,
+		FromUsername:    wallet.Username,
+		FromUserBalance: wallet.AvailableBalance,
 		Source:          param.Source,
 		Subject:         subject,
 		Description:     description,

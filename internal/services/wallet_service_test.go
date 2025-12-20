@@ -73,8 +73,8 @@ func TestCreateWallet(t *testing.T) {
 	}
 
 	wallet := res.Data.(models.Wallet)
-	if wallet.Balance != 100.00 {
-		t.Errorf("Expected balance 100, got %f", wallet.Balance)
+	if wallet.AvailableBalance != 100.00 {
+		t.Errorf("Expected balance 100, got %f", wallet.AvailableBalance)
 	}
 	if wallet.SportBonus != 50.00 {
 		t.Errorf("Expected sport bonus 50, got %f", wallet.SportBonus)

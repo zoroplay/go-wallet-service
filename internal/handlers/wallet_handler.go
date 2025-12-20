@@ -29,7 +29,7 @@ func CreateWallet(c *gin.Context) {
 		Username: req.Username,
 		ClientId: req.ClientId,
 		Currency: req.Currency,
-		Balance:  0.00,
+		AvailableBalance: 0.00,
 	}
 
 	if result := database.DB.Create(&wallet); result.Error != nil {
@@ -55,7 +55,7 @@ func GetBalance(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"balance":  wallet.Balance,
+		"balance":  wallet.AvailableBalance,
 		"currency": wallet.Currency,
 	})
 }

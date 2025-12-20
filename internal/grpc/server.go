@@ -286,11 +286,22 @@ func (s *Server) RequestWithdrawal(ctx context.Context, req *pb.WithdrawRequest)
 		return &pb.WithdrawResponse{Success: false, Message: err.Error()}, nil
 	}
 
-	respMap, _ := resp.(map[string]interface{})
-	// Extract code if needed
-	_ = respMap
+	respMap, _ := resp.(common.SuccessResponse)
+	
+	var withdrawData *pb.Withdraw
+	if data, ok := respMap.Data.(map[string]interface{}); ok {
+		withdrawData = &pb.Withdraw{
+			Balance: getFloat64(data["balance"]),
+			Code:    getString(data["code"]),
+		}
+	}
 
-	return &pb.WithdrawResponse{Success: true, Message: "Withdrawal requested"}, nil
+	return &pb.WithdrawResponse{
+		Success: respMap.Success,
+		Message: respMap.Message,
+		Status:  int32(respMap.Status),
+		Data:    withdrawData,
+	}, nil
 }
 
 func (s *Server) ListWithdrawals(ctx context.Context, req *pb.ListWithdrawalRequests) (*pb.CommonResponseObj, error) {
@@ -740,7 +751,7 @@ func (s *Server) GetPlayerWalletData(ctx context.Context, req *pb.GetBalanceRequ
 		UserId:   int(req.UserId),
 	})
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error())
+		return nil, status.Errorf(codes.Internal, "%v", err)
 	}
 	
 	rMap, ok := resp.(map[string]interface{})
@@ -846,6 +857,22 @@ func getFloat(v interface{}) float32 {
 	}
 	if i, ok := v.(int64); ok {
 		return float32(i)
+	}
+	return 0
+}
+
+func getFloat64(v interface{}) float64 {
+	if f, ok := v.(float64); ok {
+		return f
+	}
+	if f, ok := v.(float32); ok {
+		return float64(f)
+	}
+	if i, ok := v.(int); ok {
+		return float64(i)
+	}
+	if i, ok := v.(int64); ok {
+		return float64(i)
 	}
 	return 0
 }
@@ -1286,3 +1313,133 @@ func derefString(s *string) string {
 	return ""
 }
 
+func (s *Server) FinancialPerformance(ctx context.Context, req *pb.ClientRequest) (*pb.FinancialPerformanceResponse, error) {
+	resp, err := s.Dashboard.FinancialPerformance(int(req.ClientId))
+	if err != nil {
+		return &pb.FinancialPerformanceResponse{Success: false, Message: err.Error()}, nil
+	}
+
+	rMap, _ := resp.(map[string]interface{})
+	return &pb.FinancialPerformanceResponse{
+		Success:         true,
+		Message:         getString(rMap["message"]),
+		Status:          int32(getFloat(rMap["status"])),
+		TotalDeposit:    getFloat64(rMap["totalDeposit"]),
+		TotalWithdrawal: getFloat64(rMap["totalWithdrawal"]),
+	}, nil
+}
+
+func (s *Server) PlayerBalances(ctx context.Context, req *pb.ClientRequest) (*pb.PlayerBalanceResponse, error) {
+	resp, err := s.Dashboard.Balances(int(req.ClientId), "day", "", "") // Defaults to day
+	if err != nil {
+		return &pb.PlayerBalanceResponse{Success: false, Message: err.Error()}, nil
+	}
+
+	rMap, _ := resp.(map[string]interface{})
+	return &pb.PlayerBalanceResponse{
+		Success:                  true,
+		Message:                  getString(rMap["message"]),
+		Status:                   int32(getFloat(rMap["status"])),
+		TotalOnlinePlayerBalance: getFloat64(rMap["totalOnlinePlayerBalance"]),
+		TotalOnlinePlayerBonus:   getFloat64(rMap["totalOnlinePlayerBonus"]),
+		TotalRetailBalance:       getFloat64(rMap["totalRetailBalance"]),
+		TotalRetailTrustBalance:  getFloat64(rMap["totalRetailTrustBalance"]),
+	}, nil
+}
+
+func (s *Server) OverallGames(ctx context.Context, req *pb.DashboardRequest) (*pb.OverallGamesResponse, error) {
+	resp, err := s.Dashboard.GetGamingSummary(int(req.ClientId), req.RangeZ, req.From, req.To)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "%v", err)
+	}
+	return s.mapGamingSummaryToProto(resp)
+}
+
+func (s *Server) OverallGamesOnline(ctx context.Context, req *pb.DashboardRequest) (*pb.OverallGamesResponse, error) {
+	resp, err := s.Dashboard.GamingSummaryForOnline(int(req.ClientId), req.RangeZ, req.From, req.To)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "%v", err)
+	}
+	return s.mapGamingSummaryToProto(resp)
+}
+
+func (s *Server) OverallGamesRetail(ctx context.Context, req *pb.DashboardRequest) (*pb.OverallGamesResponse, error) {
+	// Reusing Online logic or stubbing as Retail summary logic is missing in dashboard_service.go
+	return &pb.OverallGamesResponse{Data: []*pb.ProductSummary{}}, nil
+}
+
+func (s *Server) OverallGamesSport(ctx context.Context, req *pb.DashboardRequest) (*pb.OverallGamesResponse, error) {
+	resp, err := s.Dashboard.GetSportSummary(int(req.ClientId), req.RangeZ, req.From, req.To)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "%v", err)
+	}
+	return s.mapGamingSummaryToProto(resp)
+}
+
+func (s *Server) Statistics(ctx context.Context, req *pb.StatisticsRequest) (*pb.StatisticsResponse, error) {
+	resp, err := s.Dashboard.GetMonthlyGamingTurnover(int(req.ClientId), req.Year)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "%v", err)
+	}
+
+	rMap, _ := resp.(map[string]interface{})
+	dataList, _ := rMap["data"].([]interface{})
+
+	var productStats []*pb.ProductStatistics
+	for _, p := range dataList {
+		pMap, _ := p.(map[string]interface{})
+		mList, _ := pMap["monthlyData"].([]interface{})
+
+		var monthlyData []*pb.MonthlyData
+		for _, m := range mList {
+			mMap, _ := m.(map[string]interface{})
+			monthlyData = append(monthlyData, &pb.MonthlyData{
+				Month:    getString(mMap["month"]),
+				Turnover: getFloat64(mMap["turnover"]),
+			})
+		}
+
+		productStats = append(productStats, &pb.ProductStatistics{
+			Product:     getString(pMap["product"]),
+			MonthlyData: monthlyData,
+		})
+	}
+
+	return &pb.StatisticsResponse{
+		Year: req.Year,
+		Data: productStats,
+	}, nil
+}
+
+func (s *Server) mapGamingSummaryToProto(resp interface{}) (*pb.OverallGamesResponse, error) {
+	rMap, _ := resp.(map[string]interface{})
+	dataList, _ := rMap["data"].([]map[string]interface{})
+
+	var summaries []*pb.ProductSummary
+	for _, d := range dataList {
+		summaries = append(summaries, &pb.ProductSummary{
+			Product:    getString(d["product"]),
+			Turnover:   getFloat64(d["turnover"]),
+			Margin:     getString(d["margin"]),
+			Ggr:        getFloat64(d["ggr"]),
+			BonusGiven: getFloat64(d["bonusGiven"]),
+			BonusSpent: getFloat64(d["bonusSpent"]),
+			Ngr:        getFloat64(d["ngr"]),
+		})
+	}
+
+	startDate := ""
+	if sd, ok := rMap["startDate"].(time.Time); ok {
+		startDate = sd.Format(time.RFC3339)
+	}
+	endDate := ""
+	if ed, ok := rMap["endDate"].(time.Time); ok {
+		endDate = ed.Format(time.RFC3339)
+	}
+
+	return &pb.OverallGamesResponse{
+		StartDate: startDate,
+		EndDate:   endDate,
+		Data:      summaries,
+	}, nil
+}

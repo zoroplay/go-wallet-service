@@ -112,51 +112,48 @@ type CoralPayWebhookDTO struct {
 }
 
 func (s *CoralPayService) HandleWebhook(param CoralPayWebhookDTO) (interface{}, error) {
-	_, err := s.coralPaySettings(param.ClientId)
+	settings, err := s.coralPaySettings(param.ClientId)
 	if err != nil {
-		return common.SuccessResponse{Success: false, Message: "Coralpay has not been configured for client"}, nil
+		return common.NewErrorResponse("CoralPay not configured", nil, 400), nil
 	}
 
-	// Validate Payload Structure
-	if errStr := s.validateCallbackPayload(param.CallbackData); errStr != "" {
-		return common.SuccessResponse{Success: false, Message: errStr}, nil
+	payload, _ := param.CallbackData["payload"].(map[string]interface{})
+	ref, _ := payload["transactionReference"].(string)
+
+	var transaction models.Transaction
+	if err := s.DB.Where("client_id = ? AND transaction_no = ? AND tranasaction_type = ?", param.ClientId, ref, "credit").First(&transaction).Error; err != nil {
+		s.logCallback(param.ClientId, "Transaction not found", param.CallbackData, 0, ref, "CoralPay")
+		return common.NewErrorResponse("Transaction not found", nil, 404), nil
 	}
 
-	responseMessage, _ := param.CallbackData["ResponseMessage"].(string)
-	responseCode, _ := param.CallbackData["ResponseCode"].(string)
-	traceId, _ := param.CallbackData["TraceId"].(string)
-
-	if responseMessage == "Successful" && responseCode == "00" {
-		var transaction models.Transaction
-		if err := s.DB.Where("client_id = ? AND transaction_no = ? AND tranasaction_type = ?", param.ClientId, traceId, "credit").First(&transaction).Error; err != nil {
-			s.logCallback(param.ClientId, "Transaction not found", param.CallbackData, 0, traceId, "Coralpay")
-			return common.NewErrorResponse("Transaction not found", nil, 404), nil
-		}
-
-		if transaction.Status == 1 {
-			s.logCallback(param.ClientId, "Transaction already processed", param.CallbackData, 1, traceId, "Coralpay")
-			return common.NewSuccessResponse(nil, "Transaction already successful"), nil
-		}
-
-		// Update Wallet
-		if err := s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance + ?", transaction.Amount)).Error; err != nil {
-			s.logCallback(param.ClientId, "Wallet not found", param.CallbackData, 0, traceId, "Coralpay")
-			return common.NewErrorResponse("Wallet not found for this user", nil, 404), nil
-		}
-
-		var wallet models.Wallet
-		s.DB.Where("user_id = ?", transaction.UserId).First(&wallet)
-
-		s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Updates(map[string]interface{}{
-			"status":  1,
-			"balance": wallet.AvailableBalance,
-		})
-
-		s.logCallback(param.ClientId, "Transaction successfully verified and processed", param.CallbackData, 1, traceId, "Coralpay")
-		return common.NewSuccessResponse(nil, "Transaction successfully verified and processed"), nil
+	if transaction.Status == 1 {
+		return common.NewSuccessResponse(nil, "Verified"), nil
+	}
+	if transaction.Status == 2 {
+		return common.NewErrorResponse("Transaction failed", nil, 406), nil
 	}
 
-	return common.NewErrorResponse("Transaction not successful", nil, 400), nil
+	if s.verifySignature(param.CallbackData, settings.SecretKey) {
+		status, _ := payload["status"].(string)
+		if status == "SUCCESSFUL" {
+			if err := s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance + ?", transaction.Amount)).Error; err != nil {
+				return common.NewErrorResponse("Wallet not found", nil, 404), nil
+			}
+
+			var wallet models.Wallet
+			s.DB.Where("user_id = ?", transaction.UserId).First(&wallet)
+
+			s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Updates(map[string]interface{}{
+				"status":            1,
+				"available_balance": wallet.AvailableBalance,
+			})
+
+			s.logCallback(param.ClientId, "Completed", param.CallbackData, 1, ref, "CoralPay")
+			return common.NewSuccessResponse(nil, "Transaction successfully verified and processed"), nil
+		}
+	}
+
+	return common.NewErrorResponse("Transaction failed", nil, 400), nil
 }
 
 func (s *CoralPayService) validateCallbackPayload(data map[string]interface{}) string {
@@ -186,44 +183,33 @@ func (s *CoralPayService) verifySignature(data map[string]interface{}, secretKey
 }
 
 func (s *CoralPayService) VerifyTransaction(param VerifyTransactionDTO) (interface{}, error) {
-	// Reusing verify logic
-	// In TS, it checks transactionRef in DB, etc.
-	// It doesn't seem to call an external API for verification in the TS code provided (it says `if (param.transactionRef !== '')` then checks DB).
-	// So it's basically a status check or manual re-trigger of success?
-	// Ah, it seems to just check if DB has it and update it? Wait, TS code updates wallet if found and not successful.
-	// This "VerifyTransaction" looks like a "Retry Processing" or "Check Status" that trusts the caller?
-	// Wait, the TS code for verifyTransaction DOES NOT call CoralPay API.
-	// It just takes `transactionRef` and blindly credits if found in DB and not status 1.
-	// That seems risky if the params don't include proof of success, but I will port as is.
-	// Actually, looking closely, `handleWebhook` does the heavy lifting. `verifyTransaction` in TS usually is called by correct verified context or manual trigger.
-	// I will port it as is.
-
-	if param.TransactionRef != "" {
-		var transaction models.Transaction
-		if err := s.DB.Where("client_id = ? AND transaction_no = ? AND tranasaction_type = ?", param.ClientId, param.TransactionRef, "credit").First(&transaction).Error; err != nil {
-			return common.NewErrorResponse("Transaction not found", nil, 404), nil
-		}
-
-		if transaction.Status == 1 {
-			return common.NewSuccessResponse(nil, "Transaction already successful"), nil
-		}
-
-		// Update Wallet
-		if err := s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance + ?", transaction.Amount)).Error; err != nil {
-			return common.NewErrorResponse("Wallet not found for this user", nil, 404), nil
-		}
-
-		var wallet models.Wallet
-		s.DB.Where("user_id = ?", transaction.UserId).First(&wallet)
-
-		s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Updates(map[string]interface{}{
-			"status":  1,
-			"balance": wallet.AvailableBalance,
-		})
-
-		return common.NewSuccessResponse(nil, "Transaction successfully verified and processed"), nil
+	var transaction models.Transaction
+	if err := s.DB.Where("client_id = ? AND transaction_no = ? AND subject = ?", param.ClientId, param.TransactionRef, "Deposit").First(&transaction).Error; err != nil {
+		return common.NewErrorResponse("Transaction not found", nil, 404), nil
 	}
-	return common.NewErrorResponse("Invalid reference", nil, 400), nil
+
+	if transaction.Status == 1 {
+		return common.NewSuccessResponse(nil, "Verified"), nil
+	}
+	if transaction.Status == 2 {
+		return common.NewErrorResponse("Transaction failed. Try again", nil, 406), nil
+	}
+
+	// For CoralPay, VerifyTransaction in TS just credits if found and not successful.
+	// It doesn't call an external API.
+	if err := s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance + ?", transaction.Amount)).Error; err != nil {
+		return common.NewErrorResponse("Wallet not found for this user", nil, 404), nil
+	}
+
+	var wallet models.Wallet
+	s.DB.Where("user_id = ?", transaction.UserId).First(&wallet)
+
+	s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Updates(map[string]interface{}{
+		"status":            1,
+		"available_balance": wallet.AvailableBalance,
+	})
+
+	return common.NewSuccessResponse(nil, "Transaction successfully verified and processed"), nil
 }
 
 func (s *CoralPayService) logCallback(clientId int, requestStr string, response interface{}, status int, trxId, method string) {

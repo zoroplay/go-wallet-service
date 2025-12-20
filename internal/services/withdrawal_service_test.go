@@ -14,7 +14,7 @@ func TestRequestWithdrawal(t *testing.T) {
 	}
 	defer cleanup()
 
-	svc := NewWithdrawalService(testDB)
+	svc := NewWithdrawalService(testDB, nil)
 
 	// Create wallet
 	testDB.Create(&models.Wallet{
@@ -73,7 +73,7 @@ func TestListWithdrawalRequest(t *testing.T) {
 		t.Skip("Database not configured")
 	}
 	defer cleanup()
-	svc := NewWithdrawalService(testDB)
+	svc := NewWithdrawalService(testDB, nil)
 
 	// Seed withdrawals
 	w1 := models.Withdrawal{

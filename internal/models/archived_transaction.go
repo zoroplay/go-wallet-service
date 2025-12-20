@@ -17,7 +17,7 @@ type ArchivedTransaction struct {
 	Subject       string  `gorm:"type:varchar(100)"`
 	Description   string  `gorm:"type:text"`
 	Source        string  `gorm:"type:varchar(50)"`
-	Balance       float64 `gorm:"type:decimal(20,2)"`
+	AvailableBalance float64 `gorm:"type:decimal(20,2);column:available_balance"`
 	Wallet        string  `gorm:"default:Main"`
 	SettlementId  *string
 	CreatedAt     time.Time `gorm:"autoCreateTime"`

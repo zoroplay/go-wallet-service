@@ -81,6 +81,18 @@ type VerifyKoraDTO struct {
 }
 
 func (s *KorapayService) VerifyTransaction(param VerifyKoraDTO) (interface{}, error) {
+	var transaction models.Transaction
+	if err := s.DB.Where("client_id = ? AND transaction_no = ? AND subject = ?", param.ClientId, param.TransactionRef, "Deposit").First(&transaction).Error; err != nil {
+		return common.NewErrorResponse("Transaction not found", nil, 404), nil
+	}
+
+	if transaction.Status == 1 {
+		return common.NewSuccessResponse(nil, "Verified"), nil
+	}
+	if transaction.Status == 2 {
+		return common.NewErrorResponse("Transaction failed", nil, 406), nil
+	}
+
 	settings, err := s.settings(param.ClientId)
 	if err != nil {
 		return common.NewErrorResponse("Korapay not configured", nil, 400), nil
@@ -98,18 +110,7 @@ func (s *KorapayService) VerifyTransaction(param VerifyKoraDTO) (interface{}, er
 	dataMap, _ := respMap["data"].(map[string]interface{})
 	status, _ := dataMap["status"].(string)
 
-	var transaction models.Transaction
-	if err := s.DB.Where("client_id = ? AND transaction_no = ? AND subject = ?", param.ClientId, param.TransactionRef, "Deposit").First(&transaction).Error; err != nil {
-		s.logCallback(param.ClientId, "Transaction not found", respMap, 0, param.TransactionRef, "Korapay")
-		return common.NewErrorResponse("Transaction not found", nil, 404), nil
-	}
-
 	if status == "success" {
-		if transaction.Status == 1 {
-			s.logCallback(param.ClientId, "Transaction already processed", respMap, 1, param.TransactionRef, "Korapay")
-			return common.NewSuccessResponse(nil, "Transaction already successful"), nil
-		}
-
 		var wallet models.Wallet
 		s.DB.Where("user_id = ?", transaction.UserId).First(&wallet)
 
@@ -118,8 +119,8 @@ func (s *KorapayService) VerifyTransaction(param VerifyKoraDTO) (interface{}, er
 		}
 
 		s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Updates(map[string]interface{}{
-			"status":  1,
-			"balance": wallet.AvailableBalance + transaction.Amount,
+			"status":            1,
+			"available_balance": wallet.AvailableBalance + transaction.Amount,
 		})
 
 		s.logCallback(param.ClientId, "Completed", respMap, 1, param.TransactionRef, "Korapay")
@@ -184,7 +185,7 @@ func (s *KorapayService) HandleWebhook(dto KoraWebhookDTO) (interface{}, error) 
 	}
 
 	switch dto.Event {
-case "charge.success":
+	case "charge.success":
 		var transaction models.Transaction
 		if err := s.DB.Where("client_id = ? AND transaction_no = ?", dto.ClientId, dto.Reference).First(&transaction).Error; err != nil {
 			s.logCallback(dto.ClientId, "Transaction not found", dto.Data, 0, dto.Reference, "Webhook")
@@ -192,8 +193,10 @@ case "charge.success":
 		}
 
 		if transaction.Status == 1 {
-			s.logCallback(dto.ClientId, "Transaction already successful", dto.Data, 1, dto.Reference, "Webhook")
-			return map[string]interface{}{"success": true}, nil
+			return map[string]interface{}{"success": true, "message": "Verified"}, nil
+		}
+		if transaction.Status == 2 {
+			return map[string]interface{}{"success": false, "message": "Transaction failed"}, nil
 		}
 
 		// Fund
@@ -203,8 +206,8 @@ case "charge.success":
 		s.DB.Where("user_id = ?", transaction.UserId).First(&wallet)
 
 		s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", dto.Reference).Updates(map[string]interface{}{
-			"status":  1,
-			"balance": wallet.AvailableBalance,
+			"status":            1,
+			"available_balance": wallet.AvailableBalance,
 		})
 
 		s.logCallback(dto.ClientId, "Completed", dto.Data, 1, dto.Reference, "Webhook")

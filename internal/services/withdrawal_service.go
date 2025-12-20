@@ -11,11 +11,12 @@ import (
 )
 
 type WithdrawalService struct {
-	DB *gorm.DB
+	DB       *gorm.DB
+	Identity *IdentityClient
 }
 
-func NewWithdrawalService(db *gorm.DB) *WithdrawalService {
-	return &WithdrawalService{DB: db}
+func NewWithdrawalService(db *gorm.DB, identity *IdentityClient) *WithdrawalService {
+	return &WithdrawalService{DB: db, Identity: identity}
 }
 
 type WithdrawRequestDTO struct {
@@ -30,16 +31,38 @@ type WithdrawRequestDTO struct {
 }
 
 // Stub for IdentityService.GetWithdrawalSettings
+// WithdrawalSettings from IdentityService
 type WithdrawalSettings struct {
-	MinimumWithdrawal float64
-	MaximumWithdrawal float64
+	AutoDisbursement      int     `json:"autoDisbursement"`
+	AutoDisbursementMin   float64 `json:"autoDisbursementMin"`
+	AutoDisbursementMax   float64 `json:"autoDisbursementMax"`
+	AutoDisbursementCount int     `json:"autoDisbursementCount"`
+	MinimumWithdrawal     float64 `json:"minimumWithdrawal"`
+	MaximumWithdrawal     float64 `json:"maximumWithdrawal"`
+	AllowWithdrawalComm   int     `json:"allowWithdrawalComm"`
+	WithdrawalComm        float64 `json:"withdrawalComm"`
 }
 
 func (s *WithdrawalService) getWithdrawalSettings(clientId, userId int) WithdrawalSettings {
-	// Stub
+	resp, err := s.Identity.GetWithdrawalSettings(clientId, userId)
+	if err != nil {
+		log.Printf("Failed to fetch withdrawal settings from identity service: %v", err)
+		// Fallback to default settings
+		return WithdrawalSettings{
+			MinimumWithdrawal: 100.0,
+			MaximumWithdrawal: 1000000.0,
+		}
+	}
+
 	return WithdrawalSettings{
-		MinimumWithdrawal: 100.0,
-		MaximumWithdrawal: 1000000.0,
+		AutoDisbursement:      int(resp.AutoDisbursement),
+		AutoDisbursementMin:   float64(resp.AutoDisbursementMin),
+		AutoDisbursementMax:   float64(resp.AutoDisbursementMax),
+		AutoDisbursementCount: int(resp.AutoDisbursementCount),
+		MinimumWithdrawal:     float64(resp.MinimumWithdrawal),
+		MaximumWithdrawal:     float64(resp.MaximumWithdrawal),
+		AllowWithdrawalComm:   int(resp.AllowWithdrawalComm),
+		WithdrawalComm:        float64(resp.WithdrawalComm),
 	}
 }
 

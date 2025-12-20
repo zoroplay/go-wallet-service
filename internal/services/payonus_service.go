@@ -134,19 +134,27 @@ func (s *PayonusService) HandleWebhook(data map[string]interface{}) (interface{}
 		}
 
 		if transaction.Status == 1 {
-			s.logCallback(clientId, "Transaction already processed", rawBody, 1, onusReference, "Payonus")
-			return map[string]interface{}{"success": true, "status": 200}, nil
+			return map[string]interface{}{"success": true, "status": 200, "message": "Verified"}, nil
+		}
+		if transaction.Status == 2 {
+			return map[string]interface{}{"success": false, "status": 406, "message": "Transaction failed"}, nil
 		}
 
-		// Update Wallet
-		s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance + ?", transaction.Amount))
+		if paymentStatus == "SUCCESSFUL" {
+			// Update Wallet
+			s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance + ?", transaction.Amount))
 
-		s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Updates(map[string]interface{}{
-			"status": 1,
-		})
+			var wallet models.Wallet
+			s.DB.Where("user_id = ?", transaction.UserId).First(&wallet)
 
-		s.logCallback(clientId, "Completed", rawBody, 1, onusReference, "Payonus")
-		return map[string]interface{}{"success": true, "status": 200}, nil
+			s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Updates(map[string]interface{}{
+				"status":            1,
+				"available_balance": wallet.AvailableBalance,
+			})
+
+			s.logCallback(clientId, "Completed", rawBody, 1, onusReference, "Payonus")
+			return map[string]interface{}{"success": true, "status": 200}, nil
+		}
 	}
 
 	return map[string]interface{}{"success": false}, nil

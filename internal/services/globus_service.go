@@ -132,18 +132,20 @@ func (s *GlobusService) HandleWebhook(param GlobusWebhookDTO) (interface{}, erro
 	payStatus, _ := param.CallbackData["paymentStatus"].(string)
 	partnerRef, _ := param.CallbackData["partnerReference"].(string)
 
+	var transaction models.Transaction
+	if err := s.DB.Where("client_id = ? AND transaction_no = ? AND tranasaction_type = ?", param.ClientId, partnerRef, "credit").First(&transaction).Error; err != nil {
+		s.logCallback(param.ClientId, "Transaction not found", param.CallbackData, 0, partnerRef, "Globus")
+		return common.NewErrorResponse("Transaction not found", nil, 404), nil
+	}
+
+	if transaction.Status == 1 {
+		return common.NewSuccessResponse(nil, "Verified"), nil
+	}
+	if transaction.Status == 2 {
+		return common.NewErrorResponse("Transaction failed", nil, 406), nil
+	}
+
 	if txnStatus == "Successful" && payStatus == "Complete" {
-		var transaction models.Transaction
-		if err := s.DB.Where("client_id = ? AND transaction_no = ? AND tranasaction_type = ?", param.ClientId, partnerRef, "credit").First(&transaction).Error; err != nil {
-			s.logCallback(param.ClientId, "Transaction not found", param.CallbackData, 0, partnerRef, "Globus")
-			return common.NewErrorResponse("Transaction not found", nil, 404), nil
-		}
-
-		if transaction.Status == 1 {
-			s.logCallback(param.ClientId, "Transaction already successful", param.CallbackData, 1, partnerRef, "Globus")
-			return common.NewSuccessResponse(nil, "Transaction already successful"), nil
-		}
-
 		if err := s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance + ?", transaction.Amount)).Error; err != nil {
 			s.logCallback(param.ClientId, "Wallet not found", param.CallbackData, 0, partnerRef, "Globus")
 			return common.NewErrorResponse("Wallet not found for this user", nil, 404), nil
@@ -153,11 +155,11 @@ func (s *GlobusService) HandleWebhook(param GlobusWebhookDTO) (interface{}, erro
 		s.DB.Where("user_id = ?", transaction.UserId).First(&wallet)
 
 		s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Updates(map[string]interface{}{
-			"status":  1,
-			"balance": wallet.AvailableBalance,
+			"status":            1,
+			"available_balance": wallet.AvailableBalance,
 		})
 
-		s.logCallback(param.ClientId, "WCompleted", param.CallbackData, 1, partnerRef, "Globus")
+		s.logCallback(param.ClientId, "Completed", param.CallbackData, 1, partnerRef, "Globus")
 		return common.NewSuccessResponse(nil, "Transaction successfully verified and processed"), nil
 	}
 

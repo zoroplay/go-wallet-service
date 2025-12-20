@@ -127,6 +127,24 @@ func (s *ProvidusService) HandleWebhook(data map[string]interface{}) (interface{
 		}, nil
 	}
 
+	if transaction.Status == 1 {
+		return map[string]interface{}{
+			"requestSuccessful": true,
+			"sessionId":         sessionId,
+			"responseMessage":   "duplicate transaction",
+			"responseCode":      "01",
+		}, nil
+	}
+
+	if transaction.Status == 2 {
+		return map[string]interface{}{
+			"requestSuccessful": true,
+			"sessionId":         sessionId,
+			"responseMessage":   "rejected transaction",
+			"responseCode":      "02",
+		}, nil
+	}
+
 	// Check settlementId uniqueness
 	var existingSettlement models.Transaction
 	if err := s.DB.Where("settlement_id = ?", settlementId).First(&existingSettlement).Error; err == nil {
@@ -144,18 +162,8 @@ func (s *ProvidusService) HandleWebhook(data map[string]interface{}) (interface{
 		s.DB.Model(&transaction).Update("settlement_id", settlementId)
 	}
 
-	if transaction.Status == 1 {
-		s.logCallback(clientId, "Transaction already successful", rawBody, 1, accountNumber, "Providus")
-		return map[string]interface{}{
-			"requestSuccessful": true,
-			"sessionId":         sessionId,
-			"responseMessage":   "duplicate transaction",
-			"responseCode":      "01",
-		}, nil
-	}
-
-	var wallet models.Wallet
-	if err := s.DB.Where("user_id = ?", transaction.UserId).First(&wallet).Error; err != nil {
+	// Update Wallet
+	if err := s.DB.Model(&models.Wallet{}).Where("user_id = ?", transaction.UserId).UpdateColumn("available_balance", gorm.Expr("available_balance + ?", transaction.Amount)).Error; err != nil {
 		s.logCallback(clientId, "Wallet not found", rawBody, 0, accountNumber, "Providus")
 		return map[string]interface{}{
 			"requestSuccessful": true,
@@ -165,14 +173,12 @@ func (s *ProvidusService) HandleWebhook(data map[string]interface{}) (interface{
 		}, nil
 	}
 
-	balance := wallet.AvailableBalance + transaction.Amount
-	if err := s.HelperService.UpdateWallet(balance, transaction.UserId); err != nil {
-		// handle error
-	}
+	var wallet models.Wallet
+	s.DB.Where("user_id = ?", transaction.UserId).First(&wallet)
 
 	s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transaction.TransactionNo).Updates(map[string]interface{}{
-		"status":  1,
-		"balance": balance,
+		"status":            1,
+		"available_balance": wallet.AvailableBalance,
 	})
 
 	s.logCallback(clientId, "Completed", rawBody, 0, accountNumber, "Providus")
