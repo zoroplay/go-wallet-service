@@ -1,2 +1,51 @@
-go.sum
+# Environment
 .env
+.env.local
+.env.*.local
+
+# Dependencies
+go.sum
+vendor/
+
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+server
+bin/
+dist/
+
+# Build output
+*.out
+*.test
+coverage.out
+coverage.html
+
+# IDE and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Temp files
+tmp/
+temp/
+*.tmp
+
+# Proto generated (optional - remove if you want to track these)
+# proto/*.pb.go
+
+# Debug
+debug
+*.pprof
+
+# Air live reload
+tmp/
