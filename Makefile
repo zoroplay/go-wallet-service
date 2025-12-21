@@ -23,6 +23,11 @@ gen-proto:
 		$(PROTO_SRC_DIR)/*.proto
 	@echo "Code generation complete."
 
+migrate:
+	@echo "Running database migrations..."
+	@go run cmd/migrate/main.go
+	@echo "Migrations complete."
+
 build:
 	@echo "Building application..."
 	@go build -o bin/server main.go

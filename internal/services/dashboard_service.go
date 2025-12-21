@@ -178,7 +178,7 @@ func (s *DashboardService) Balances(clientId int, rangeZ string, from, to string
 	var totalRetailBalance float64
 	if len(retailUserIds) > 0 {
 		s.DB.Model(&models.Wallet{}).
-			Select("COALESCE(SUM(available_balance), 0)").
+			Select("COALESCE(SUM(balance), 0)").
 			Where("user_id IN ?", retailUserIds).
 			Scan(&totalRetailBalance)
 	}
@@ -263,9 +263,10 @@ func (s *DashboardService) GetGamingSummary(clientId int, rangeZ string, from, t
 		summary = append(summary, stat)
 	}
 
+	dateFormat := "Mon Jan 02 2006 15:04:05 GMT-0700 (Coordinated Universal Time)"
 	return map[string]interface{}{
-		"startDate": start.Format(time.RFC3339),
-		"endDate":   end.Format(time.RFC3339),
+		"startDate": start.Format(dateFormat),
+		"endDate":   end.Format(dateFormat),
 		"data":      summary,
 	}, nil
 }
@@ -288,10 +289,8 @@ func (s *DashboardService) parseDateRange(rangeZ, from, to string) (time.Time, t
 	return start, end, nil
 }
 
-// GamingSummaryForOnline & GamingSummaryForRetail would follow similar patterns
-// but additionally filtering by UserIDs fetched from IdentityService
-// I will implement them as stubs or full implementations if space allows.
-// Implementation for Online:
+// GamingSummaryForOnline & GamingSummaryForRetail follow similar patterns
+// filtering by UserIDs fetched from IdentityService
 
 func (s *DashboardService) GamingSummaryForOnline(clientId int, rangeZ, from, to string) (interface{}, error) {
 	start, end, err := s.parseDateRange(rangeZ, from, to)
@@ -330,27 +329,27 @@ func (s *DashboardService) GamingSummaryForOnline(clientId int, rangeZ, from, to
 		{"Virtual Sport", "Bet Deposit (Virtual)", "Bonus Bet (Virtual)", "virtual_bonus_balance"},
 	}
 
+	var summary []map[string]interface{}
+
 	if len(playerUserIds) == 0 {
-		var summary []map[string]interface{}
 		for _, p := range products {
 			summary = append(summary, map[string]interface{}{
 				"product":    p.Name,
-				"turnover":   0.0,
+				"turnover":   0,
 				"margin":     "0%",
-				"ggr":        0.0,
-				"bonusGiven": 0.0,
-				"bonusSpent": 0.0,
-				"ngr":        0.0,
+				"ggr":        0,
+				"bonusGiven": 0,
+				"bonusSpent": 0,
+				"ngr":        0,
 			})
 		}
+		dateFormat := "Mon Jan 02 2006 15:04:05 GMT-0700 (Coordinated Universal Time)"
 		return map[string]interface{}{
-			"startDate": start.Format(time.RFC3339),
-			"endDate":   end.Format(time.RFC3339),
+			"startDate": start.Format(dateFormat),
+			"endDate":   end.Format(dateFormat),
 			"data":      summary,
 		}, nil
 	}
-
-	var summary []map[string]interface{}
 
 	for _, p := range products {
 		var stake, winnings, bonusPlayed, bonusGiven float64
@@ -359,13 +358,13 @@ func (s *DashboardService) GamingSummaryForOnline(clientId int, rangeZ, from, to
 		// Filtering by UserIDs
 		s.DB.Model(&models.Transaction{}).Select("COALESCE(SUM(amount), 0)").Where("client_id = ? AND subject = ? AND created_at BETWEEN ? AND ? AND user_id IN ?", clientId, p.StakeSubject, start, end, playerUserIds).Scan(&stake)
 
-		// Winnings Pattern (Using LIKE as in TS)
+		// Winnings Pattern (Using LIKE as in TS for Online)
 		s.DB.Model(&models.Transaction{}).Select("COALESCE(SUM(amount), 0)").Where("client_id = ? AND subject LIKE ? AND created_at BETWEEN ? AND ? AND user_id IN ?", clientId, "%Win%", start, end, playerUserIds).Scan(&winnings)
 
 		// Bonus Played (Subject match)
 		s.DB.Model(&models.Transaction{}).Select("COALESCE(SUM(amount), 0)").Where("client_id = ? AND subject = ? AND created_at BETWEEN ? AND ? AND user_id IN ?", clientId, p.WinningSubject, start, end, playerUserIds).Scan(&bonusPlayed)
 
-		// Archived...
+		// Archived
 		s.DB.Table("archived_transactions").Select("COALESCE(SUM(amount), 0)").Where("client_id = ? AND subject = ? AND created_at BETWEEN ? AND ? AND user_id IN ?", clientId, p.StakeSubject, start, end, playerUserIds).Scan(&archStake)
 		s.DB.Table("archived_transactions").Select("COALESCE(SUM(amount), 0)").Where("client_id = ? AND subject LIKE ? AND created_at BETWEEN ? AND ? AND user_id IN ?", clientId, "%Win%", start, end, playerUserIds).Scan(&archWinnings)
 		s.DB.Table("archived_transactions").Select("COALESCE(SUM(amount), 0)").Where("client_id = ? AND subject = ? AND created_at BETWEEN ? AND ? AND user_id IN ?", clientId, p.WinningSubject, start, end, playerUserIds).Scan(&archBonusPlayed)
@@ -392,12 +391,129 @@ func (s *DashboardService) GamingSummaryForOnline(clientId int, rangeZ, from, to
 			"bonusSpent": totalBonusPlayed,
 			"ngr":        ggr,
 		}
+
 		summary = append(summary, stat)
 	}
 
+	dateFormat := "Mon Jan 02 2006 15:04:05 GMT-0700 (Coordinated Universal Time)"
 	return map[string]interface{}{
-		"startDate": start.Format(time.RFC3339),
-		"endDate":   end.Format(time.RFC3339),
+		"startDate": start.Format(dateFormat),
+		"endDate":   end.Format(dateFormat),
+		"data":      summary,
+	}, nil
+}
+
+func (s *DashboardService) GamingSummaryForRetail(clientId int, rangeZ, from, to string) (interface{}, error) {
+	start, end, err := s.parseDateRange(rangeZ, from, to)
+	if err != nil {
+		return common.NewErrorResponse(err.Error(), nil, http.StatusBadRequest), nil
+	}
+
+	resp, err := s.IdentityClient.GetClientUsers(&identity.ClientIdRequest{ClientId: int32(clientId)})
+	if err != nil {
+		return common.NewErrorResponse("Failed to fetch client users", nil, http.StatusInternalServerError), nil
+	}
+
+	retailRoles := map[string]bool{
+		"Cashier": true, "Shop": true, "Agent": true, "Master Agent": true, "Super Agent": true, "POS": true,
+	}
+
+	var retailUserIds []int
+	for _, user := range resp.Data {
+		roleVal := user.Fields["role"]
+		role := ""
+		if roleVal != nil {
+			role = roleVal.GetStringValue()
+		}
+		idVal := user.Fields["id"]
+		var id int
+		if idVal != nil {
+			id = int(idVal.GetNumberValue())
+		}
+		if id == 0 {
+			continue
+		}
+		if retailRoles[role] {
+			retailUserIds = append(retailUserIds, id)
+		}
+	}
+
+	products := []ProductStat{
+		{"Sport", "Bet Deposit (Sport)", "Sport Win", "sport_bonus_balance"},
+		{"Casino", "Bet Deposit (Casino)", "Bonus Bet (Casino)", "casino_bonus_balance"},
+		{"Virtual Sport", "Bet Deposit (Virtual)", "Bonus Bet (Virtual)", "virtual_bonus_balance"},
+	}
+
+	var summary []map[string]interface{}
+
+	if len(retailUserIds) == 0 {
+		for _, p := range products {
+			summary = append(summary, map[string]interface{}{
+				"product":    p.Name,
+				"turnover":   0,
+				"margin":     "0%",
+				"ggr":        0,
+				"bonusGiven": 0,
+				"bonusSpent": 0,
+				"ngr":        0,
+			})
+		}
+		dateFormat := "Mon Jan 02 2006 15:04:05 GMT-0700 (Coordinated Universal Time)"
+		return map[string]interface{}{
+			"startDate": start.Format(dateFormat),
+			"endDate":   end.Format(dateFormat),
+			"data":      summary,
+		}, nil
+	}
+
+	for _, p := range products {
+		var stake, winnings, bonusPlayed, bonusGiven float64
+		var archStake, archWinnings, archBonusPlayed float64
+
+		// Filtering by UserIDs
+		s.DB.Model(&models.Transaction{}).Select("COALESCE(SUM(amount), 0)").Where("client_id = ? AND subject = ? AND created_at BETWEEN ? AND ? AND user_id IN ?", clientId, p.StakeSubject, start, end, retailUserIds).Scan(&stake)
+
+		// Winnings Pattern (Using exact match for Retail as in Online but checking subjects)
+		s.DB.Model(&models.Transaction{}).Select("COALESCE(SUM(amount), 0)").Where("client_id = ? AND subject = ? AND created_at BETWEEN ? AND ? AND user_id IN ?", clientId, p.WinningSubject, start, end, retailUserIds).Scan(&winnings)
+
+		// Bonus Played
+		s.DB.Model(&models.Transaction{}).Select("COALESCE(SUM(amount), 0)").Where("client_id = ? AND subject = ? AND created_at BETWEEN ? AND ? AND user_id IN ?", clientId, p.WinningSubject, start, end, retailUserIds).Scan(&bonusPlayed)
+
+		// Archived
+		s.DB.Table("archived_transactions").Select("COALESCE(SUM(amount), 0)").Where("client_id = ? AND subject = ? AND created_at BETWEEN ? AND ? AND user_id IN ?", clientId, p.StakeSubject, start, end, retailUserIds).Scan(&archStake)
+		s.DB.Table("archived_transactions").Select("COALESCE(SUM(amount), 0)").Where("client_id = ? AND subject = ? AND created_at BETWEEN ? AND ? AND user_id IN ?", clientId, p.WinningSubject, start, end, retailUserIds).Scan(&archWinnings)
+		s.DB.Table("archived_transactions").Select("COALESCE(SUM(amount), 0)").Where("client_id = ? AND subject = ? AND created_at BETWEEN ? AND ? AND user_id IN ?", clientId, p.WinningSubject, start, end, retailUserIds).Scan(&archBonusPlayed)
+
+		// Bonus Given
+		s.DB.Model(&models.Wallet{}).Select(fmt.Sprintf("COALESCE(SUM(%s), 0)", p.WalletField)).Where("client_id = ? AND user_id IN ?", clientId, retailUserIds).Scan(&bonusGiven)
+
+		totalStake := stake + archStake
+		totalWinnings := winnings + archWinnings
+		totalBonusPlayed := bonusPlayed + archBonusPlayed
+
+		ggr := totalStake - totalWinnings
+		margin := "0%"
+		if totalStake > 0 {
+			margin = fmt.Sprintf("%.2f%%", (ggr/totalStake)*100)
+		}
+
+		stat := map[string]interface{}{
+			"product":    p.Name,
+			"turnover":   totalStake,
+			"margin":     margin,
+			"ggr":        ggr,
+			"bonusGiven": bonusGiven,
+			"bonusSpent": totalBonusPlayed,
+			"ngr":        ggr,
+		}
+
+		summary = append(summary, stat)
+	}
+
+	dateFormat := "Mon Jan 02 2006 15:04:05 GMT-0700 (Coordinated Universal Time)"
+	return map[string]interface{}{
+		"startDate": start.Format(dateFormat),
+		"endDate":   end.Format(dateFormat),
 		"data":      summary,
 	}, nil
 }
@@ -441,19 +557,22 @@ func (s *DashboardService) GetSportSummary(clientId int, rangeZ, from, to string
 		margin = fmt.Sprintf("%.2f%%", (ggr/totalStake)*100)
 	}
 
+	stat := map[string]interface{}{
+		"product":    sportProduct.Name,
+		"turnover":   totalStake,
+		"margin":     margin,
+		"ggr":        ggr,
+		"bonusGiven": bonusGiven,
+		"bonusSpent": totalBonusPlayed,
+		"ngr":        ggr,
+	}
+
+	dateFormat := "Mon Jan 02 2006 15:04:05 GMT-0700 (Coordinated Universal Time)"
 	return map[string]interface{}{
-		"startDate": start.Format("Mon Jan 02 2006 15:04:05 GMT-0700 (Coordinated Universal Time)"),
-		"endDate":   end.Format("Mon Jan 02 2006 15:04:05 GMT-0700 (Coordinated Universal Time)"),
+		"startDate": start.Format(dateFormat),
+		"endDate":   end.Format(dateFormat),
 		"data": []interface{}{
-			map[string]interface{}{
-				"product":    sportProduct.Name,
-				"turnover":   totalStake,
-				"margin":     margin,
-				"ggr":        ggr,
-				"bonusGiven": bonusGiven,
-				"bonusSpent": totalBonusPlayed,
-				"ngr":        ggr,
-			},
+			stat,
 		},
 	}, nil
 }

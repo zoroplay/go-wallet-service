@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 
 	"wallet-service/internal/models"
 )
@@ -23,12 +25,40 @@ func Connect() {
 		os.Getenv("DB_NAME"),
 	)
 
-	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	// Configure GORM with optimized settings
+	gormConfig := &gorm.Config{
+		// Disable default transaction for single queries (faster)
+		SkipDefaultTransaction: true,
+		// Enable prepared statement cache (reuses prepared statements)
+		PrepareStmt: true,
+		// Set logger level based on environment
+		Logger: logger.Default.LogMode(logger.Warn), // Change to logger.Silent for production
+	}
+
+	DB, err = gorm.Open(mysql.Open(dsn), gormConfig)
 	if err != nil {
 		log.Fatal("Failed to connect to database: ", err)
 	}
 
-	log.Println("Database connection established")
+	// Configure connection pool
+	sqlDB, err := DB.DB()
+	if err != nil {
+		log.Fatal("Failed to get DB instance: ", err)
+	}
+
+	// SetMaxIdleConns sets the maximum number of connections in the idle connection pool
+	sqlDB.SetMaxIdleConns(10)
+
+	// SetMaxOpenConns sets the maximum number of open connections to the database
+	sqlDB.SetMaxOpenConns(100)
+
+	// SetConnMaxLifetime sets the maximum amount of time a connection may be reused
+	sqlDB.SetConnMaxLifetime(time.Hour)
+
+	// SetConnMaxIdleTime sets the maximum amount of time a connection may be idle
+	sqlDB.SetConnMaxIdleTime(10 * time.Minute)
+
+	log.Println("Database connection established with connection pooling")
 }
 
 func Migrate() {

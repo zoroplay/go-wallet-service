@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"wallet-service/internal/models"
 	"wallet-service/internal/services"
 	"wallet-service/pkg/common"
 	pb "wallet-service/proto/wallet"
@@ -44,6 +45,24 @@ type Server struct {
 	Retail      *services.RetailService
 }
 
+// errorLoggingInterceptor logs all errors from gRPC method calls
+func errorLoggingInterceptor(
+	ctx context.Context,
+	req interface{},
+	info *grpc.UnaryServerInfo,
+	handler grpc.UnaryHandler,
+) (interface{}, error) {
+	// Call the handler
+	resp, err := handler(ctx, req)
+
+	// Log any error that occurred
+	if err != nil {
+		log.Printf("[gRPC ERROR] Method: %s | Error: %v", info.FullMethod, err)
+	}
+
+	return resp, err
+}
+
 // StartGRPCServer initializes and starts the gRPC server
 func StartGRPCServer(
 	port string,
@@ -73,7 +92,12 @@ func StartGRPCServer(
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
-	s := grpc.NewServer()
+
+	// Create server with error logging interceptor
+	s := grpc.NewServer(
+		grpc.UnaryInterceptor(errorLoggingInterceptor),
+	)
+
 	pb.RegisterWalletServiceServer(s, &Server{
 		Wallet:      wallet,
 		Payment:     payment,
@@ -305,9 +329,67 @@ func (s *Server) RequestWithdrawal(ctx context.Context, req *pb.WithdrawRequest)
 }
 
 func (s *Server) ListWithdrawals(ctx context.Context, req *pb.ListWithdrawalRequests) (*pb.CommonResponseObj, error) {
-	// Stub using WithdrawalService
-	// s.Withdrawal.ListWithdrawalRequest(...)
-	return &pb.CommonResponseObj{Success: true, Message: "Listed"}, nil
+	var status *int
+	if req.Status != 0 {
+		sVal := int(req.Status)
+		status = &sVal
+	}
+
+	result, err := s.Withdrawal.ListWithdrawalRequest(services.ListWithdrawalRequestsDTO{
+		ClientId: int(req.ClientId),
+		From:     req.From,
+		To:       req.To,
+		Status:   status,
+		UserId:   int(req.UserId),
+		Username: req.Username,
+		BankName: req.BankName,
+		Page:     int(req.Page),
+		Limit:    int(req.Limit),
+	})
+	if err != nil {
+		return &pb.CommonResponseObj{Success: false, Message: err.Error()}, nil
+	}
+
+	// Extract data and totalAmount from the result
+	var dataList []interface{}
+	var totalAmount float64
+
+	if dataMap, ok := result.Data.(map[string]interface{}); ok {
+		if list, ok := dataMap["data"].([]models.Withdrawal); ok {
+			// Convert to JSON-compatible format
+			listBytes, _ := json.Marshal(list)
+			json.Unmarshal(listBytes, &dataList)
+		}
+		if amt, ok := dataMap["totalAmount"].(float64); ok {
+			totalAmount = amt
+		}
+	}
+
+	// Build the response data struct
+	responseData := map[string]interface{}{
+		"data":        dataList,
+		"totalAmount": totalAmount,
+		"total":       result.Count,
+		"page":        result.CurrentPage,
+		"limit":       100,
+	}
+
+	dataStruct, err := structpb.NewStruct(responseData)
+	if err != nil {
+		dataStruct, _ = structpb.NewStruct(map[string]interface{}{
+			"totalAmount": totalAmount,
+			"total":       result.Count,
+			"page":        result.CurrentPage,
+			"limit":       100,
+		})
+	}
+
+	return &pb.CommonResponseObj{
+		Success: true,
+		Message: result.Message,
+		Status:  200,
+		Data:    dataStruct,
+	}, nil
 }
 
 func (s *Server) ListDeposits(ctx context.Context, req *pb.ListDepositRequests) (*pb.CommonResponseObj, error) {
@@ -318,7 +400,7 @@ func (s *Server) ListDeposits(ctx context.Context, req *pb.ListDepositRequests) 
 			status = &sVal
 		}
 	}
-	_, err := s.Wallet.ListDeposits(services.ListDepositsDTO{
+	result, err := s.Wallet.ListDeposits(services.ListDepositsDTO{
 		ClientId:      int(req.ClientId),
 		StartDate:     req.StartDate,
 		EndDate:       req.EndDate,
@@ -332,7 +414,49 @@ func (s *Server) ListDeposits(ctx context.Context, req *pb.ListDepositRequests) 
 	if err != nil {
 		return &pb.CommonResponseObj{Success: false, Message: err.Error()}, nil
 	}
-	return &pb.CommonResponseObj{Success: true, Message: "Listed"}, nil
+
+	// Calculate total amount from the transactions
+	var totalAmount float64
+	var rowsList []interface{}
+	if rows, ok := result.Data.([]models.Transaction); ok {
+		for _, tx := range rows {
+			totalAmount += tx.Amount
+		}
+		// Convert rows to JSON-compatible format
+		rowsBytes, _ := json.Marshal(rows)
+		json.Unmarshal(rowsBytes, &rowsList)
+	}
+
+	// Build the data struct for CommonResponseObj
+	dataMap := map[string]interface{}{
+		"rows":        rowsList,
+		"total":       result.Count,
+		"page":        result.CurrentPage,
+		"newPage":     result.NextPage,
+		"prevPage":    result.PrevPage,
+		"lastPage":    result.LastPage,
+		"totalAmount": totalAmount,
+	}
+
+	dataStruct, err := structpb.NewStruct(dataMap)
+	if err != nil {
+		// If struct conversion fails, try without complex data
+		dataStruct, _ = structpb.NewStruct(map[string]interface{}{
+			"total":       result.Count,
+			"page":        result.CurrentPage,
+			"newPage":     result.NextPage,
+			"prevPage":    result.PrevPage,
+			"lastPage":    result.LastPage,
+			"totalAmount": totalAmount,
+		})
+	}
+
+	return &pb.CommonResponseObj{
+		Success: true,
+		Message: result.Message,
+		Status:  200,
+		Data:    dataStruct,
+	}, nil
 }
 
 func (s *Server) UpdateWithdrawal(ctx context.Context, req *pb.UpdateWithdrawalRequest) (*pb.CommonResponseObj, error) {
@@ -365,31 +489,103 @@ func (s *Server) UpdateCommissionRequest(ctx context.Context, req *pb.UpdateAffi
 }
 
 func (s *Server) FetchBetRange(ctx context.Context, req *pb.FetchBetRangeRequest) (*pb.FetchBetRangeResponse, error) {
-	_, err := s.Deposit.FetchBetRange(req)
+	resp, err := s.Deposit.FetchBetRange(req)
 	if err != nil {
 		errStr := err.Error()
 		return &pb.FetchBetRangeResponse{Success: false, Error: &errStr}, nil
 	}
-	// Data mapping omitted for brevity, returning success
-	return &pb.FetchBetRangeResponse{Success: true}, nil 
+
+	// Map the response to proto type
+	if rMap, ok := resp.(map[string]interface{}); ok {
+		if rMap["success"] == true {
+			var protoData []*pb.FetchBetRangeResponse_Data
+			dataBytes, _ := json.Marshal(rMap["data"])
+			var dataList []map[string]interface{}
+			json.Unmarshal(dataBytes, &dataList)
+
+			for _, item := range dataList {
+				protoData = append(protoData, &pb.FetchBetRangeResponse_Data{
+					UserId:  getInt32(item["userId"]),
+					Total:   getFloat(item["total"]),
+					Count:   getFloat(item["count"]),
+					Balance: getFloat(item["availableBalance"]),
+				})
+			}
+
+			return &pb.FetchBetRangeResponse{
+				Success: true,
+				Status:  200,
+				Data:    protoData,
+			}, nil
+		}
+	}
+	return &pb.FetchBetRangeResponse{Success: true, Status: 200}, nil
 }
 
 func (s *Server) FetchDepositRange(ctx context.Context, req *pb.FetchDepositRangeRequest) (*pb.FetchDepositRangeResponse, error) {
-	_, err := s.Deposit.FetchDepositRange(req)
+	resp, err := s.Deposit.FetchDepositRange(req)
 	if err != nil {
 		errStr := err.Error()
 		return &pb.FetchDepositRangeResponse{Success: false, Error: &errStr}, nil
 	}
-	return &pb.FetchDepositRangeResponse{Success: true}, nil
+
+	// Map the response to proto type
+	if rMap, ok := resp.(map[string]interface{}); ok {
+		if rMap["success"] == true {
+			var protoData []*pb.FetchDepositRangeResponse_Data
+			dataBytes, _ := json.Marshal(rMap["data"])
+			var dataList []map[string]interface{}
+			json.Unmarshal(dataBytes, &dataList)
+
+			for _, item := range dataList {
+				protoData = append(protoData, &pb.FetchDepositRangeResponse_Data{
+					UserId:  getInt32(item["userId"]),
+					Total:   getFloat(item["total"]),
+					Balance: getFloat(item["availableBalance"]),
+				})
+			}
+
+			return &pb.FetchDepositRangeResponse{
+				Success: true,
+				Status:  200,
+				Data:    protoData,
+			}, nil
+		}
+	}
+	return &pb.FetchDepositRangeResponse{Success: true, Status: 200}, nil
 }
 
 func (s *Server) FetchDepositCount(ctx context.Context, req *pb.FetchDepositCountRequest) (*pb.FetchDepositCountResponse, error) {
-	_, err := s.Deposit.FetchDepositCount(req)
+	resp, err := s.Deposit.FetchDepositCount(req)
 	if err != nil {
 		errStr := err.Error()
 		return &pb.FetchDepositCountResponse{Success: false, Error: &errStr}, nil
 	}
-	return &pb.FetchDepositCountResponse{Success: true}, nil
+
+	// Map the response to proto type
+	if rMap, ok := resp.(map[string]interface{}); ok {
+		if rMap["success"] == true {
+			var protoData []*pb.FetchDepositCountResponse_Data
+			dataBytes, _ := json.Marshal(rMap["data"])
+			var dataList []map[string]interface{}
+			json.Unmarshal(dataBytes, &dataList)
+
+			for _, item := range dataList {
+				protoData = append(protoData, &pb.FetchDepositCountResponse_Data{
+					UserId:  getInt32(item["userId"]),
+					Total:   getFloat(item["total"]),
+					Balance: getFloat(item["availableBalance"]),
+				})
+			}
+
+			return &pb.FetchDepositCountResponse{
+				Success: true,
+				Status:  200,
+				Data:    protoData,
+			}, nil
+		}
+	}
+	return &pb.FetchDepositCountResponse{Success: true, Status: 200}, nil
 }
 
 func (s *Server) FetchPlayerDeposit(ctx context.Context, req *pb.FetchPlayerDepositRequest) (*pb.WalletResponse, error) {
@@ -1364,8 +1560,11 @@ func (s *Server) OverallGamesOnline(ctx context.Context, req *pb.DashboardReques
 }
 
 func (s *Server) OverallGamesRetail(ctx context.Context, req *pb.DashboardRequest) (*pb.OverallGamesResponse, error) {
-	// Reusing Online logic or stubbing as Retail summary logic is missing in dashboard_service.go
-	return &pb.OverallGamesResponse{Data: []*pb.ProductSummary{}}, nil
+	resp, err := s.Dashboard.GamingSummaryForRetail(int(req.ClientId), req.RangeZ, req.From, req.To)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "%v", err)
+	}
+	return s.mapGamingSummaryToProto(resp)
 }
 
 func (s *Server) OverallGamesSport(ctx context.Context, req *pb.DashboardRequest) (*pb.OverallGamesResponse, error) {
@@ -1413,27 +1612,58 @@ func (s *Server) Statistics(ctx context.Context, req *pb.StatisticsRequest) (*pb
 
 func (s *Server) mapGamingSummaryToProto(resp interface{}) (*pb.OverallGamesResponse, error) {
 	rMap, _ := resp.(map[string]interface{})
-	dataList, _ := rMap["data"].([]map[string]interface{})
 
 	var summaries []*pb.ProductSummary
-	for _, d := range dataList {
-		summaries = append(summaries, &pb.ProductSummary{
-			Product:    getString(d["product"]),
-			Turnover:   getFloat64(d["turnover"]),
-			Margin:     getString(d["margin"]),
-			Ggr:        getFloat64(d["ggr"]),
-			BonusGiven: getFloat64(d["bonusGiven"]),
-			BonusSpent: getFloat64(d["bonusSpent"]),
-			Ngr:        getFloat64(d["ngr"]),
-		})
+
+	// Handle both []map[string]interface{} and []interface{} types
+	if dataList, ok := rMap["data"].([]map[string]interface{}); ok {
+		for _, d := range dataList {
+			turnover := getFloat64(d["turnover"])
+			ggr := getFloat64(d["ggr"])
+			bonusGiven := getFloat64(d["bonusGiven"])
+			bonusSpent := getFloat64(d["bonusSpent"])
+			ngr := getFloat64(d["ngr"])
+			summaries = append(summaries, &pb.ProductSummary{
+				Product:    getString(d["product"]),
+				Turnover:   &turnover,
+				Margin:     getString(d["margin"]),
+				Ggr:        &ggr,
+				BonusGiven: &bonusGiven,
+				BonusSpent: &bonusSpent,
+				Ngr:        &ngr,
+			})
+		}
+	} else if dataList, ok := rMap["data"].([]interface{}); ok {
+		for _, item := range dataList {
+			if d, ok := item.(map[string]interface{}); ok {
+				turnover := getFloat64(d["turnover"])
+				ggr := getFloat64(d["ggr"])
+				bonusGiven := getFloat64(d["bonusGiven"])
+				bonusSpent := getFloat64(d["bonusSpent"])
+				ngr := getFloat64(d["ngr"])
+				summaries = append(summaries, &pb.ProductSummary{
+					Product:    getString(d["product"]),
+					Turnover:   &turnover,
+					Margin:     getString(d["margin"]),
+					Ggr:        &ggr,
+					BonusGiven: &bonusGiven,
+					BonusSpent: &bonusSpent,
+					Ngr:        &ngr,
+				})
+			}
+		}
 	}
 
 	startDate := ""
-	if sd, ok := rMap["startDate"].(time.Time); ok {
+	if sd, ok := rMap["startDate"].(string); ok {
+		startDate = sd
+	} else if sd, ok := rMap["startDate"].(time.Time); ok {
 		startDate = sd.Format(time.RFC3339)
 	}
 	endDate := ""
-	if ed, ok := rMap["endDate"].(time.Time); ok {
+	if ed, ok := rMap["endDate"].(string); ok {
+		endDate = ed
+	} else if ed, ok := rMap["endDate"].(time.Time); ok {
 		endDate = ed.Format(time.RFC3339)
 	}
 

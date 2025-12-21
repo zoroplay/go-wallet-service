@@ -306,9 +306,15 @@ func (s *WalletService) ListDeposits(data ListDepositsDTO) (common.PaginationRes
 	query := s.DB.Model(&models.Transaction{}).
 		Where("client_id = ?", data.ClientId).
 		Where("user_id != 0").
-		Where("subject = ?", "Deposit").
-		Where("created_at >= ?", data.StartDate).
-		Where("created_at <= ?", data.EndDate)
+		Where("subject = ?", "Deposit")
+
+	// Only apply date filters if dates are provided
+	if data.StartDate != "" {
+		query = query.Where("DATE(created_at) >= ?", data.StartDate)
+	}
+	if data.EndDate != "" {
+		query = query.Where("DATE(created_at) <= ?", data.EndDate)
+	}
 
 	if data.PaymentMethod != "" {
 		query = query.Where("channel = ?", data.PaymentMethod)

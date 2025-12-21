@@ -6,8 +6,8 @@ import (
 
 type Withdrawal struct {
 	ID             int       `gorm:"primaryKey;autoIncrement" json:"id"`
-	ClientId       int       `gorm:"column:client_id;not null" json:"client_id"`
-	UserId         int       `gorm:"column:user_id;not null" json:"user_id"`
+	ClientId       int       `gorm:"column:client_id;not null;index:idx_withdrawal_client" json:"client_id"`
+	UserId         int       `gorm:"column:user_id;not null;index:idx_withdrawal_user" json:"user_id"`
 	Username       string    `gorm:"column:username;size:50;not null" json:"username"`
 	Amount         float64   `gorm:"column:amount;type:decimal(20,2);not null" json:"amount"`
 	WithdrawalCode string    `gorm:"column:withdrawal_code;size:40" json:"withdrawal_code"`

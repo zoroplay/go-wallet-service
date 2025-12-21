@@ -15,10 +15,10 @@ type Transaction struct {
 	Subject                string    `gorm:"column:subject;size:255;not null" json:"subject"`
 	Description            string    `gorm:"column:description;type:text" json:"description"`
 	Source                 string    `gorm:"column:source;size:50" json:"source"`
-	Channel                string    `gorm:"column:channel;size:50" json:"channel"`
+	Channel                string    `gorm:"column:channel;size:50;index:idx_trx_pending_cancel" json:"channel"`
 	AvailableBalance       float64   `gorm:"column:available_balance;type:decimal(20,2);default:0.00" json:"available_balance"`
 	Wallet                 string    `gorm:"column:wallet;size:50;default:main" json:"wallet"`
-	Status                 int       `gorm:"column:status;default:0" json:"status"` // 0: pending, 1: success, 2: failed
+	Status                 int       `gorm:"column:status;default:0;index:idx_trx_pending_cancel" json:"status"` // 0: pending, 1: success, 2: failed
 	SettlementId           *string   `gorm:"column:settlementId;size:255" json:"settlementId"`
 	AffiliateId            int       `gorm:"column:affiliateId;default:0" json:"affiliateId"`
 	AffiliateTransactionNo *int      `gorm:"column:affiliate_transactionNo;default:0" json:"affiliate_transactionNo"`

@@ -439,12 +439,12 @@ message DashboardRequest {
 
 message ProductSummary {
   string product = 1;
-  double turnover = 2;
+  optional double turnover = 2;
   string margin = 3;
-  double ggr = 4;
-  double bonusGiven = 5;
-  double bonusSpent = 6;
-  double ngr = 7;
+  optional double ggr = 4;
+  optional double bonusGiven = 5;
+  optional double bonusSpent = 6;
+  optional double ngr = 7;
 }
 
 message OverallGamesResponse {

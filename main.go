@@ -29,7 +29,7 @@ func main() {
 
 	// Initialize Database
 	database.Connect()
-	database.Migrate()
+	// NOTE: Migrations removed from startup. Run 'make migrate' to apply database changes.
 	db := database.DB
 
 	// Init Services
