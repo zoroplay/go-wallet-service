@@ -1,5 +1,4 @@
 syntax = "proto3";
-option go_package = "wallet-service/proto/identity";
 
 import "google/protobuf/struct.proto";
 
@@ -164,7 +163,34 @@ service IdentityService {
   rpc GetReferralUserIdsForCommission(FindUserIdRequest) returns (CommonResponseArray) {}
   rpc ListSuperAgentsUsers(GetAgentUsersRequest) returns (ArrayResponse) {}
   rpc GetClientAffiliates(ClientIdRequest) returns (CommonResponseArray) {}
+  rpc GetAffiliatesOverview(AffiliateRequest) returns (CommonResponseObj) {}
 
+  // User Import
+  rpc ImportUsers (ImportUsersRequest) returns (ImportUsersResponse) {}
+
+}
+
+
+// Top affiliate information
+message TopAffiliate {
+  int32 affiliate_id = 1;
+  optional string username = 2;
+  int32 signup_count = 3;
+  optional int32 totalDeposit = 4;
+  optional int32 totalWithdraw = 5;
+}
+
+// Data payload for affiliate statistics
+message AffiliateStatsData {
+  int32 totalUsers = 1;
+  repeated TopAffiliate topAffiliates = 2;
+}
+
+// Response message for affiliate statistics
+message AffiliateStatsResponse {
+  bool success = 1;
+  string message = 2;
+  AffiliateStatsData data = 3;
 }
 
 
@@ -1464,4 +1490,29 @@ message MetaData {
   int32 lastPage = 4;
   int32 nextPage = 5;
   int32 prevPage = 6;
+}
+
+// User Import Messages
+message ImportUserData {
+  int32 clientId = 1;
+  string username = 2;
+  string phoneNumber = 3;
+  optional string firstName = 4;
+  optional string lastName = 5;
+  optional string email = 6;
+  optional string createdAt = 7;
+  optional float balance = 8;
+}
+
+message ImportUsersRequest {
+  repeated ImportUserData users = 1;
+}
+
+message ImportUsersResponse {
+  bool success = 1;
+  string message = 2;
+  int32 totalProcessed = 3;
+  int32 totalCreated = 4;
+  int32 totalSkipped = 5;
+  repeated string errors = 6;
 }

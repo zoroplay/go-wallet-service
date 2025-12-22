@@ -1,5 +1,4 @@
 syntax = "proto3";
-option go_package = "wallet-service/proto/common";
 
 package common;
 
@@ -31,9 +30,3 @@ message CommonResponseArray {
     int32 lastPage = 6;
     repeated google.protobuf.Struct data = 7;
   }
-
-  message ClientRequest {
-    int32 clientId = 1;
-  }
-
-  message EmptyRequest {}

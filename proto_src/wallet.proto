@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-option go_package = "wallet-service/proto/wallet";
-
 import "google/protobuf/struct.proto";
 // import "proto";
 // import "cashbook.proto";
@@ -204,10 +202,9 @@ service WalletService {
   rpc AdminDailyAndMontlyAffiliateSummary(ClientAffiliateRequest) returns (CommonResponseObj) {}
   rpc ListAffiliateTotalDepositsAndWithdrawals(DepositWithdrawals) returns (CommonResponseObj) {}
   rpc AdminAffiliateReferralDashboardData(AffiliateDashboardData) returns (CommonResponseObj) {}
+
   rpc ListRetailData(RetailDataRequest) returns (CommonResponseArray) {}
   rpc ListRetailDataListRetailData(RetailDataRequest) returns (CommonResponseArray) {}
-  rpc ListRetailTransactions (RetailDataRequest) returns (CommonResponseArray) {}
-  rpc ListClientRetailTransactions (RetailDataRequest) returns (CommonResponseArray) {}
 }
 
 message RetailDataRequest {
@@ -221,6 +218,7 @@ message AffiliateDashboardData {
   int32 clientId = 1;
   optional string from = 2;
   optional string to = 3; 
+  optional int32 userId = 4;
 }
 
 
@@ -439,12 +437,12 @@ message DashboardRequest {
 
 message ProductSummary {
   string product = 1;
-  optional double turnover = 2;
+  double turnover = 2;
   string margin = 3;
-  optional double ggr = 4;
-  optional double bonusGiven = 5;
-  optional double bonusSpent = 6;
-  optional double ngr = 7;
+  double ggr = 4;
+  double bonusGiven = 5;
+  double bonusSpent = 6;
+  double ngr = 7;
 }
 
 message OverallGamesResponse {

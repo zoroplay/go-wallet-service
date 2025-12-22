@@ -1,5 +1,4 @@
 syntax = "proto3";
-option go_package = "wallet-service/proto/commission";
 
 import "google/protobuf/struct.proto";
 
@@ -37,7 +36,7 @@ service CommissionService {
   rpc Totals(SalesReportRequest) returns (CommonResponseArray) {}
 
   rpc DepositCommission(DepositCommissionRequest) returns (CommonResponseObj) {}
-  rpc PayoutSingleCommission(PayoutCommissionRequestData) returns (CommonResponseObj) {}
+  rpc PayoutCommission(PayoutCommissionRequestData) returns (CommonResponseObj) {}
   rpc BetCommission(BetCommissionRequest) returns (CommonResponseObj) {}
 
 

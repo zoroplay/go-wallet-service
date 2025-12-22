@@ -1,5 +1,4 @@
 syntax = "proto3";
-option go_package = "wallet-service/proto/gaming";
 // import "google/protobuf/any.proto";
 import "google/protobuf/struct.proto";
 

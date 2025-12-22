@@ -1245,7 +1245,7 @@ func (s *Server) CashbookFindAllBranchCashOut(context.Context, *pb.BranchRequest
 }
 
 func (s *Server) AdminAffiliateReferralDashboardData(ctx context.Context, req *pb.AffiliateDashboardData) (*pb.CommonResponseObj, error) {
-	resp, err := s.Commission.AdminAffiliateReferralDashboardData(req)
+	resp, err := s.Commission.AdminAffiliateDashboardData(req)
 	if err != nil {
 		return &pb.CommonResponseObj{Success: false, Message: err.Error()}, nil
 	}
