@@ -25,6 +25,17 @@ func Connect() {
 		os.Getenv("DB_NAME"),
 	)
 
+	// Configure a custom logger that ignores ErrRecordNotFound
+	newLogger := logger.New(
+		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
+		logger.Config{
+			SlowThreshold:             time.Second,
+			LogLevel:                  logger.Warn,
+			IgnoreRecordNotFoundError: true,
+			Colorful:                  false,
+		},
+	)
+
 	// Configure GORM with optimized settings
 	gormConfig := &gorm.Config{
 		// Disable default transaction for single queries (faster)
@@ -32,7 +43,7 @@ func Connect() {
 		// Enable prepared statement cache (reuses prepared statements)
 		PrepareStmt: true,
 		// Set logger level based on environment
-		Logger: logger.Default.LogMode(logger.Warn), // Change to logger.Silent for production
+		Logger: newLogger,
 	}
 
 	DB, err = gorm.Open(mysql.Open(dsn), gormConfig)

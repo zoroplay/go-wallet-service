@@ -1245,33 +1245,23 @@ func (s *Server) CashbookFindAllBranchCashOut(context.Context, *pb.BranchRequest
 }
 
 func (s *Server) AdminAffiliateReferralDashboardData(ctx context.Context, req *pb.AffiliateDashboardData) (*pb.CommonResponseObj, error) {
-	resp, err := s.Commission.AdminAffiliateDashboardData(req)
+	log.Println("gRPC: [AdminAffiliateReferralDashboardData] called");
+
+	var userIdPtr *int
+	if req.UserId != nil {
+		id := int(*req.UserId)
+		userIdPtr = &id
+	}
+
+	resp, err := s.Commission.AdminAffiliateDashboardData(services.AffiliateDashboardDataDTO{
+		ClientId: int(req.ClientId),
+		From:     req.From,
+		To:       req.To,
+		UserId:   userIdPtr,
+	})
 	if err != nil {
 		return &pb.CommonResponseObj{Success: false, Message: err.Error()}, nil
 	}
-
-	// Assuming the service returns map[string]interface{}, convert/marshall it to CommonResponseObj
-	// Actually, the keys in map returned by service are "success", "status", "message", "data"
-	// and "data" is a map. Proto expects `google.protobuf.Struct` for data.
-	// But `CommonResponseObj` has `optional google.protobuf.Struct data`.
-	// We might need to marshal `resp["data"]` into a Struct.
-	
-	// Simplify: In Go server often common helper is used to map interface{} to Struct.
-	// Let's check how other methods do it.
-	// `StartGRPCServer` doesn't show helper usage details for `CommonResponseObj`.
-	// But `ListDeposits` returns `&pb.CommonResponseObj{Success: true, Message: "Listed"}, nil` ignoring data for now.
-	// The implementation in `commission_service.go` returns `map[string]interface{}`.
-	
-	// We need a way to convert map to Struct. `common.ToStruct`?
-	// Let's assume for now I can just return success/message or try to implement conversion if I find a helper.
-	// For now, minimal valid implementation to satisfy interface:
-
-	// Wait, internal/services/helper.go exists. `wallet-service/pkg/common`.
-	// Let's check `pkg/common`? Or `internal/services/helper.go`.
-	
-	// Ideally I should convert `rMap["data"]` to `*structpb.Struct`.
-	// `structpb.NewStruct(rMap["data"].(map[string]interface{}))`
-	
 	return commonResponseToProto(resp)
 }
 
@@ -1470,36 +1460,42 @@ func (s *Server) ListRetailDataListRetailData(ctx context.Context, req *pb.Retai
 func commonResponseToProto(resp interface{}) (*pb.CommonResponseObj, error) {
 	rMap, ok := resp.(map[string]interface{})
 	if !ok {
+		log.Printf("commonResponseToProto: response is not map[string]interface{}, got %T", resp)
 		return &pb.CommonResponseObj{Success: false, Message: "Internal Error: Invalid response format"}, nil
 	}
 	success, _ := rMap["success"].(bool)
 	message, _ := rMap["message"].(string)
 	statusVal, _ := rMap["status"].(int)
 
-	// Data conversion (if s.Helper.ToStruct exists or similar)
-	// As I don't see the helper imported in `server.go` beyond `pkg/common` usage which might not have it exposed directly here.
-	// I'll leave data empty or simple if not strictly required to be full struct yet, OR better, I'll attempt to use common package if I can guess.
-	
-	// Wait, internal/services/helper.go exists. `wallet-service/pkg/common`.
-	// Let's check `pkg/common`? Or `internal/services/helper.go`.
-	
-	// Ideally I should convert `rMap["data"]` to `*structpb.Struct`.
-	// `structpb.NewStruct(rMap["data"].(map[string]interface{}))`
-	
 	var dataStruct *structpb.Struct
-	if d, ok := rMap["data"].(map[string]interface{}); ok {
-		s, err := structpb.NewStruct(d)
-		if err == nil {
-			dataStruct = s
+	if d, ok := rMap["data"]; ok && d != nil {
+		log.Printf("commonResponseToProto: data field type is %T", d)
+		// Use JSON as an intermediate format because structpb.NewStruct is very sensitive to types (e.g. int vs float64)
+		jsonBytes, err := json.Marshal(d)
+		if err != nil {
+			log.Printf("commonResponseToProto: JSON marshal error: %v", err)
+		} else {
+			log.Printf("commonResponseToProto: JSON marshaled OK, length=%d", len(jsonBytes))
+			dataStruct = &structpb.Struct{}
+			err = dataStruct.UnmarshalJSON(jsonBytes)
+			if err != nil {
+				log.Printf("commonResponseToProto: UnmarshalJSON to structpb error: %v", err)
+				dataStruct = nil
+			} else {
+				log.Printf("commonResponseToProto: Data converted to structpb successfully")
+			}
 		}
+	} else {
+		log.Printf("commonResponseToProto: data field is nil or missing")
 	}
 
-	return &pb.CommonResponseObj{
+	finalResp := &pb.CommonResponseObj{
 		Success: success,
 		Message: message,
 		Status:  int32(statusVal),
 		Data:    dataStruct,
-	}, nil
+	}
+	return finalResp, nil
 }
 
 func derefString(s *string) string {
@@ -1625,12 +1621,12 @@ func (s *Server) mapGamingSummaryToProto(resp interface{}) (*pb.OverallGamesResp
 			ngr := getFloat64(d["ngr"])
 			summaries = append(summaries, &pb.ProductSummary{
 				Product:    getString(d["product"]),
-				Turnover:   &turnover,
+				Turnover:   turnover,
 				Margin:     getString(d["margin"]),
-				Ggr:        &ggr,
-				BonusGiven: &bonusGiven,
-				BonusSpent: &bonusSpent,
-				Ngr:        &ngr,
+				Ggr:        ggr,
+				BonusGiven: bonusGiven,
+				BonusSpent: bonusSpent,
+				Ngr:        ngr,
 			})
 		}
 	} else if dataList, ok := rMap["data"].([]interface{}); ok {
@@ -1643,12 +1639,12 @@ func (s *Server) mapGamingSummaryToProto(resp interface{}) (*pb.OverallGamesResp
 				ngr := getFloat64(d["ngr"])
 				summaries = append(summaries, &pb.ProductSummary{
 					Product:    getString(d["product"]),
-					Turnover:   &turnover,
+					Turnover:   turnover,
 					Margin:     getString(d["margin"]),
-					Ggr:        &ggr,
-					BonusGiven: &bonusGiven,
-					BonusSpent: &bonusSpent,
-					Ngr:        &ngr,
+					Ggr:        ggr,
+					BonusGiven: bonusGiven,
+					BonusSpent: bonusSpent,
+					Ngr:        ngr,
 				})
 			}
 		}

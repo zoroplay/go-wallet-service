@@ -168,7 +168,7 @@ type WalletServiceClient interface {
 	ListAffiliateTotalDepositsAndWithdrawals(ctx context.Context, in *DepositWithdrawals, opts ...grpc.CallOption) (*CommonResponseObj, error)
 	AdminAffiliateReferralDashboardData(ctx context.Context, in *AffiliateDashboardData, opts ...grpc.CallOption) (*CommonResponseObj, error)
 	ListRetailData(ctx context.Context, in *RetailDataRequest, opts ...grpc.CallOption) (*CommonResponseArray, error)
-	ListRetailDataListRetailData(ctx context.Context, in *RetailDataRequest, opts ...grpc.CallOption) (*CommonResponseArray, error)
+	ListRetailClientTransactions(ctx context.Context, in *RetailDataRequest, opts ...grpc.CallOption) (*CommonResponseArray, error)
 }
 
 type walletServiceClient struct {
@@ -1484,9 +1484,9 @@ func (c *walletServiceClient) ListRetailData(ctx context.Context, in *RetailData
 	return out, nil
 }
 
-func (c *walletServiceClient) ListRetailDataListRetailData(ctx context.Context, in *RetailDataRequest, opts ...grpc.CallOption) (*CommonResponseArray, error) {
+func (c *walletServiceClient) ListRetailClientTransactions(ctx context.Context, in *RetailDataRequest, opts ...grpc.CallOption) (*CommonResponseArray, error) {
 	out := new(CommonResponseArray)
-	err := c.cc.Invoke(ctx, "/wallet.WalletService/ListRetailDataListRetailData", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/wallet.WalletService/ListRetailClientTransactions", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1643,7 +1643,7 @@ type WalletServiceServer interface {
 	ListAffiliateTotalDepositsAndWithdrawals(context.Context, *DepositWithdrawals) (*CommonResponseObj, error)
 	AdminAffiliateReferralDashboardData(context.Context, *AffiliateDashboardData) (*CommonResponseObj, error)
 	ListRetailData(context.Context, *RetailDataRequest) (*CommonResponseArray, error)
-	ListRetailDataListRetailData(context.Context, *RetailDataRequest) (*CommonResponseArray, error)
+	ListRetailClientTransactions(context.Context, *RetailDataRequest) (*CommonResponseArray, error)
 	mustEmbedUnimplementedWalletServiceServer()
 }
 
@@ -2086,8 +2086,8 @@ func (UnimplementedWalletServiceServer) AdminAffiliateReferralDashboardData(cont
 func (UnimplementedWalletServiceServer) ListRetailData(context.Context, *RetailDataRequest) (*CommonResponseArray, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListRetailData not implemented")
 }
-func (UnimplementedWalletServiceServer) ListRetailDataListRetailData(context.Context, *RetailDataRequest) (*CommonResponseArray, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListRetailDataListRetailData not implemented")
+func (UnimplementedWalletServiceServer) ListRetailClientTransactions(context.Context, *RetailDataRequest) (*CommonResponseArray, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListRetailClientTransactions not implemented")
 }
 func (UnimplementedWalletServiceServer) mustEmbedUnimplementedWalletServiceServer() {}
 
@@ -4712,20 +4712,20 @@ func _WalletService_ListRetailData_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _WalletService_ListRetailDataListRetailData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _WalletService_ListRetailClientTransactions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RetailDataRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(WalletServiceServer).ListRetailDataListRetailData(ctx, in)
+		return srv.(WalletServiceServer).ListRetailClientTransactions(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/wallet.WalletService/ListRetailDataListRetailData",
+		FullMethod: "/wallet.WalletService/ListRetailClientTransactions",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WalletServiceServer).ListRetailDataListRetailData(ctx, req.(*RetailDataRequest))
+		return srv.(WalletServiceServer).ListRetailClientTransactions(ctx, req.(*RetailDataRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -5318,8 +5318,8 @@ var WalletService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _WalletService_ListRetailData_Handler,
 		},
 		{
-			MethodName: "ListRetailDataListRetailData",
-			Handler:    _WalletService_ListRetailDataListRetailData_Handler,
+			MethodName: "ListRetailClientTransactions",
+			Handler:    _WalletService_ListRetailClientTransactions_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

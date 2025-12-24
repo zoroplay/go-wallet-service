@@ -21,6 +21,206 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Top affiliate information
+type TopAffiliate struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	AffiliateId   int32   `protobuf:"varint,1,opt,name=affiliate_id,json=affiliateId,proto3" json:"affiliate_id,omitempty"`
+	Username      *string `protobuf:"bytes,2,opt,name=username,proto3,oneof" json:"username,omitempty"`
+	SignupCount   int32   `protobuf:"varint,3,opt,name=signup_count,json=signupCount,proto3" json:"signup_count,omitempty"`
+	TotalDeposit  *int32  `protobuf:"varint,4,opt,name=totalDeposit,proto3,oneof" json:"totalDeposit,omitempty"`
+	TotalWithdraw *int32  `protobuf:"varint,5,opt,name=totalWithdraw,proto3,oneof" json:"totalWithdraw,omitempty"`
+}
+
+func (x *TopAffiliate) Reset() {
+	*x = TopAffiliate{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_identity_proto_msgTypes[0]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *TopAffiliate) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TopAffiliate) ProtoMessage() {}
+
+func (x *TopAffiliate) ProtoReflect() protoreflect.Message {
+	mi := &file_identity_proto_msgTypes[0]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TopAffiliate.ProtoReflect.Descriptor instead.
+func (*TopAffiliate) Descriptor() ([]byte, []int) {
+	return file_identity_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *TopAffiliate) GetAffiliateId() int32 {
+	if x != nil {
+		return x.AffiliateId
+	}
+	return 0
+}
+
+func (x *TopAffiliate) GetUsername() string {
+	if x != nil && x.Username != nil {
+		return *x.Username
+	}
+	return ""
+}
+
+func (x *TopAffiliate) GetSignupCount() int32 {
+	if x != nil {
+		return x.SignupCount
+	}
+	return 0
+}
+
+func (x *TopAffiliate) GetTotalDeposit() int32 {
+	if x != nil && x.TotalDeposit != nil {
+		return *x.TotalDeposit
+	}
+	return 0
+}
+
+func (x *TopAffiliate) GetTotalWithdraw() int32 {
+	if x != nil && x.TotalWithdraw != nil {
+		return *x.TotalWithdraw
+	}
+	return 0
+}
+
+// Data payload for affiliate statistics
+type AffiliateStatsData struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	TotalUsers    int32           `protobuf:"varint,1,opt,name=totalUsers,proto3" json:"totalUsers,omitempty"`
+	TopAffiliates []*TopAffiliate `protobuf:"bytes,2,rep,name=topAffiliates,proto3" json:"topAffiliates,omitempty"`
+}
+
+func (x *AffiliateStatsData) Reset() {
+	*x = AffiliateStatsData{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_identity_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AffiliateStatsData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AffiliateStatsData) ProtoMessage() {}
+
+func (x *AffiliateStatsData) ProtoReflect() protoreflect.Message {
+	mi := &file_identity_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AffiliateStatsData.ProtoReflect.Descriptor instead.
+func (*AffiliateStatsData) Descriptor() ([]byte, []int) {
+	return file_identity_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *AffiliateStatsData) GetTotalUsers() int32 {
+	if x != nil {
+		return x.TotalUsers
+	}
+	return 0
+}
+
+func (x *AffiliateStatsData) GetTopAffiliates() []*TopAffiliate {
+	if x != nil {
+		return x.TopAffiliates
+	}
+	return nil
+}
+
+// Response message for affiliate statistics
+type AffiliateStatsResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Success bool                `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message string              `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Data    *AffiliateStatsData `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+}
+
+func (x *AffiliateStatsResponse) Reset() {
+	*x = AffiliateStatsResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_identity_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AffiliateStatsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AffiliateStatsResponse) ProtoMessage() {}
+
+func (x *AffiliateStatsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_identity_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AffiliateStatsResponse.ProtoReflect.Descriptor instead.
+func (*AffiliateStatsResponse) Descriptor() ([]byte, []int) {
+	return file_identity_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *AffiliateStatsResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *AffiliateStatsResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *AffiliateStatsResponse) GetData() *AffiliateStatsData {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
 type ArrayResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -35,7 +235,7 @@ type ArrayResponse struct {
 func (x *ArrayResponse) Reset() {
 	*x = ArrayResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[0]
+		mi := &file_identity_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -48,7 +248,7 @@ func (x *ArrayResponse) String() string {
 func (*ArrayResponse) ProtoMessage() {}
 
 func (x *ArrayResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[0]
+	mi := &file_identity_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -61,7 +261,7 @@ func (x *ArrayResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ArrayResponse.ProtoReflect.Descriptor instead.
 func (*ArrayResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{0}
+	return file_identity_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *ArrayResponse) GetStatus() int32 {
@@ -109,7 +309,7 @@ type AffiliateRequest struct {
 func (x *AffiliateRequest) Reset() {
 	*x = AffiliateRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[1]
+		mi := &file_identity_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -122,7 +322,7 @@ func (x *AffiliateRequest) String() string {
 func (*AffiliateRequest) ProtoMessage() {}
 
 func (x *AffiliateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[1]
+	mi := &file_identity_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -135,7 +335,7 @@ func (x *AffiliateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AffiliateRequest.ProtoReflect.Descriptor instead.
 func (*AffiliateRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{1}
+	return file_identity_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *AffiliateRequest) GetClientId() int32 {
@@ -201,7 +401,7 @@ type Pagination struct {
 func (x *Pagination) Reset() {
 	*x = Pagination{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[2]
+		mi := &file_identity_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -214,7 +414,7 @@ func (x *Pagination) String() string {
 func (*Pagination) ProtoMessage() {}
 
 func (x *Pagination) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[2]
+	mi := &file_identity_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -227,7 +427,7 @@ func (x *Pagination) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Pagination.ProtoReflect.Descriptor instead.
 func (*Pagination) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{2}
+	return file_identity_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *Pagination) GetPage() int32 {
@@ -278,7 +478,7 @@ type AffiliateResponse struct {
 func (x *AffiliateResponse) Reset() {
 	*x = AffiliateResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[3]
+		mi := &file_identity_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -291,7 +491,7 @@ func (x *AffiliateResponse) String() string {
 func (*AffiliateResponse) ProtoMessage() {}
 
 func (x *AffiliateResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[3]
+	mi := &file_identity_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -304,7 +504,7 @@ func (x *AffiliateResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AffiliateResponse.ProtoReflect.Descriptor instead.
 func (*AffiliateResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{3}
+	return file_identity_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *AffiliateResponse) GetStatus() int32 {
@@ -391,7 +591,7 @@ type AddAndRemoveUserRequest struct {
 func (x *AddAndRemoveUserRequest) Reset() {
 	*x = AddAndRemoveUserRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[4]
+		mi := &file_identity_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -404,7 +604,7 @@ func (x *AddAndRemoveUserRequest) String() string {
 func (*AddAndRemoveUserRequest) ProtoMessage() {}
 
 func (x *AddAndRemoveUserRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[4]
+	mi := &file_identity_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -417,7 +617,7 @@ func (x *AddAndRemoveUserRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AddAndRemoveUserRequest.ProtoReflect.Descriptor instead.
 func (*AddAndRemoveUserRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{4}
+	return file_identity_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *AddAndRemoveUserRequest) GetClientId() int32 {
@@ -459,7 +659,7 @@ type FindUserIdRequest struct {
 func (x *FindUserIdRequest) Reset() {
 	*x = FindUserIdRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[5]
+		mi := &file_identity_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -472,7 +672,7 @@ func (x *FindUserIdRequest) String() string {
 func (*FindUserIdRequest) ProtoMessage() {}
 
 func (x *FindUserIdRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[5]
+	mi := &file_identity_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -485,7 +685,7 @@ func (x *FindUserIdRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FindUserIdRequest.ProtoReflect.Descriptor instead.
 func (*FindUserIdRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{5}
+	return file_identity_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *FindUserIdRequest) GetAffiliateId() int32 {
@@ -507,7 +707,7 @@ type ListBanksRequest struct {
 func (x *ListBanksRequest) Reset() {
 	*x = ListBanksRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[6]
+		mi := &file_identity_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -520,7 +720,7 @@ func (x *ListBanksRequest) String() string {
 func (*ListBanksRequest) ProtoMessage() {}
 
 func (x *ListBanksRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[6]
+	mi := &file_identity_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -533,7 +733,7 @@ func (x *ListBanksRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListBanksRequest.ProtoReflect.Descriptor instead.
 func (*ListBanksRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{6}
+	return file_identity_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *ListBanksRequest) GetPage() int32 {
@@ -567,7 +767,7 @@ type KycRequest struct {
 func (x *KycRequest) Reset() {
 	*x = KycRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[7]
+		mi := &file_identity_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -580,7 +780,7 @@ func (x *KycRequest) String() string {
 func (*KycRequest) ProtoMessage() {}
 
 func (x *KycRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[7]
+	mi := &file_identity_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -593,7 +793,7 @@ func (x *KycRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use KycRequest.ProtoReflect.Descriptor instead.
 func (*KycRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{7}
+	return file_identity_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *KycRequest) GetClientId() int32 {
@@ -659,7 +859,7 @@ type BasicUser struct {
 func (x *BasicUser) Reset() {
 	*x = BasicUser{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[8]
+		mi := &file_identity_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -672,7 +872,7 @@ func (x *BasicUser) String() string {
 func (*BasicUser) ProtoMessage() {}
 
 func (x *BasicUser) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[8]
+	mi := &file_identity_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -685,7 +885,7 @@ func (x *BasicUser) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BasicUser.ProtoReflect.Descriptor instead.
 func (*BasicUser) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{8}
+	return file_identity_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *BasicUser) GetId() int32 {
@@ -728,7 +928,7 @@ type ClientIdRequest struct {
 func (x *ClientIdRequest) Reset() {
 	*x = ClientIdRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[9]
+		mi := &file_identity_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -741,7 +941,7 @@ func (x *ClientIdRequest) String() string {
 func (*ClientIdRequest) ProtoMessage() {}
 
 func (x *ClientIdRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[9]
+	mi := &file_identity_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -754,7 +954,7 @@ func (x *ClientIdRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClientIdRequest.ProtoReflect.Descriptor instead.
 func (*ClientIdRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{9}
+	return file_identity_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *ClientIdRequest) GetClientId() int32 {
@@ -783,7 +983,7 @@ type FindOneRequest struct {
 func (x *FindOneRequest) Reset() {
 	*x = FindOneRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[10]
+		mi := &file_identity_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -796,7 +996,7 @@ func (x *FindOneRequest) String() string {
 func (*FindOneRequest) ProtoMessage() {}
 
 func (x *FindOneRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[10]
+	mi := &file_identity_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -809,7 +1009,7 @@ func (x *FindOneRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FindOneRequest.ProtoReflect.Descriptor instead.
 func (*FindOneRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{10}
+	return file_identity_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *FindOneRequest) GetClientId() int32 {
@@ -838,7 +1038,7 @@ type ApprovalRequest struct {
 func (x *ApprovalRequest) Reset() {
 	*x = ApprovalRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[11]
+		mi := &file_identity_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -851,7 +1051,7 @@ func (x *ApprovalRequest) String() string {
 func (*ApprovalRequest) ProtoMessage() {}
 
 func (x *ApprovalRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[11]
+	mi := &file_identity_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -864,7 +1064,7 @@ func (x *ApprovalRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ApprovalRequest.ProtoReflect.Descriptor instead.
 func (*ApprovalRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{11}
+	return file_identity_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *ApprovalRequest) GetAgentId() int32 {
@@ -895,7 +1095,7 @@ type AdditionalInfo struct {
 func (x *AdditionalInfo) Reset() {
 	*x = AdditionalInfo{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[12]
+		mi := &file_identity_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -908,7 +1108,7 @@ func (x *AdditionalInfo) String() string {
 func (*AdditionalInfo) ProtoMessage() {}
 
 func (x *AdditionalInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[12]
+	mi := &file_identity_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -921,7 +1121,7 @@ func (x *AdditionalInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AdditionalInfo.ProtoReflect.Descriptor instead.
 func (*AdditionalInfo) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{12}
+	return file_identity_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *AdditionalInfo) GetBrowser() string {
@@ -970,7 +1170,7 @@ type CreateBannerRequest struct {
 func (x *CreateBannerRequest) Reset() {
 	*x = CreateBannerRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[13]
+		mi := &file_identity_proto_msgTypes[16]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -983,7 +1183,7 @@ func (x *CreateBannerRequest) String() string {
 func (*CreateBannerRequest) ProtoMessage() {}
 
 func (x *CreateBannerRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[13]
+	mi := &file_identity_proto_msgTypes[16]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -996,7 +1196,7 @@ func (x *CreateBannerRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateBannerRequest.ProtoReflect.Descriptor instead.
 func (*CreateBannerRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{13}
+	return file_identity_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *CreateBannerRequest) GetTitle() string {
@@ -1116,7 +1316,7 @@ type CreatePageRequest struct {
 func (x *CreatePageRequest) Reset() {
 	*x = CreatePageRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[14]
+		mi := &file_identity_proto_msgTypes[17]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1129,7 +1329,7 @@ func (x *CreatePageRequest) String() string {
 func (*CreatePageRequest) ProtoMessage() {}
 
 func (x *CreatePageRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[14]
+	mi := &file_identity_proto_msgTypes[17]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1142,7 +1342,7 @@ func (x *CreatePageRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreatePageRequest.ProtoReflect.Descriptor instead.
 func (*CreatePageRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{14}
+	return file_identity_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *CreatePageRequest) GetTitle() string {
@@ -1222,7 +1422,7 @@ type CreateMenuRequest struct {
 func (x *CreateMenuRequest) Reset() {
 	*x = CreateMenuRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[15]
+		mi := &file_identity_proto_msgTypes[18]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1235,7 +1435,7 @@ func (x *CreateMenuRequest) String() string {
 func (*CreateMenuRequest) ProtoMessage() {}
 
 func (x *CreateMenuRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[15]
+	mi := &file_identity_proto_msgTypes[18]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1248,7 +1448,7 @@ func (x *CreateMenuRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateMenuRequest.ProtoReflect.Descriptor instead.
 func (*CreateMenuRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{15}
+	return file_identity_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *CreateMenuRequest) GetTitle() string {
@@ -1346,7 +1546,7 @@ type AuditLog struct {
 func (x *AuditLog) Reset() {
 	*x = AuditLog{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[16]
+		mi := &file_identity_proto_msgTypes[19]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1359,7 +1559,7 @@ func (x *AuditLog) String() string {
 func (*AuditLog) ProtoMessage() {}
 
 func (x *AuditLog) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[16]
+	mi := &file_identity_proto_msgTypes[19]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1372,7 +1572,7 @@ func (x *AuditLog) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuditLog.ProtoReflect.Descriptor instead.
 func (*AuditLog) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{16}
+	return file_identity_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *AuditLog) GetId() int32 {
@@ -1492,7 +1692,7 @@ type CreateLogRequest struct {
 func (x *CreateLogRequest) Reset() {
 	*x = CreateLogRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[17]
+		mi := &file_identity_proto_msgTypes[20]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1505,7 +1705,7 @@ func (x *CreateLogRequest) String() string {
 func (*CreateLogRequest) ProtoMessage() {}
 
 func (x *CreateLogRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[17]
+	mi := &file_identity_proto_msgTypes[20]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1518,7 +1718,7 @@ func (x *CreateLogRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateLogRequest.ProtoReflect.Descriptor instead.
 func (*CreateLogRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{17}
+	return file_identity_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *CreateLogRequest) GetAuditLog() *AuditLog {
@@ -1541,7 +1741,7 @@ type AuditUser struct {
 func (x *AuditUser) Reset() {
 	*x = AuditUser{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[18]
+		mi := &file_identity_proto_msgTypes[21]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1554,7 +1754,7 @@ func (x *AuditUser) String() string {
 func (*AuditUser) ProtoMessage() {}
 
 func (x *AuditUser) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[18]
+	mi := &file_identity_proto_msgTypes[21]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1567,7 +1767,7 @@ func (x *AuditUser) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuditUser.ProtoReflect.Descriptor instead.
 func (*AuditUser) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{18}
+	return file_identity_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *AuditUser) GetRoleId() int32 {
@@ -1598,7 +1798,7 @@ type CreateLogResponse struct {
 func (x *CreateLogResponse) Reset() {
 	*x = CreateLogResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[19]
+		mi := &file_identity_proto_msgTypes[22]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1611,7 +1811,7 @@ func (x *CreateLogResponse) String() string {
 func (*CreateLogResponse) ProtoMessage() {}
 
 func (x *CreateLogResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[19]
+	mi := &file_identity_proto_msgTypes[22]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1624,7 +1824,7 @@ func (x *CreateLogResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateLogResponse.ProtoReflect.Descriptor instead.
 func (*CreateLogResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{19}
+	return file_identity_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *CreateLogResponse) GetSuccess() bool {
@@ -1665,7 +1865,7 @@ type AuditQuery struct {
 func (x *AuditQuery) Reset() {
 	*x = AuditQuery{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[20]
+		mi := &file_identity_proto_msgTypes[23]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1678,7 +1878,7 @@ func (x *AuditQuery) String() string {
 func (*AuditQuery) ProtoMessage() {}
 
 func (x *AuditQuery) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[20]
+	mi := &file_identity_proto_msgTypes[23]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1691,7 +1891,7 @@ func (x *AuditQuery) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuditQuery.ProtoReflect.Descriptor instead.
 func (*AuditQuery) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{20}
+	return file_identity_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *AuditQuery) GetStartDate() string {
@@ -1766,7 +1966,7 @@ type GetAllLogsRequest struct {
 func (x *GetAllLogsRequest) Reset() {
 	*x = GetAllLogsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[21]
+		mi := &file_identity_proto_msgTypes[24]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1779,7 +1979,7 @@ func (x *GetAllLogsRequest) String() string {
 func (*GetAllLogsRequest) ProtoMessage() {}
 
 func (x *GetAllLogsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[21]
+	mi := &file_identity_proto_msgTypes[24]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1792,7 +1992,7 @@ func (x *GetAllLogsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAllLogsRequest.ProtoReflect.Descriptor instead.
 func (*GetAllLogsRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{21}
+	return file_identity_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *GetAllLogsRequest) GetClientId() int32 {
@@ -1892,7 +2092,7 @@ type GetAllLogsResponse struct {
 func (x *GetAllLogsResponse) Reset() {
 	*x = GetAllLogsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[22]
+		mi := &file_identity_proto_msgTypes[25]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1905,7 +2105,7 @@ func (x *GetAllLogsResponse) String() string {
 func (*GetAllLogsResponse) ProtoMessage() {}
 
 func (x *GetAllLogsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[22]
+	mi := &file_identity_proto_msgTypes[25]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1918,7 +2118,7 @@ func (x *GetAllLogsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAllLogsResponse.ProtoReflect.Descriptor instead.
 func (*GetAllLogsResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{22}
+	return file_identity_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *GetAllLogsResponse) GetLogs() []*AuditLog {
@@ -1950,7 +2150,7 @@ type HandlePinRequest struct {
 func (x *HandlePinRequest) Reset() {
 	*x = HandlePinRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[23]
+		mi := &file_identity_proto_msgTypes[26]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1963,7 +2163,7 @@ func (x *HandlePinRequest) String() string {
 func (*HandlePinRequest) ProtoMessage() {}
 
 func (x *HandlePinRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[23]
+	mi := &file_identity_proto_msgTypes[26]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1976,7 +2176,7 @@ func (x *HandlePinRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HandlePinRequest.ProtoReflect.Descriptor instead.
 func (*HandlePinRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{23}
+	return file_identity_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *HandlePinRequest) GetPin() int32 {
@@ -2021,7 +2221,7 @@ type GetNetworkSalesRequest struct {
 func (x *GetNetworkSalesRequest) Reset() {
 	*x = GetNetworkSalesRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[24]
+		mi := &file_identity_proto_msgTypes[27]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2034,7 +2234,7 @@ func (x *GetNetworkSalesRequest) String() string {
 func (*GetNetworkSalesRequest) ProtoMessage() {}
 
 func (x *GetNetworkSalesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[24]
+	mi := &file_identity_proto_msgTypes[27]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2047,7 +2247,7 @@ func (x *GetNetworkSalesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetNetworkSalesRequest.ProtoReflect.Descriptor instead.
 func (*GetNetworkSalesRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{24}
+	return file_identity_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *GetNetworkSalesRequest) GetClientId() int32 {
@@ -2099,7 +2299,7 @@ type DailyTransactionsRequest struct {
 func (x *DailyTransactionsRequest) Reset() {
 	*x = DailyTransactionsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[25]
+		mi := &file_identity_proto_msgTypes[28]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2112,7 +2312,7 @@ func (x *DailyTransactionsRequest) String() string {
 func (*DailyTransactionsRequest) ProtoMessage() {}
 
 func (x *DailyTransactionsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[25]
+	mi := &file_identity_proto_msgTypes[28]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2125,7 +2325,7 @@ func (x *DailyTransactionsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DailyTransactionsRequest.ProtoReflect.Descriptor instead.
 func (*DailyTransactionsRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{25}
+	return file_identity_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *DailyTransactionsRequest) GetUserId() int32 {
@@ -2221,7 +2421,7 @@ type HandleTransferRequest struct {
 func (x *HandleTransferRequest) Reset() {
 	*x = HandleTransferRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[26]
+		mi := &file_identity_proto_msgTypes[29]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2234,7 +2434,7 @@ func (x *HandleTransferRequest) String() string {
 func (*HandleTransferRequest) ProtoMessage() {}
 
 func (x *HandleTransferRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[26]
+	mi := &file_identity_proto_msgTypes[29]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2247,7 +2447,7 @@ func (x *HandleTransferRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HandleTransferRequest.ProtoReflect.Descriptor instead.
 func (*HandleTransferRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{26}
+	return file_identity_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *HandleTransferRequest) GetPin() int32 {
@@ -2300,7 +2500,7 @@ type PowerRequest struct {
 func (x *PowerRequest) Reset() {
 	*x = PowerRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[27]
+		mi := &file_identity_proto_msgTypes[30]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2313,7 +2513,7 @@ func (x *PowerRequest) String() string {
 func (*PowerRequest) ProtoMessage() {}
 
 func (x *PowerRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[27]
+	mi := &file_identity_proto_msgTypes[30]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2326,7 +2526,7 @@ func (x *PowerRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PowerRequest.ProtoReflect.Descriptor instead.
 func (*PowerRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{27}
+	return file_identity_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *PowerRequest) GetAgentIds() []int32 {
@@ -2381,7 +2581,7 @@ type BetData struct {
 func (x *BetData) Reset() {
 	*x = BetData{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[28]
+		mi := &file_identity_proto_msgTypes[31]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2394,7 +2594,7 @@ func (x *BetData) String() string {
 func (*BetData) ProtoMessage() {}
 
 func (x *BetData) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[28]
+	mi := &file_identity_proto_msgTypes[31]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2407,7 +2607,7 @@ func (x *BetData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BetData.ProtoReflect.Descriptor instead.
 func (*BetData) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{28}
+	return file_identity_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *BetData) GetId() int32 {
@@ -2520,7 +2720,7 @@ type Response struct {
 func (x *Response) Reset() {
 	*x = Response{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[29]
+		mi := &file_identity_proto_msgTypes[32]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2533,7 +2733,7 @@ func (x *Response) String() string {
 func (*Response) ProtoMessage() {}
 
 func (x *Response) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[29]
+	mi := &file_identity_proto_msgTypes[32]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2546,7 +2746,7 @@ func (x *Response) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Response.ProtoReflect.Descriptor instead.
 func (*Response) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{29}
+	return file_identity_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *Response) GetSuccess() bool {
@@ -2580,7 +2780,7 @@ type CurrentWeekData struct {
 func (x *CurrentWeekData) Reset() {
 	*x = CurrentWeekData{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[30]
+		mi := &file_identity_proto_msgTypes[33]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2593,7 +2793,7 @@ func (x *CurrentWeekData) String() string {
 func (*CurrentWeekData) ProtoMessage() {}
 
 func (x *CurrentWeekData) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[30]
+	mi := &file_identity_proto_msgTypes[33]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2606,7 +2806,7 @@ func (x *CurrentWeekData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CurrentWeekData.ProtoReflect.Descriptor instead.
 func (*CurrentWeekData) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{30}
+	return file_identity_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *CurrentWeekData) GetTotalWeeks() int32 {
@@ -2669,7 +2869,7 @@ type CurrentMonth struct {
 func (x *CurrentMonth) Reset() {
 	*x = CurrentMonth{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[31]
+		mi := &file_identity_proto_msgTypes[34]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2682,7 +2882,7 @@ func (x *CurrentMonth) String() string {
 func (*CurrentMonth) ProtoMessage() {}
 
 func (x *CurrentMonth) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[31]
+	mi := &file_identity_proto_msgTypes[34]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2695,7 +2895,7 @@ func (x *CurrentMonth) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CurrentMonth.ProtoReflect.Descriptor instead.
 func (*CurrentMonth) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{31}
+	return file_identity_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *CurrentMonth) GetMonth() string {
@@ -2719,7 +2919,7 @@ type Meta struct {
 func (x *Meta) Reset() {
 	*x = Meta{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[32]
+		mi := &file_identity_proto_msgTypes[35]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2732,7 +2932,7 @@ func (x *Meta) String() string {
 func (*Meta) ProtoMessage() {}
 
 func (x *Meta) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[32]
+	mi := &file_identity_proto_msgTypes[35]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2745,7 +2945,7 @@ func (x *Meta) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Meta.ProtoReflect.Descriptor instead.
 func (*Meta) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{32}
+	return file_identity_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *Meta) GetTotal() int32 {
@@ -2790,7 +2990,7 @@ type NormalResponse struct {
 func (x *NormalResponse) Reset() {
 	*x = NormalResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[33]
+		mi := &file_identity_proto_msgTypes[36]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2803,7 +3003,7 @@ func (x *NormalResponse) String() string {
 func (*NormalResponse) ProtoMessage() {}
 
 func (x *NormalResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[33]
+	mi := &file_identity_proto_msgTypes[36]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2816,7 +3016,7 @@ func (x *NormalResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use NormalResponse.ProtoReflect.Descriptor instead.
 func (*NormalResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{33}
+	return file_identity_proto_rawDescGZIP(), []int{36}
 }
 
 func (x *NormalResponse) GetSuccess() bool {
@@ -2860,7 +3060,7 @@ type PayNormalResponse struct {
 func (x *PayNormalResponse) Reset() {
 	*x = PayNormalResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[34]
+		mi := &file_identity_proto_msgTypes[37]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2873,7 +3073,7 @@ func (x *PayNormalResponse) String() string {
 func (*PayNormalResponse) ProtoMessage() {}
 
 func (x *PayNormalResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[34]
+	mi := &file_identity_proto_msgTypes[37]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2886,7 +3086,7 @@ func (x *PayNormalResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PayNormalResponse.ProtoReflect.Descriptor instead.
 func (*PayNormalResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{34}
+	return file_identity_proto_rawDescGZIP(), []int{37}
 }
 
 func (x *PayNormalResponse) GetSuccess() bool {
@@ -2932,7 +3132,7 @@ type NormalPayout struct {
 func (x *NormalPayout) Reset() {
 	*x = NormalPayout{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[35]
+		mi := &file_identity_proto_msgTypes[38]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2945,7 +3145,7 @@ func (x *NormalPayout) String() string {
 func (*NormalPayout) ProtoMessage() {}
 
 func (x *NormalPayout) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[35]
+	mi := &file_identity_proto_msgTypes[38]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2958,7 +3158,7 @@ func (x *NormalPayout) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use NormalPayout.ProtoReflect.Descriptor instead.
 func (*NormalPayout) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{35}
+	return file_identity_proto_rawDescGZIP(), []int{38}
 }
 
 func (x *NormalPayout) GetId() int32 {
@@ -3071,7 +3271,7 @@ type PowerBonusData struct {
 func (x *PowerBonusData) Reset() {
 	*x = PowerBonusData{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[36]
+		mi := &file_identity_proto_msgTypes[39]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3084,7 +3284,7 @@ func (x *PowerBonusData) String() string {
 func (*PowerBonusData) ProtoMessage() {}
 
 func (x *PowerBonusData) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[36]
+	mi := &file_identity_proto_msgTypes[39]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3097,7 +3297,7 @@ func (x *PowerBonusData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PowerBonusData.ProtoReflect.Descriptor instead.
 func (*PowerBonusData) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{36}
+	return file_identity_proto_rawDescGZIP(), []int{39}
 }
 
 func (x *PowerBonusData) GetId() int32 {
@@ -3227,7 +3427,7 @@ type PayPowerRequest struct {
 func (x *PayPowerRequest) Reset() {
 	*x = PayPowerRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[37]
+		mi := &file_identity_proto_msgTypes[40]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3240,7 +3440,7 @@ func (x *PayPowerRequest) String() string {
 func (*PayPowerRequest) ProtoMessage() {}
 
 func (x *PayPowerRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[37]
+	mi := &file_identity_proto_msgTypes[40]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3253,7 +3453,7 @@ func (x *PayPowerRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PayPowerRequest.ProtoReflect.Descriptor instead.
 func (*PayPowerRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{37}
+	return file_identity_proto_rawDescGZIP(), []int{40}
 }
 
 func (x *PayPowerRequest) GetClientId() int32 {
@@ -3304,7 +3504,7 @@ type PowerCountData struct {
 func (x *PowerCountData) Reset() {
 	*x = PowerCountData{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[38]
+		mi := &file_identity_proto_msgTypes[41]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3317,7 +3517,7 @@ func (x *PowerCountData) String() string {
 func (*PowerCountData) ProtoMessage() {}
 
 func (x *PowerCountData) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[38]
+	mi := &file_identity_proto_msgTypes[41]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3330,7 +3530,7 @@ func (x *PowerCountData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PowerCountData.ProtoReflect.Descriptor instead.
 func (*PowerCountData) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{38}
+	return file_identity_proto_rawDescGZIP(), []int{41}
 }
 
 func (x *PowerCountData) GetPaidUsers() []string {
@@ -3367,7 +3567,7 @@ type PowerResponse struct {
 func (x *PowerResponse) Reset() {
 	*x = PowerResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[39]
+		mi := &file_identity_proto_msgTypes[42]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3380,7 +3580,7 @@ func (x *PowerResponse) String() string {
 func (*PowerResponse) ProtoMessage() {}
 
 func (x *PowerResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[39]
+	mi := &file_identity_proto_msgTypes[42]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3393,7 +3593,7 @@ func (x *PowerResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PowerResponse.ProtoReflect.Descriptor instead.
 func (*PowerResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{39}
+	return file_identity_proto_rawDescGZIP(), []int{42}
 }
 
 func (x *PowerResponse) GetSuccess() bool {
@@ -3430,7 +3630,7 @@ type PowerBonusResponse struct {
 func (x *PowerBonusResponse) Reset() {
 	*x = PowerBonusResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[40]
+		mi := &file_identity_proto_msgTypes[43]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3443,7 +3643,7 @@ func (x *PowerBonusResponse) String() string {
 func (*PowerBonusResponse) ProtoMessage() {}
 
 func (x *PowerBonusResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[40]
+	mi := &file_identity_proto_msgTypes[43]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3456,7 +3656,7 @@ func (x *PowerBonusResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PowerBonusResponse.ProtoReflect.Descriptor instead.
 func (*PowerBonusResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{40}
+	return file_identity_proto_rawDescGZIP(), []int{43}
 }
 
 func (x *PowerBonusResponse) GetSuccess() bool {
@@ -3496,7 +3696,7 @@ type GetNormalRequest struct {
 func (x *GetNormalRequest) Reset() {
 	*x = GetNormalRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[41]
+		mi := &file_identity_proto_msgTypes[44]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3509,7 +3709,7 @@ func (x *GetNormalRequest) String() string {
 func (*GetNormalRequest) ProtoMessage() {}
 
 func (x *GetNormalRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[41]
+	mi := &file_identity_proto_msgTypes[44]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3522,7 +3722,7 @@ func (x *GetNormalRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetNormalRequest.ProtoReflect.Descriptor instead.
 func (*GetNormalRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{41}
+	return file_identity_proto_rawDescGZIP(), []int{44}
 }
 
 func (x *GetNormalRequest) GetClientId() int32 {
@@ -3581,7 +3781,7 @@ type PayNormalRequest struct {
 func (x *PayNormalRequest) Reset() {
 	*x = PayNormalRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[42]
+		mi := &file_identity_proto_msgTypes[45]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3594,7 +3794,7 @@ func (x *PayNormalRequest) String() string {
 func (*PayNormalRequest) ProtoMessage() {}
 
 func (x *PayNormalRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[42]
+	mi := &file_identity_proto_msgTypes[45]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3607,7 +3807,7 @@ func (x *PayNormalRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PayNormalRequest.ProtoReflect.Descriptor instead.
 func (*PayNormalRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{42}
+	return file_identity_proto_rawDescGZIP(), []int{45}
 }
 
 func (x *PayNormalRequest) GetId() int32 {
@@ -3708,7 +3908,7 @@ type BonusGroup struct {
 func (x *BonusGroup) Reset() {
 	*x = BonusGroup{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[43]
+		mi := &file_identity_proto_msgTypes[46]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3721,7 +3921,7 @@ func (x *BonusGroup) String() string {
 func (*BonusGroup) ProtoMessage() {}
 
 func (x *BonusGroup) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[43]
+	mi := &file_identity_proto_msgTypes[46]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3734,7 +3934,7 @@ func (x *BonusGroup) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BonusGroup.ProtoReflect.Descriptor instead.
 func (*BonusGroup) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{43}
+	return file_identity_proto_rawDescGZIP(), []int{46}
 }
 
 func (x *BonusGroup) GetGroup() string {
@@ -3819,7 +4019,7 @@ type BonusGroups struct {
 func (x *BonusGroups) Reset() {
 	*x = BonusGroups{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[44]
+		mi := &file_identity_proto_msgTypes[47]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3832,7 +4032,7 @@ func (x *BonusGroups) String() string {
 func (*BonusGroups) ProtoMessage() {}
 
 func (x *BonusGroups) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[44]
+	mi := &file_identity_proto_msgTypes[47]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3845,7 +4045,7 @@ func (x *BonusGroups) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BonusGroups.ProtoReflect.Descriptor instead.
 func (*BonusGroups) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{44}
+	return file_identity_proto_rawDescGZIP(), []int{47}
 }
 
 func (x *BonusGroups) GetClientId() int32 {
@@ -3875,7 +4075,7 @@ type BonusGroupResponse struct {
 func (x *BonusGroupResponse) Reset() {
 	*x = BonusGroupResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[45]
+		mi := &file_identity_proto_msgTypes[48]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3888,7 +4088,7 @@ func (x *BonusGroupResponse) String() string {
 func (*BonusGroupResponse) ProtoMessage() {}
 
 func (x *BonusGroupResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[45]
+	mi := &file_identity_proto_msgTypes[48]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3901,7 +4101,7 @@ func (x *BonusGroupResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BonusGroupResponse.ProtoReflect.Descriptor instead.
 func (*BonusGroupResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{45}
+	return file_identity_proto_rawDescGZIP(), []int{48}
 }
 
 func (x *BonusGroupResponse) GetSuccess() bool {
@@ -3937,7 +4137,7 @@ type GetAgentUserRequest struct {
 func (x *GetAgentUserRequest) Reset() {
 	*x = GetAgentUserRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[46]
+		mi := &file_identity_proto_msgTypes[49]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3950,7 +4150,7 @@ func (x *GetAgentUserRequest) String() string {
 func (*GetAgentUserRequest) ProtoMessage() {}
 
 func (x *GetAgentUserRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[46]
+	mi := &file_identity_proto_msgTypes[49]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3963,7 +4163,7 @@ func (x *GetAgentUserRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAgentUserRequest.ProtoReflect.Descriptor instead.
 func (*GetAgentUserRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{46}
+	return file_identity_proto_rawDescGZIP(), []int{49}
 }
 
 func (x *GetAgentUserRequest) GetClientId() int32 {
@@ -4000,7 +4200,7 @@ type GetAgentUsersRequest struct {
 func (x *GetAgentUsersRequest) Reset() {
 	*x = GetAgentUsersRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[47]
+		mi := &file_identity_proto_msgTypes[50]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4013,7 +4213,7 @@ func (x *GetAgentUsersRequest) String() string {
 func (*GetAgentUsersRequest) ProtoMessage() {}
 
 func (x *GetAgentUsersRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[47]
+	mi := &file_identity_proto_msgTypes[50]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4026,7 +4226,7 @@ func (x *GetAgentUsersRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAgentUsersRequest.ProtoReflect.Descriptor instead.
 func (*GetAgentUsersRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{47}
+	return file_identity_proto_rawDescGZIP(), []int{50}
 }
 
 func (x *GetAgentUsersRequest) GetClientId() int32 {
@@ -4111,7 +4311,7 @@ type GetCommissionsRequest struct {
 func (x *GetCommissionsRequest) Reset() {
 	*x = GetCommissionsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[48]
+		mi := &file_identity_proto_msgTypes[51]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4124,7 +4324,7 @@ func (x *GetCommissionsRequest) String() string {
 func (*GetCommissionsRequest) ProtoMessage() {}
 
 func (x *GetCommissionsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[48]
+	mi := &file_identity_proto_msgTypes[51]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4137,7 +4337,7 @@ func (x *GetCommissionsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCommissionsRequest.ProtoReflect.Descriptor instead.
 func (*GetCommissionsRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{48}
+	return file_identity_proto_rawDescGZIP(), []int{51}
 }
 
 func (x *GetCommissionsRequest) GetClientId() int32 {
@@ -4170,7 +4370,7 @@ type CalculateCommissionRequest struct {
 func (x *CalculateCommissionRequest) Reset() {
 	*x = CalculateCommissionRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[49]
+		mi := &file_identity_proto_msgTypes[52]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4183,7 +4383,7 @@ func (x *CalculateCommissionRequest) String() string {
 func (*CalculateCommissionRequest) ProtoMessage() {}
 
 func (x *CalculateCommissionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[49]
+	mi := &file_identity_proto_msgTypes[52]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4196,7 +4396,7 @@ func (x *CalculateCommissionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CalculateCommissionRequest.ProtoReflect.Descriptor instead.
 func (*CalculateCommissionRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{49}
+	return file_identity_proto_rawDescGZIP(), []int{52}
 }
 
 func (x *CalculateCommissionRequest) GetClientId() int32 {
@@ -4252,7 +4452,7 @@ type PayoutCommissionRequest struct {
 func (x *PayoutCommissionRequest) Reset() {
 	*x = PayoutCommissionRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[50]
+		mi := &file_identity_proto_msgTypes[53]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4265,7 +4465,7 @@ func (x *PayoutCommissionRequest) String() string {
 func (*PayoutCommissionRequest) ProtoMessage() {}
 
 func (x *PayoutCommissionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[50]
+	mi := &file_identity_proto_msgTypes[53]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4278,7 +4478,7 @@ func (x *PayoutCommissionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PayoutCommissionRequest.ProtoReflect.Descriptor instead.
 func (*PayoutCommissionRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{50}
+	return file_identity_proto_rawDescGZIP(), []int{53}
 }
 
 func (x *PayoutCommissionRequest) GetData() []*PayoutCommissionData {
@@ -4311,7 +4511,7 @@ type PayoutCommissionData struct {
 func (x *PayoutCommissionData) Reset() {
 	*x = PayoutCommissionData{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[51]
+		mi := &file_identity_proto_msgTypes[54]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4324,7 +4524,7 @@ func (x *PayoutCommissionData) String() string {
 func (*PayoutCommissionData) ProtoMessage() {}
 
 func (x *PayoutCommissionData) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[51]
+	mi := &file_identity_proto_msgTypes[54]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4337,7 +4537,7 @@ func (x *PayoutCommissionData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PayoutCommissionData.ProtoReflect.Descriptor instead.
 func (*PayoutCommissionData) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{51}
+	return file_identity_proto_rawDescGZIP(), []int{54}
 }
 
 func (x *PayoutCommissionData) GetClientId() int32 {
@@ -4455,7 +4655,7 @@ type CommissionProfile struct {
 func (x *CommissionProfile) Reset() {
 	*x = CommissionProfile{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[52]
+		mi := &file_identity_proto_msgTypes[55]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4468,7 +4668,7 @@ func (x *CommissionProfile) String() string {
 func (*CommissionProfile) ProtoMessage() {}
 
 func (x *CommissionProfile) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[52]
+	mi := &file_identity_proto_msgTypes[55]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4481,7 +4681,7 @@ func (x *CommissionProfile) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CommissionProfile.ProtoReflect.Descriptor instead.
 func (*CommissionProfile) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{52}
+	return file_identity_proto_rawDescGZIP(), []int{55}
 }
 
 func (x *CommissionProfile) GetClientId() int32 {
@@ -4586,7 +4786,7 @@ type SingleItemRequest struct {
 func (x *SingleItemRequest) Reset() {
 	*x = SingleItemRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[53]
+		mi := &file_identity_proto_msgTypes[56]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4599,7 +4799,7 @@ func (x *SingleItemRequest) String() string {
 func (*SingleItemRequest) ProtoMessage() {}
 
 func (x *SingleItemRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[53]
+	mi := &file_identity_proto_msgTypes[56]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4612,7 +4812,7 @@ func (x *SingleItemRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SingleItemRequest.ProtoReflect.Descriptor instead.
 func (*SingleItemRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{53}
+	return file_identity_proto_rawDescGZIP(), []int{56}
 }
 
 func (x *SingleItemRequest) GetItemId() int32 {
@@ -4636,7 +4836,7 @@ type AssignUserCommissionProfile struct {
 func (x *AssignUserCommissionProfile) Reset() {
 	*x = AssignUserCommissionProfile{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[54]
+		mi := &file_identity_proto_msgTypes[57]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4649,7 +4849,7 @@ func (x *AssignUserCommissionProfile) String() string {
 func (*AssignUserCommissionProfile) ProtoMessage() {}
 
 func (x *AssignUserCommissionProfile) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[54]
+	mi := &file_identity_proto_msgTypes[57]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4662,7 +4862,7 @@ func (x *AssignUserCommissionProfile) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AssignUserCommissionProfile.ProtoReflect.Descriptor instead.
 func (*AssignUserCommissionProfile) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{54}
+	return file_identity_proto_rawDescGZIP(), []int{57}
 }
 
 func (x *AssignUserCommissionProfile) GetProfileId() int32 {
@@ -4716,7 +4916,7 @@ type Commission struct {
 func (x *Commission) Reset() {
 	*x = Commission{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[55]
+		mi := &file_identity_proto_msgTypes[58]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4729,7 +4929,7 @@ func (x *Commission) String() string {
 func (*Commission) ProtoMessage() {}
 
 func (x *Commission) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[55]
+	mi := &file_identity_proto_msgTypes[58]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4742,7 +4942,7 @@ func (x *Commission) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Commission.ProtoReflect.Descriptor instead.
 func (*Commission) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{55}
+	return file_identity_proto_rawDescGZIP(), []int{58}
 }
 
 func (x *Commission) GetId() int32 {
@@ -4855,7 +5055,7 @@ type CommissionTurnover struct {
 func (x *CommissionTurnover) Reset() {
 	*x = CommissionTurnover{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[56]
+		mi := &file_identity_proto_msgTypes[59]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4868,7 +5068,7 @@ func (x *CommissionTurnover) String() string {
 func (*CommissionTurnover) ProtoMessage() {}
 
 func (x *CommissionTurnover) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[56]
+	mi := &file_identity_proto_msgTypes[59]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4881,7 +5081,7 @@ func (x *CommissionTurnover) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CommissionTurnover.ProtoReflect.Descriptor instead.
 func (*CommissionTurnover) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{56}
+	return file_identity_proto_rawDescGZIP(), []int{59}
 }
 
 func (x *CommissionTurnover) GetId() int32 {
@@ -4959,7 +5159,7 @@ type GetRiskSettingRequest struct {
 func (x *GetRiskSettingRequest) Reset() {
 	*x = GetRiskSettingRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[57]
+		mi := &file_identity_proto_msgTypes[60]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4972,7 +5172,7 @@ func (x *GetRiskSettingRequest) String() string {
 func (*GetRiskSettingRequest) ProtoMessage() {}
 
 func (x *GetRiskSettingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[57]
+	mi := &file_identity_proto_msgTypes[60]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4985,7 +5185,7 @@ func (x *GetRiskSettingRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetRiskSettingRequest.ProtoReflect.Descriptor instead.
 func (*GetRiskSettingRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{57}
+	return file_identity_proto_rawDescGZIP(), []int{60}
 }
 
 func (x *GetRiskSettingRequest) GetClientId() int32 {
@@ -5014,7 +5214,7 @@ type FindUserRequest struct {
 func (x *FindUserRequest) Reset() {
 	*x = FindUserRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[58]
+		mi := &file_identity_proto_msgTypes[61]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5027,7 +5227,7 @@ func (x *FindUserRequest) String() string {
 func (*FindUserRequest) ProtoMessage() {}
 
 func (x *FindUserRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[58]
+	mi := &file_identity_proto_msgTypes[61]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5040,7 +5240,7 @@ func (x *FindUserRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FindUserRequest.ProtoReflect.Descriptor instead.
 func (*FindUserRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{58}
+	return file_identity_proto_rawDescGZIP(), []int{61}
 }
 
 func (x *FindUserRequest) GetUserId() int32 {
@@ -5069,7 +5269,7 @@ type GetUserIdNameRequest struct {
 func (x *GetUserIdNameRequest) Reset() {
 	*x = GetUserIdNameRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[59]
+		mi := &file_identity_proto_msgTypes[62]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5082,7 +5282,7 @@ func (x *GetUserIdNameRequest) String() string {
 func (*GetUserIdNameRequest) ProtoMessage() {}
 
 func (x *GetUserIdNameRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[59]
+	mi := &file_identity_proto_msgTypes[62]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5095,7 +5295,7 @@ func (x *GetUserIdNameRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserIdNameRequest.ProtoReflect.Descriptor instead.
 func (*GetUserIdNameRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{59}
+	return file_identity_proto_rawDescGZIP(), []int{62}
 }
 
 func (x *GetUserIdNameRequest) GetUsername() string {
@@ -5123,7 +5323,7 @@ type GetUserIdNameResponse struct {
 func (x *GetUserIdNameResponse) Reset() {
 	*x = GetUserIdNameResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[60]
+		mi := &file_identity_proto_msgTypes[63]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5136,7 +5336,7 @@ func (x *GetUserIdNameResponse) String() string {
 func (*GetUserIdNameResponse) ProtoMessage() {}
 
 func (x *GetUserIdNameResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[60]
+	mi := &file_identity_proto_msgTypes[63]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5149,7 +5349,7 @@ func (x *GetUserIdNameResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserIdNameResponse.ProtoReflect.Descriptor instead.
 func (*GetUserIdNameResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{60}
+	return file_identity_proto_rawDescGZIP(), []int{63}
 }
 
 func (x *GetUserIdNameResponse) GetData() []*GetUserIdNameResponse_Users {
@@ -5171,7 +5371,7 @@ type GetWithdrawalSettingsRequest struct {
 func (x *GetWithdrawalSettingsRequest) Reset() {
 	*x = GetWithdrawalSettingsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[61]
+		mi := &file_identity_proto_msgTypes[64]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5184,7 +5384,7 @@ func (x *GetWithdrawalSettingsRequest) String() string {
 func (*GetWithdrawalSettingsRequest) ProtoMessage() {}
 
 func (x *GetWithdrawalSettingsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[61]
+	mi := &file_identity_proto_msgTypes[64]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5197,7 +5397,7 @@ func (x *GetWithdrawalSettingsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetWithdrawalSettingsRequest.ProtoReflect.Descriptor instead.
 func (*GetWithdrawalSettingsRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{61}
+	return file_identity_proto_rawDescGZIP(), []int{64}
 }
 
 func (x *GetWithdrawalSettingsRequest) GetClientId() int32 {
@@ -5232,7 +5432,7 @@ type WithdrawalSettingsResponse struct {
 func (x *WithdrawalSettingsResponse) Reset() {
 	*x = WithdrawalSettingsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[62]
+		mi := &file_identity_proto_msgTypes[65]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5245,7 +5445,7 @@ func (x *WithdrawalSettingsResponse) String() string {
 func (*WithdrawalSettingsResponse) ProtoMessage() {}
 
 func (x *WithdrawalSettingsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[62]
+	mi := &file_identity_proto_msgTypes[65]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5258,7 +5458,7 @@ func (x *WithdrawalSettingsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WithdrawalSettingsResponse.ProtoReflect.Descriptor instead.
 func (*WithdrawalSettingsResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{62}
+	return file_identity_proto_rawDescGZIP(), []int{65}
 }
 
 func (x *WithdrawalSettingsResponse) GetAutoDisbursement() int32 {
@@ -5343,7 +5543,7 @@ type PlaceBetRequest struct {
 func (x *PlaceBetRequest) Reset() {
 	*x = PlaceBetRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[63]
+		mi := &file_identity_proto_msgTypes[66]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5356,7 +5556,7 @@ func (x *PlaceBetRequest) String() string {
 func (*PlaceBetRequest) ProtoMessage() {}
 
 func (x *PlaceBetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[63]
+	mi := &file_identity_proto_msgTypes[66]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5369,7 +5569,7 @@ func (x *PlaceBetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PlaceBetRequest.ProtoReflect.Descriptor instead.
 func (*PlaceBetRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{63}
+	return file_identity_proto_rawDescGZIP(), []int{66}
 }
 
 func (x *PlaceBetRequest) GetSelections() []*BetSelection {
@@ -5517,7 +5717,7 @@ type BetSelection struct {
 func (x *BetSelection) Reset() {
 	*x = BetSelection{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[64]
+		mi := &file_identity_proto_msgTypes[67]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5530,7 +5730,7 @@ func (x *BetSelection) String() string {
 func (*BetSelection) ProtoMessage() {}
 
 func (x *BetSelection) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[64]
+	mi := &file_identity_proto_msgTypes[67]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5543,7 +5743,7 @@ func (x *BetSelection) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BetSelection.ProtoReflect.Descriptor instead.
 func (*BetSelection) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{64}
+	return file_identity_proto_rawDescGZIP(), []int{67}
 }
 
 func (x *BetSelection) GetEventName() string {
@@ -5719,7 +5919,7 @@ type GetSettingsRequest struct {
 func (x *GetSettingsRequest) Reset() {
 	*x = GetSettingsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[65]
+		mi := &file_identity_proto_msgTypes[68]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5732,7 +5932,7 @@ func (x *GetSettingsRequest) String() string {
 func (*GetSettingsRequest) ProtoMessage() {}
 
 func (x *GetSettingsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[65]
+	mi := &file_identity_proto_msgTypes[68]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5745,7 +5945,7 @@ func (x *GetSettingsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSettingsRequest.ProtoReflect.Descriptor instead.
 func (*GetSettingsRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{65}
+	return file_identity_proto_rawDescGZIP(), []int{68}
 }
 
 func (x *GetSettingsRequest) GetClientId() int32 {
@@ -5776,7 +5976,7 @@ type SettingsRequest struct {
 func (x *SettingsRequest) Reset() {
 	*x = SettingsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[66]
+		mi := &file_identity_proto_msgTypes[69]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5789,7 +5989,7 @@ func (x *SettingsRequest) String() string {
 func (*SettingsRequest) ProtoMessage() {}
 
 func (x *SettingsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[66]
+	mi := &file_identity_proto_msgTypes[69]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5802,7 +6002,7 @@ func (x *SettingsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SettingsRequest.ProtoReflect.Descriptor instead.
 func (*SettingsRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{66}
+	return file_identity_proto_rawDescGZIP(), []int{69}
 }
 
 func (x *SettingsRequest) GetClientId() int32 {
@@ -5846,7 +6046,7 @@ type UserRiskSettingsRequest struct {
 func (x *UserRiskSettingsRequest) Reset() {
 	*x = UserRiskSettingsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[67]
+		mi := &file_identity_proto_msgTypes[70]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5859,7 +6059,7 @@ func (x *UserRiskSettingsRequest) String() string {
 func (*UserRiskSettingsRequest) ProtoMessage() {}
 
 func (x *UserRiskSettingsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[67]
+	mi := &file_identity_proto_msgTypes[70]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5872,7 +6072,7 @@ func (x *UserRiskSettingsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserRiskSettingsRequest.ProtoReflect.Descriptor instead.
 func (*UserRiskSettingsRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{67}
+	return file_identity_proto_rawDescGZIP(), []int{70}
 }
 
 func (x *UserRiskSettingsRequest) GetUserId() int32 {
@@ -5913,7 +6113,7 @@ type SaveSegmentRequest struct {
 func (x *SaveSegmentRequest) Reset() {
 	*x = SaveSegmentRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[68]
+		mi := &file_identity_proto_msgTypes[71]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5926,7 +6126,7 @@ func (x *SaveSegmentRequest) String() string {
 func (*SaveSegmentRequest) ProtoMessage() {}
 
 func (x *SaveSegmentRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[68]
+	mi := &file_identity_proto_msgTypes[71]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5939,7 +6139,7 @@ func (x *SaveSegmentRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SaveSegmentRequest.ProtoReflect.Descriptor instead.
 func (*SaveSegmentRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{68}
+	return file_identity_proto_rawDescGZIP(), []int{71}
 }
 
 func (x *SaveSegmentRequest) GetClientId() int32 {
@@ -6005,7 +6205,7 @@ type GrantBonusRequest struct {
 func (x *GrantBonusRequest) Reset() {
 	*x = GrantBonusRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[69]
+		mi := &file_identity_proto_msgTypes[72]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6018,7 +6218,7 @@ func (x *GrantBonusRequest) String() string {
 func (*GrantBonusRequest) ProtoMessage() {}
 
 func (x *GrantBonusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[69]
+	mi := &file_identity_proto_msgTypes[72]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6031,7 +6231,7 @@ func (x *GrantBonusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GrantBonusRequest.ProtoReflect.Descriptor instead.
 func (*GrantBonusRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{69}
+	return file_identity_proto_rawDescGZIP(), []int{72}
 }
 
 func (x *GrantBonusRequest) GetClientId() int32 {
@@ -6073,7 +6273,7 @@ type FetchPlayerSegmentRequest struct {
 func (x *FetchPlayerSegmentRequest) Reset() {
 	*x = FetchPlayerSegmentRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[70]
+		mi := &file_identity_proto_msgTypes[73]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6086,7 +6286,7 @@ func (x *FetchPlayerSegmentRequest) String() string {
 func (*FetchPlayerSegmentRequest) ProtoMessage() {}
 
 func (x *FetchPlayerSegmentRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[70]
+	mi := &file_identity_proto_msgTypes[73]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6099,7 +6299,7 @@ func (x *FetchPlayerSegmentRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FetchPlayerSegmentRequest.ProtoReflect.Descriptor instead.
 func (*FetchPlayerSegmentRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{70}
+	return file_identity_proto_rawDescGZIP(), []int{73}
 }
 
 func (x *FetchPlayerSegmentRequest) GetClientId() int32 {
@@ -6120,7 +6320,7 @@ type GetSegmentPlayerRequest struct {
 func (x *GetSegmentPlayerRequest) Reset() {
 	*x = GetSegmentPlayerRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[71]
+		mi := &file_identity_proto_msgTypes[74]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6133,7 +6333,7 @@ func (x *GetSegmentPlayerRequest) String() string {
 func (*GetSegmentPlayerRequest) ProtoMessage() {}
 
 func (x *GetSegmentPlayerRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[71]
+	mi := &file_identity_proto_msgTypes[74]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6146,7 +6346,7 @@ func (x *GetSegmentPlayerRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSegmentPlayerRequest.ProtoReflect.Descriptor instead.
 func (*GetSegmentPlayerRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{71}
+	return file_identity_proto_rawDescGZIP(), []int{74}
 }
 
 func (x *GetSegmentPlayerRequest) GetSegmentId() int32 {
@@ -6167,7 +6367,7 @@ type DeleteItemRequest struct {
 func (x *DeleteItemRequest) Reset() {
 	*x = DeleteItemRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[72]
+		mi := &file_identity_proto_msgTypes[75]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6180,7 +6380,7 @@ func (x *DeleteItemRequest) String() string {
 func (*DeleteItemRequest) ProtoMessage() {}
 
 func (x *DeleteItemRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[72]
+	mi := &file_identity_proto_msgTypes[75]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6193,7 +6393,7 @@ func (x *DeleteItemRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteItemRequest.ProtoReflect.Descriptor instead.
 func (*DeleteItemRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{72}
+	return file_identity_proto_rawDescGZIP(), []int{75}
 }
 
 func (x *DeleteItemRequest) GetId() int32 {
@@ -6216,7 +6416,7 @@ type AddToSegmentRequest struct {
 func (x *AddToSegmentRequest) Reset() {
 	*x = AddToSegmentRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[73]
+		mi := &file_identity_proto_msgTypes[76]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6229,7 +6429,7 @@ func (x *AddToSegmentRequest) String() string {
 func (*AddToSegmentRequest) ProtoMessage() {}
 
 func (x *AddToSegmentRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[73]
+	mi := &file_identity_proto_msgTypes[76]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6242,7 +6442,7 @@ func (x *AddToSegmentRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AddToSegmentRequest.ProtoReflect.Descriptor instead.
 func (*AddToSegmentRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{73}
+	return file_identity_proto_rawDescGZIP(), []int{76}
 }
 
 func (x *AddToSegmentRequest) GetClientId() int32 {
@@ -6279,7 +6479,7 @@ type UploadPlayersToSegment struct {
 func (x *UploadPlayersToSegment) Reset() {
 	*x = UploadPlayersToSegment{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[74]
+		mi := &file_identity_proto_msgTypes[77]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6292,7 +6492,7 @@ func (x *UploadPlayersToSegment) String() string {
 func (*UploadPlayersToSegment) ProtoMessage() {}
 
 func (x *UploadPlayersToSegment) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[74]
+	mi := &file_identity_proto_msgTypes[77]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6305,7 +6505,7 @@ func (x *UploadPlayersToSegment) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadPlayersToSegment.ProtoReflect.Descriptor instead.
 func (*UploadPlayersToSegment) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{74}
+	return file_identity_proto_rawDescGZIP(), []int{77}
 }
 
 func (x *UploadPlayersToSegment) GetClientId() int32 {
@@ -6347,7 +6547,7 @@ type FetchPlayerFilterRequest struct {
 func (x *FetchPlayerFilterRequest) Reset() {
 	*x = FetchPlayerFilterRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[75]
+		mi := &file_identity_proto_msgTypes[78]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6360,7 +6560,7 @@ func (x *FetchPlayerFilterRequest) String() string {
 func (*FetchPlayerFilterRequest) ProtoMessage() {}
 
 func (x *FetchPlayerFilterRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[75]
+	mi := &file_identity_proto_msgTypes[78]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6373,7 +6573,7 @@ func (x *FetchPlayerFilterRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FetchPlayerFilterRequest.ProtoReflect.Descriptor instead.
 func (*FetchPlayerFilterRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{75}
+	return file_identity_proto_rawDescGZIP(), []int{78}
 }
 
 func (x *FetchPlayerFilterRequest) GetClientId() int32 {
@@ -6446,7 +6646,7 @@ type FetchPlayerFilterResponse struct {
 func (x *FetchPlayerFilterResponse) Reset() {
 	*x = FetchPlayerFilterResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[76]
+		mi := &file_identity_proto_msgTypes[79]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6459,7 +6659,7 @@ func (x *FetchPlayerFilterResponse) String() string {
 func (*FetchPlayerFilterResponse) ProtoMessage() {}
 
 func (x *FetchPlayerFilterResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[76]
+	mi := &file_identity_proto_msgTypes[79]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6472,7 +6672,7 @@ func (x *FetchPlayerFilterResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FetchPlayerFilterResponse.ProtoReflect.Descriptor instead.
 func (*FetchPlayerFilterResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{76}
+	return file_identity_proto_rawDescGZIP(), []int{79}
 }
 
 func (x *FetchPlayerFilterResponse) GetStatus() int32 {
@@ -6528,7 +6728,7 @@ type TransactionEntity struct {
 func (x *TransactionEntity) Reset() {
 	*x = TransactionEntity{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[77]
+		mi := &file_identity_proto_msgTypes[80]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6541,7 +6741,7 @@ func (x *TransactionEntity) String() string {
 func (*TransactionEntity) ProtoMessage() {}
 
 func (x *TransactionEntity) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[77]
+	mi := &file_identity_proto_msgTypes[80]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6554,7 +6754,7 @@ func (x *TransactionEntity) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TransactionEntity.ProtoReflect.Descriptor instead.
 func (*TransactionEntity) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{77}
+	return file_identity_proto_rawDescGZIP(), []int{80}
 }
 
 func (x *TransactionEntity) GetId() int32 {
@@ -6692,7 +6892,7 @@ type UserInfo struct {
 func (x *UserInfo) Reset() {
 	*x = UserInfo{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[78]
+		mi := &file_identity_proto_msgTypes[81]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6705,7 +6905,7 @@ func (x *UserInfo) String() string {
 func (*UserInfo) ProtoMessage() {}
 
 func (x *UserInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[78]
+	mi := &file_identity_proto_msgTypes[81]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6718,7 +6918,7 @@ func (x *UserInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserInfo.ProtoReflect.Descriptor instead.
 func (*UserInfo) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{78}
+	return file_identity_proto_rawDescGZIP(), []int{81}
 }
 
 func (x *UserInfo) GetId() int32 {
@@ -6899,7 +7099,7 @@ type UserData struct {
 func (x *UserData) Reset() {
 	*x = UserData{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[79]
+		mi := &file_identity_proto_msgTypes[82]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6912,7 +7112,7 @@ func (x *UserData) String() string {
 func (*UserData) ProtoMessage() {}
 
 func (x *UserData) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[79]
+	mi := &file_identity_proto_msgTypes[82]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6925,7 +7125,7 @@ func (x *UserData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserData.ProtoReflect.Descriptor instead.
 func (*UserData) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{79}
+	return file_identity_proto_rawDescGZIP(), []int{82}
 }
 
 func (x *UserData) GetId() int32 {
@@ -7137,7 +7337,7 @@ type ChangeUserTypeStatusRequest struct {
 func (x *ChangeUserTypeStatusRequest) Reset() {
 	*x = ChangeUserTypeStatusRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[80]
+		mi := &file_identity_proto_msgTypes[83]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -7150,7 +7350,7 @@ func (x *ChangeUserTypeStatusRequest) String() string {
 func (*ChangeUserTypeStatusRequest) ProtoMessage() {}
 
 func (x *ChangeUserTypeStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[80]
+	mi := &file_identity_proto_msgTypes[83]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7163,7 +7363,7 @@ func (x *ChangeUserTypeStatusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChangeUserTypeStatusRequest.ProtoReflect.Descriptor instead.
 func (*ChangeUserTypeStatusRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{80}
+	return file_identity_proto_rawDescGZIP(), []int{83}
 }
 
 func (x *ChangeUserTypeStatusRequest) GetUserId() int32 {
@@ -7220,7 +7420,7 @@ type CreateUserRequest struct {
 func (x *CreateUserRequest) Reset() {
 	*x = CreateUserRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[81]
+		mi := &file_identity_proto_msgTypes[84]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -7233,7 +7433,7 @@ func (x *CreateUserRequest) String() string {
 func (*CreateUserRequest) ProtoMessage() {}
 
 func (x *CreateUserRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[81]
+	mi := &file_identity_proto_msgTypes[84]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7246,7 +7446,7 @@ func (x *CreateUserRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateUserRequest.ProtoReflect.Descriptor instead.
 func (*CreateUserRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{81}
+	return file_identity_proto_rawDescGZIP(), []int{84}
 }
 
 func (x *CreateUserRequest) GetClientId() int32 {
@@ -7431,7 +7631,7 @@ type CreateAgentRequest struct {
 func (x *CreateAgentRequest) Reset() {
 	*x = CreateAgentRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[82]
+		mi := &file_identity_proto_msgTypes[85]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -7444,7 +7644,7 @@ func (x *CreateAgentRequest) String() string {
 func (*CreateAgentRequest) ProtoMessage() {}
 
 func (x *CreateAgentRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[82]
+	mi := &file_identity_proto_msgTypes[85]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7457,7 +7657,7 @@ func (x *CreateAgentRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateAgentRequest.ProtoReflect.Descriptor instead.
 func (*CreateAgentRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{82}
+	return file_identity_proto_rawDescGZIP(), []int{85}
 }
 
 func (x *CreateAgentRequest) GetClientId() int32 {
@@ -7570,7 +7770,7 @@ type UpdateUserRequest struct {
 func (x *UpdateUserRequest) Reset() {
 	*x = UpdateUserRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[83]
+		mi := &file_identity_proto_msgTypes[86]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -7583,7 +7783,7 @@ func (x *UpdateUserRequest) String() string {
 func (*UpdateUserRequest) ProtoMessage() {}
 
 func (x *UpdateUserRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[83]
+	mi := &file_identity_proto_msgTypes[86]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7596,7 +7796,7 @@ func (x *UpdateUserRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUserRequest.ProtoReflect.Descriptor instead.
 func (*UpdateUserRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{83}
+	return file_identity_proto_rawDescGZIP(), []int{86}
 }
 
 func (x *UpdateUserRequest) GetClientId() int32 {
@@ -7784,7 +7984,7 @@ type User struct {
 func (x *User) Reset() {
 	*x = User{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[84]
+		mi := &file_identity_proto_msgTypes[87]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -7797,7 +7997,7 @@ func (x *User) String() string {
 func (*User) ProtoMessage() {}
 
 func (x *User) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[84]
+	mi := &file_identity_proto_msgTypes[87]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7810,7 +8010,7 @@ func (x *User) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use User.ProtoReflect.Descriptor instead.
 func (*User) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{84}
+	return file_identity_proto_rawDescGZIP(), []int{87}
 }
 
 func (x *User) GetUserID() string {
@@ -7918,7 +8118,7 @@ type RegisterResponse struct {
 func (x *RegisterResponse) Reset() {
 	*x = RegisterResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[85]
+		mi := &file_identity_proto_msgTypes[88]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -7931,7 +8131,7 @@ func (x *RegisterResponse) String() string {
 func (*RegisterResponse) ProtoMessage() {}
 
 func (x *RegisterResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[85]
+	mi := &file_identity_proto_msgTypes[88]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7944,7 +8144,7 @@ func (x *RegisterResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterResponse.ProtoReflect.Descriptor instead.
 func (*RegisterResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{85}
+	return file_identity_proto_rawDescGZIP(), []int{88}
 }
 
 func (x *RegisterResponse) GetStatus() int32 {
@@ -7990,7 +8190,7 @@ type LoginRequest struct {
 func (x *LoginRequest) Reset() {
 	*x = LoginRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[86]
+		mi := &file_identity_proto_msgTypes[89]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -8003,7 +8203,7 @@ func (x *LoginRequest) String() string {
 func (*LoginRequest) ProtoMessage() {}
 
 func (x *LoginRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[86]
+	mi := &file_identity_proto_msgTypes[89]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8016,7 +8216,7 @@ func (x *LoginRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoginRequest.ProtoReflect.Descriptor instead.
 func (*LoginRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{86}
+	return file_identity_proto_rawDescGZIP(), []int{89}
 }
 
 func (x *LoginRequest) GetClientId() int32 {
@@ -8061,7 +8261,7 @@ type LoginResponse struct {
 func (x *LoginResponse) Reset() {
 	*x = LoginResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[87]
+		mi := &file_identity_proto_msgTypes[90]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -8074,7 +8274,7 @@ func (x *LoginResponse) String() string {
 func (*LoginResponse) ProtoMessage() {}
 
 func (x *LoginResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[87]
+	mi := &file_identity_proto_msgTypes[90]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8087,7 +8287,7 @@ func (x *LoginResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoginResponse.ProtoReflect.Descriptor instead.
 func (*LoginResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{87}
+	return file_identity_proto_rawDescGZIP(), []int{90}
 }
 
 func (x *LoginResponse) GetStatus() int32 {
@@ -8130,7 +8330,7 @@ type GetUserDetailsRequest struct {
 func (x *GetUserDetailsRequest) Reset() {
 	*x = GetUserDetailsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[88]
+		mi := &file_identity_proto_msgTypes[91]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -8143,7 +8343,7 @@ func (x *GetUserDetailsRequest) String() string {
 func (*GetUserDetailsRequest) ProtoMessage() {}
 
 func (x *GetUserDetailsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[88]
+	mi := &file_identity_proto_msgTypes[91]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8156,7 +8356,7 @@ func (x *GetUserDetailsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserDetailsRequest.ProtoReflect.Descriptor instead.
 func (*GetUserDetailsRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{88}
+	return file_identity_proto_rawDescGZIP(), []int{91}
 }
 
 func (x *GetUserDetailsRequest) GetClientId() int32 {
@@ -8187,7 +8387,7 @@ type GetUserDetailsResponse struct {
 func (x *GetUserDetailsResponse) Reset() {
 	*x = GetUserDetailsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[89]
+		mi := &file_identity_proto_msgTypes[92]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -8200,7 +8400,7 @@ func (x *GetUserDetailsResponse) String() string {
 func (*GetUserDetailsResponse) ProtoMessage() {}
 
 func (x *GetUserDetailsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[89]
+	mi := &file_identity_proto_msgTypes[92]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8213,7 +8413,7 @@ func (x *GetUserDetailsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserDetailsResponse.ProtoReflect.Descriptor instead.
 func (*GetUserDetailsResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{89}
+	return file_identity_proto_rawDescGZIP(), []int{92}
 }
 
 func (x *GetUserDetailsResponse) GetStatus() int32 {
@@ -8256,7 +8456,7 @@ type ValidateRequest struct {
 func (x *ValidateRequest) Reset() {
 	*x = ValidateRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[90]
+		mi := &file_identity_proto_msgTypes[93]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -8269,7 +8469,7 @@ func (x *ValidateRequest) String() string {
 func (*ValidateRequest) ProtoMessage() {}
 
 func (x *ValidateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[90]
+	mi := &file_identity_proto_msgTypes[93]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8282,7 +8482,7 @@ func (x *ValidateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ValidateRequest.ProtoReflect.Descriptor instead.
 func (*ValidateRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{90}
+	return file_identity_proto_rawDescGZIP(), []int{93}
 }
 
 func (x *ValidateRequest) GetToken() string {
@@ -8303,7 +8503,7 @@ type ValidateTestRequest struct {
 func (x *ValidateTestRequest) Reset() {
 	*x = ValidateTestRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[91]
+		mi := &file_identity_proto_msgTypes[94]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -8316,7 +8516,7 @@ func (x *ValidateTestRequest) String() string {
 func (*ValidateTestRequest) ProtoMessage() {}
 
 func (x *ValidateTestRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[91]
+	mi := &file_identity_proto_msgTypes[94]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8329,7 +8529,7 @@ func (x *ValidateTestRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ValidateTestRequest.ProtoReflect.Descriptor instead.
 func (*ValidateTestRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{91}
+	return file_identity_proto_rawDescGZIP(), []int{94}
 }
 
 func (x *ValidateTestRequest) GetAccountId() int32 {
@@ -8353,7 +8553,7 @@ type ValidateTestResponse struct {
 func (x *ValidateTestResponse) Reset() {
 	*x = ValidateTestResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[92]
+		mi := &file_identity_proto_msgTypes[95]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -8366,7 +8566,7 @@ func (x *ValidateTestResponse) String() string {
 func (*ValidateTestResponse) ProtoMessage() {}
 
 func (x *ValidateTestResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[92]
+	mi := &file_identity_proto_msgTypes[95]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8379,7 +8579,7 @@ func (x *ValidateTestResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ValidateTestResponse.ProtoReflect.Descriptor instead.
 func (*ValidateTestResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{92}
+	return file_identity_proto_rawDescGZIP(), []int{95}
 }
 
 func (x *ValidateTestResponse) GetIsTest() bool {
@@ -8423,7 +8623,7 @@ type ListTestAccountsRequest struct {
 func (x *ListTestAccountsRequest) Reset() {
 	*x = ListTestAccountsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[93]
+		mi := &file_identity_proto_msgTypes[96]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -8436,7 +8636,7 @@ func (x *ListTestAccountsRequest) String() string {
 func (*ListTestAccountsRequest) ProtoMessage() {}
 
 func (x *ListTestAccountsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[93]
+	mi := &file_identity_proto_msgTypes[96]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8449,7 +8649,7 @@ func (x *ListTestAccountsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListTestAccountsRequest.ProtoReflect.Descriptor instead.
 func (*ListTestAccountsRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{93}
+	return file_identity_proto_rawDescGZIP(), []int{96}
 }
 
 func (x *ListTestAccountsRequest) GetClientId() int32 {
@@ -8486,7 +8686,7 @@ type ValidateResponse struct {
 func (x *ValidateResponse) Reset() {
 	*x = ValidateResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[94]
+		mi := &file_identity_proto_msgTypes[97]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -8499,7 +8699,7 @@ func (x *ValidateResponse) String() string {
 func (*ValidateResponse) ProtoMessage() {}
 
 func (x *ValidateResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[94]
+	mi := &file_identity_proto_msgTypes[97]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8512,7 +8712,7 @@ func (x *ValidateResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ValidateResponse.ProtoReflect.Descriptor instead.
 func (*ValidateResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{94}
+	return file_identity_proto_rawDescGZIP(), []int{97}
 }
 
 func (x *ValidateResponse) GetStatus() int32 {
@@ -8549,7 +8749,7 @@ type ValidateClientResponse struct {
 func (x *ValidateClientResponse) Reset() {
 	*x = ValidateClientResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[95]
+		mi := &file_identity_proto_msgTypes[98]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -8562,7 +8762,7 @@ func (x *ValidateClientResponse) String() string {
 func (*ValidateClientResponse) ProtoMessage() {}
 
 func (x *ValidateClientResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[95]
+	mi := &file_identity_proto_msgTypes[98]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8575,7 +8775,7 @@ func (x *ValidateClientResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ValidateClientResponse.ProtoReflect.Descriptor instead.
 func (*ValidateClientResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{95}
+	return file_identity_proto_rawDescGZIP(), []int{98}
 }
 
 func (x *ValidateClientResponse) GetStatus() int32 {
@@ -8610,7 +8810,7 @@ type ValidateGroupCodeRequest struct {
 func (x *ValidateGroupCodeRequest) Reset() {
 	*x = ValidateGroupCodeRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[96]
+		mi := &file_identity_proto_msgTypes[99]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -8623,7 +8823,7 @@ func (x *ValidateGroupCodeRequest) String() string {
 func (*ValidateGroupCodeRequest) ProtoMessage() {}
 
 func (x *ValidateGroupCodeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[96]
+	mi := &file_identity_proto_msgTypes[99]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8636,7 +8836,7 @@ func (x *ValidateGroupCodeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ValidateGroupCodeRequest.ProtoReflect.Descriptor instead.
 func (*ValidateGroupCodeRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{96}
+	return file_identity_proto_rawDescGZIP(), []int{99}
 }
 
 func (x *ValidateGroupCodeRequest) GetGroupName() string {
@@ -8660,7 +8860,7 @@ type ValidateGroupCodeResponse struct {
 func (x *ValidateGroupCodeResponse) Reset() {
 	*x = ValidateGroupCodeResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[97]
+		mi := &file_identity_proto_msgTypes[100]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -8673,7 +8873,7 @@ func (x *ValidateGroupCodeResponse) String() string {
 func (*ValidateGroupCodeResponse) ProtoMessage() {}
 
 func (x *ValidateGroupCodeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[97]
+	mi := &file_identity_proto_msgTypes[100]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8686,7 +8886,7 @@ func (x *ValidateGroupCodeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ValidateGroupCodeResponse.ProtoReflect.Descriptor instead.
 func (*ValidateGroupCodeResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{97}
+	return file_identity_proto_rawDescGZIP(), []int{100}
 }
 
 func (x *ValidateGroupCodeResponse) GetStatus() int32 {
@@ -8737,7 +8937,7 @@ type ClientRequest struct {
 func (x *ClientRequest) Reset() {
 	*x = ClientRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[98]
+		mi := &file_identity_proto_msgTypes[101]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -8750,7 +8950,7 @@ func (x *ClientRequest) String() string {
 func (*ClientRequest) ProtoMessage() {}
 
 func (x *ClientRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[98]
+	mi := &file_identity_proto_msgTypes[101]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8763,7 +8963,7 @@ func (x *ClientRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClientRequest.ProtoReflect.Descriptor instead.
 func (*ClientRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{98}
+	return file_identity_proto_rawDescGZIP(), []int{101}
 }
 
 func (x *ClientRequest) GetName() string {
@@ -8847,7 +9047,7 @@ type RemoveClientRequest struct {
 func (x *RemoveClientRequest) Reset() {
 	*x = RemoveClientRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[99]
+		mi := &file_identity_proto_msgTypes[102]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -8860,7 +9060,7 @@ func (x *RemoveClientRequest) String() string {
 func (*RemoveClientRequest) ProtoMessage() {}
 
 func (x *RemoveClientRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[99]
+	mi := &file_identity_proto_msgTypes[102]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8873,7 +9073,7 @@ func (x *RemoveClientRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RemoveClientRequest.ProtoReflect.Descriptor instead.
 func (*RemoveClientRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{99}
+	return file_identity_proto_rawDescGZIP(), []int{102}
 }
 
 func (x *RemoveClientRequest) GetClientID() string {
@@ -8894,7 +9094,7 @@ type RemovePermissionRequest struct {
 func (x *RemovePermissionRequest) Reset() {
 	*x = RemovePermissionRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[100]
+		mi := &file_identity_proto_msgTypes[103]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -8907,7 +9107,7 @@ func (x *RemovePermissionRequest) String() string {
 func (*RemovePermissionRequest) ProtoMessage() {}
 
 func (x *RemovePermissionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[100]
+	mi := &file_identity_proto_msgTypes[103]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8920,7 +9120,7 @@ func (x *RemovePermissionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RemovePermissionRequest.ProtoReflect.Descriptor instead.
 func (*RemovePermissionRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{100}
+	return file_identity_proto_rawDescGZIP(), []int{103}
 }
 
 func (x *RemovePermissionRequest) GetPermissionID() string {
@@ -8944,7 +9144,7 @@ type RoleRequest struct {
 func (x *RoleRequest) Reset() {
 	*x = RoleRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[101]
+		mi := &file_identity_proto_msgTypes[104]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -8957,7 +9157,7 @@ func (x *RoleRequest) String() string {
 func (*RoleRequest) ProtoMessage() {}
 
 func (x *RoleRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[101]
+	mi := &file_identity_proto_msgTypes[104]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8970,7 +9170,7 @@ func (x *RoleRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RoleRequest.ProtoReflect.Descriptor instead.
 func (*RoleRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{101}
+	return file_identity_proto_rawDescGZIP(), []int{104}
 }
 
 func (x *RoleRequest) GetName() string {
@@ -9015,7 +9215,7 @@ type SaveRoleResponse struct {
 func (x *SaveRoleResponse) Reset() {
 	*x = SaveRoleResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[102]
+		mi := &file_identity_proto_msgTypes[105]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9028,7 +9228,7 @@ func (x *SaveRoleResponse) String() string {
 func (*SaveRoleResponse) ProtoMessage() {}
 
 func (x *SaveRoleResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[102]
+	mi := &file_identity_proto_msgTypes[105]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9041,7 +9241,7 @@ func (x *SaveRoleResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SaveRoleResponse.ProtoReflect.Descriptor instead.
 func (*SaveRoleResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{102}
+	return file_identity_proto_rawDescGZIP(), []int{105}
 }
 
 func (x *SaveRoleResponse) GetStatus() bool {
@@ -9086,7 +9286,7 @@ type GetRolesResponse struct {
 func (x *GetRolesResponse) Reset() {
 	*x = GetRolesResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[103]
+		mi := &file_identity_proto_msgTypes[106]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9099,7 +9299,7 @@ func (x *GetRolesResponse) String() string {
 func (*GetRolesResponse) ProtoMessage() {}
 
 func (x *GetRolesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[103]
+	mi := &file_identity_proto_msgTypes[106]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9112,7 +9312,7 @@ func (x *GetRolesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetRolesResponse.ProtoReflect.Descriptor instead.
 func (*GetRolesResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{103}
+	return file_identity_proto_rawDescGZIP(), []int{106}
 }
 
 func (x *GetRolesResponse) GetStatus() bool {
@@ -9154,7 +9354,7 @@ type RemoveRoleRequest struct {
 func (x *RemoveRoleRequest) Reset() {
 	*x = RemoveRoleRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[104]
+		mi := &file_identity_proto_msgTypes[107]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9167,7 +9367,7 @@ func (x *RemoveRoleRequest) String() string {
 func (*RemoveRoleRequest) ProtoMessage() {}
 
 func (x *RemoveRoleRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[104]
+	mi := &file_identity_proto_msgTypes[107]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9180,7 +9380,7 @@ func (x *RemoveRoleRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RemoveRoleRequest.ProtoReflect.Descriptor instead.
 func (*RemoveRoleRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{104}
+	return file_identity_proto_rawDescGZIP(), []int{107}
 }
 
 func (x *RemoveRoleRequest) GetRoleID() string {
@@ -9204,7 +9404,7 @@ type Role struct {
 func (x *Role) Reset() {
 	*x = Role{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[105]
+		mi := &file_identity_proto_msgTypes[108]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9217,7 +9417,7 @@ func (x *Role) String() string {
 func (*Role) ProtoMessage() {}
 
 func (x *Role) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[105]
+	mi := &file_identity_proto_msgTypes[108]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9230,7 +9430,7 @@ func (x *Role) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Role.ProtoReflect.Descriptor instead.
 func (*Role) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{105}
+	return file_identity_proto_rawDescGZIP(), []int{108}
 }
 
 func (x *Role) GetId() int32 {
@@ -9275,7 +9475,7 @@ type PermissionRequest struct {
 func (x *PermissionRequest) Reset() {
 	*x = PermissionRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[106]
+		mi := &file_identity_proto_msgTypes[109]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9288,7 +9488,7 @@ func (x *PermissionRequest) String() string {
 func (*PermissionRequest) ProtoMessage() {}
 
 func (x *PermissionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[106]
+	mi := &file_identity_proto_msgTypes[109]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9301,7 +9501,7 @@ func (x *PermissionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PermissionRequest.ProtoReflect.Descriptor instead.
 func (*PermissionRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{106}
+	return file_identity_proto_rawDescGZIP(), []int{109}
 }
 
 func (x *PermissionRequest) GetName() string {
@@ -9344,7 +9544,7 @@ type AssignRolePermissionRequest struct {
 func (x *AssignRolePermissionRequest) Reset() {
 	*x = AssignRolePermissionRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[107]
+		mi := &file_identity_proto_msgTypes[110]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9357,7 +9557,7 @@ func (x *AssignRolePermissionRequest) String() string {
 func (*AssignRolePermissionRequest) ProtoMessage() {}
 
 func (x *AssignRolePermissionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[107]
+	mi := &file_identity_proto_msgTypes[110]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9370,7 +9570,7 @@ func (x *AssignRolePermissionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AssignRolePermissionRequest.ProtoReflect.Descriptor instead.
 func (*AssignRolePermissionRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{107}
+	return file_identity_proto_rawDescGZIP(), []int{110}
 }
 
 func (x *AssignRolePermissionRequest) GetRoleID() int32 {
@@ -9400,7 +9600,7 @@ type GetPaymentDataRequest struct {
 func (x *GetPaymentDataRequest) Reset() {
 	*x = GetPaymentDataRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[108]
+		mi := &file_identity_proto_msgTypes[111]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9413,7 +9613,7 @@ func (x *GetPaymentDataRequest) String() string {
 func (*GetPaymentDataRequest) ProtoMessage() {}
 
 func (x *GetPaymentDataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[108]
+	mi := &file_identity_proto_msgTypes[111]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9426,7 +9626,7 @@ func (x *GetPaymentDataRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPaymentDataRequest.ProtoReflect.Descriptor instead.
 func (*GetPaymentDataRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{108}
+	return file_identity_proto_rawDescGZIP(), []int{111}
 }
 
 func (x *GetPaymentDataRequest) GetClientId() int32 {
@@ -9467,7 +9667,7 @@ type GetPaymentDataResponse struct {
 func (x *GetPaymentDataResponse) Reset() {
 	*x = GetPaymentDataResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[109]
+		mi := &file_identity_proto_msgTypes[112]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9480,7 +9680,7 @@ func (x *GetPaymentDataResponse) String() string {
 func (*GetPaymentDataResponse) ProtoMessage() {}
 
 func (x *GetPaymentDataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[109]
+	mi := &file_identity_proto_msgTypes[112]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9493,7 +9693,7 @@ func (x *GetPaymentDataResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPaymentDataResponse.ProtoReflect.Descriptor instead.
 func (*GetPaymentDataResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{109}
+	return file_identity_proto_rawDescGZIP(), []int{112}
 }
 
 func (x *GetPaymentDataResponse) GetUsername() string {
@@ -9556,7 +9756,7 @@ type GetClientRequest struct {
 func (x *GetClientRequest) Reset() {
 	*x = GetClientRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[110]
+		mi := &file_identity_proto_msgTypes[113]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9569,7 +9769,7 @@ func (x *GetClientRequest) String() string {
 func (*GetClientRequest) ProtoMessage() {}
 
 func (x *GetClientRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[110]
+	mi := &file_identity_proto_msgTypes[113]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9582,7 +9782,7 @@ func (x *GetClientRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetClientRequest.ProtoReflect.Descriptor instead.
 func (*GetClientRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{110}
+	return file_identity_proto_rawDescGZIP(), []int{113}
 }
 
 func (x *GetClientRequest) GetId() int32 {
@@ -9606,7 +9806,7 @@ type GetClientResponse struct {
 func (x *GetClientResponse) Reset() {
 	*x = GetClientResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[111]
+		mi := &file_identity_proto_msgTypes[114]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9619,7 +9819,7 @@ func (x *GetClientResponse) String() string {
 func (*GetClientResponse) ProtoMessage() {}
 
 func (x *GetClientResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[111]
+	mi := &file_identity_proto_msgTypes[114]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9632,7 +9832,7 @@ func (x *GetClientResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetClientResponse.ProtoReflect.Descriptor instead.
 func (*GetClientResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{111}
+	return file_identity_proto_rawDescGZIP(), []int{114}
 }
 
 func (x *GetClientResponse) GetStatus() bool {
@@ -9678,7 +9878,7 @@ type CommonResponseArray struct {
 func (x *CommonResponseArray) Reset() {
 	*x = CommonResponseArray{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[112]
+		mi := &file_identity_proto_msgTypes[115]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9691,7 +9891,7 @@ func (x *CommonResponseArray) String() string {
 func (*CommonResponseArray) ProtoMessage() {}
 
 func (x *CommonResponseArray) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[112]
+	mi := &file_identity_proto_msgTypes[115]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9704,7 +9904,7 @@ func (x *CommonResponseArray) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CommonResponseArray.ProtoReflect.Descriptor instead.
 func (*CommonResponseArray) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{112}
+	return file_identity_proto_rawDescGZIP(), []int{115}
 }
 
 func (x *CommonResponseArray) GetStatus() int32 {
@@ -9757,7 +9957,7 @@ type CommonResponseObj struct {
 func (x *CommonResponseObj) Reset() {
 	*x = CommonResponseObj{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[113]
+		mi := &file_identity_proto_msgTypes[116]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9770,7 +9970,7 @@ func (x *CommonResponseObj) String() string {
 func (*CommonResponseObj) ProtoMessage() {}
 
 func (x *CommonResponseObj) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[113]
+	mi := &file_identity_proto_msgTypes[116]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9783,7 +9983,7 @@ func (x *CommonResponseObj) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CommonResponseObj.ProtoReflect.Descriptor instead.
 func (*CommonResponseObj) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{113}
+	return file_identity_proto_rawDescGZIP(), []int{116}
 }
 
 func (x *CommonResponseObj) GetStatus() int32 {
@@ -9837,7 +10037,7 @@ type ClientData struct {
 func (x *ClientData) Reset() {
 	*x = ClientData{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[114]
+		mi := &file_identity_proto_msgTypes[117]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9850,7 +10050,7 @@ func (x *ClientData) String() string {
 func (*ClientData) ProtoMessage() {}
 
 func (x *ClientData) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[114]
+	mi := &file_identity_proto_msgTypes[117]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9863,7 +10063,7 @@ func (x *ClientData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClientData.ProtoReflect.Descriptor instead.
 func (*ClientData) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{114}
+	return file_identity_proto_rawDescGZIP(), []int{117}
 }
 
 func (x *ClientData) GetName() string {
@@ -9920,7 +10120,7 @@ type SearchPlayerRequest struct {
 func (x *SearchPlayerRequest) Reset() {
 	*x = SearchPlayerRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[115]
+		mi := &file_identity_proto_msgTypes[118]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9933,7 +10133,7 @@ func (x *SearchPlayerRequest) String() string {
 func (*SearchPlayerRequest) ProtoMessage() {}
 
 func (x *SearchPlayerRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[115]
+	mi := &file_identity_proto_msgTypes[118]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9946,7 +10146,7 @@ func (x *SearchPlayerRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SearchPlayerRequest.ProtoReflect.Descriptor instead.
 func (*SearchPlayerRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{115}
+	return file_identity_proto_rawDescGZIP(), []int{118}
 }
 
 func (x *SearchPlayerRequest) GetClientId() int32 {
@@ -9976,7 +10176,7 @@ type SearchPlayerResponse struct {
 func (x *SearchPlayerResponse) Reset() {
 	*x = SearchPlayerResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[116]
+		mi := &file_identity_proto_msgTypes[119]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9989,7 +10189,7 @@ func (x *SearchPlayerResponse) String() string {
 func (*SearchPlayerResponse) ProtoMessage() {}
 
 func (x *SearchPlayerResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[116]
+	mi := &file_identity_proto_msgTypes[119]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10002,7 +10202,7 @@ func (x *SearchPlayerResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SearchPlayerResponse.ProtoReflect.Descriptor instead.
 func (*SearchPlayerResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{116}
+	return file_identity_proto_rawDescGZIP(), []int{119}
 }
 
 func (x *SearchPlayerResponse) GetSuccess() bool {
@@ -10055,7 +10255,7 @@ type Player struct {
 func (x *Player) Reset() {
 	*x = Player{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[117]
+		mi := &file_identity_proto_msgTypes[120]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -10068,7 +10268,7 @@ func (x *Player) String() string {
 func (*Player) ProtoMessage() {}
 
 func (x *Player) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[117]
+	mi := &file_identity_proto_msgTypes[120]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10081,7 +10281,7 @@ func (x *Player) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Player.ProtoReflect.Descriptor instead.
 func (*Player) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{117}
+	return file_identity_proto_rawDescGZIP(), []int{120}
 }
 
 func (x *Player) GetId() int32 {
@@ -10229,7 +10429,7 @@ type GetUserByUsernameRequest struct {
 func (x *GetUserByUsernameRequest) Reset() {
 	*x = GetUserByUsernameRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[118]
+		mi := &file_identity_proto_msgTypes[121]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -10242,7 +10442,7 @@ func (x *GetUserByUsernameRequest) String() string {
 func (*GetUserByUsernameRequest) ProtoMessage() {}
 
 func (x *GetUserByUsernameRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[118]
+	mi := &file_identity_proto_msgTypes[121]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10255,7 +10455,7 @@ func (x *GetUserByUsernameRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserByUsernameRequest.ProtoReflect.Descriptor instead.
 func (*GetUserByUsernameRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{118}
+	return file_identity_proto_rawDescGZIP(), []int{121}
 }
 
 func (x *GetUserByUsernameRequest) GetClientId() int32 {
@@ -10285,7 +10485,7 @@ type GetUserByUsernameResponse struct {
 func (x *GetUserByUsernameResponse) Reset() {
 	*x = GetUserByUsernameResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[119]
+		mi := &file_identity_proto_msgTypes[122]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -10298,7 +10498,7 @@ func (x *GetUserByUsernameResponse) String() string {
 func (*GetUserByUsernameResponse) ProtoMessage() {}
 
 func (x *GetUserByUsernameResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[119]
+	mi := &file_identity_proto_msgTypes[122]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10311,7 +10511,7 @@ func (x *GetUserByUsernameResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserByUsernameResponse.ProtoReflect.Descriptor instead.
 func (*GetUserByUsernameResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{119}
+	return file_identity_proto_rawDescGZIP(), []int{122}
 }
 
 func (x *GetUserByUsernameResponse) GetResponseCode() string {
@@ -10351,7 +10551,7 @@ type LoggedInUserData struct {
 func (x *LoggedInUserData) Reset() {
 	*x = LoggedInUserData{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[120]
+		mi := &file_identity_proto_msgTypes[123]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -10364,7 +10564,7 @@ func (x *LoggedInUserData) String() string {
 func (*LoggedInUserData) ProtoMessage() {}
 
 func (x *LoggedInUserData) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[120]
+	mi := &file_identity_proto_msgTypes[123]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10377,7 +10577,7 @@ func (x *LoggedInUserData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoggedInUserData.ProtoReflect.Descriptor instead.
 func (*LoggedInUserData) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{120}
+	return file_identity_proto_rawDescGZIP(), []int{123}
 }
 
 func (x *LoggedInUserData) GetTimestamp() string {
@@ -10436,7 +10636,7 @@ type GetUserLogResponse struct {
 func (x *GetUserLogResponse) Reset() {
 	*x = GetUserLogResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[121]
+		mi := &file_identity_proto_msgTypes[124]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -10449,7 +10649,7 @@ func (x *GetUserLogResponse) String() string {
 func (*GetUserLogResponse) ProtoMessage() {}
 
 func (x *GetUserLogResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[121]
+	mi := &file_identity_proto_msgTypes[124]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10462,7 +10662,7 @@ func (x *GetUserLogResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserLogResponse.ProtoReflect.Descriptor instead.
 func (*GetUserLogResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{121}
+	return file_identity_proto_rawDescGZIP(), []int{124}
 }
 
 func (x *GetUserLogResponse) GetMessage() string {
@@ -10511,7 +10711,7 @@ type OnlinePlayersRequest struct {
 func (x *OnlinePlayersRequest) Reset() {
 	*x = OnlinePlayersRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[122]
+		mi := &file_identity_proto_msgTypes[125]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -10524,7 +10724,7 @@ func (x *OnlinePlayersRequest) String() string {
 func (*OnlinePlayersRequest) ProtoMessage() {}
 
 func (x *OnlinePlayersRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[122]
+	mi := &file_identity_proto_msgTypes[125]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10537,7 +10737,7 @@ func (x *OnlinePlayersRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OnlinePlayersRequest.ProtoReflect.Descriptor instead.
 func (*OnlinePlayersRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{122}
+	return file_identity_proto_rawDescGZIP(), []int{125}
 }
 
 func (x *OnlinePlayersRequest) GetClientId() int32 {
@@ -10613,7 +10813,7 @@ type RegistrationReportRequest struct {
 func (x *RegistrationReportRequest) Reset() {
 	*x = RegistrationReportRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[123]
+		mi := &file_identity_proto_msgTypes[126]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -10626,7 +10826,7 @@ func (x *RegistrationReportRequest) String() string {
 func (*RegistrationReportRequest) ProtoMessage() {}
 
 func (x *RegistrationReportRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[123]
+	mi := &file_identity_proto_msgTypes[126]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10639,7 +10839,7 @@ func (x *RegistrationReportRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegistrationReportRequest.ProtoReflect.Descriptor instead.
 func (*RegistrationReportRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{123}
+	return file_identity_proto_rawDescGZIP(), []int{126}
 }
 
 func (x *RegistrationReportRequest) GetClientId() int32 {
@@ -10707,7 +10907,7 @@ type PlayersListResponse struct {
 func (x *PlayersListResponse) Reset() {
 	*x = PlayersListResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[124]
+		mi := &file_identity_proto_msgTypes[127]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -10720,7 +10920,7 @@ func (x *PlayersListResponse) String() string {
 func (*PlayersListResponse) ProtoMessage() {}
 
 func (x *PlayersListResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[124]
+	mi := &file_identity_proto_msgTypes[127]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10733,7 +10933,7 @@ func (x *PlayersListResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PlayersListResponse.ProtoReflect.Descriptor instead.
 func (*PlayersListResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{124}
+	return file_identity_proto_rawDescGZIP(), []int{127}
 }
 
 func (x *PlayersListResponse) GetFrom() int32 {
@@ -10790,7 +10990,7 @@ type GetPlayerDataRequest struct {
 func (x *GetPlayerDataRequest) Reset() {
 	*x = GetPlayerDataRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[125]
+		mi := &file_identity_proto_msgTypes[128]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -10803,7 +11003,7 @@ func (x *GetPlayerDataRequest) String() string {
 func (*GetPlayerDataRequest) ProtoMessage() {}
 
 func (x *GetPlayerDataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[125]
+	mi := &file_identity_proto_msgTypes[128]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10816,7 +11016,7 @@ func (x *GetPlayerDataRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPlayerDataRequest.ProtoReflect.Descriptor instead.
 func (*GetPlayerDataRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{125}
+	return file_identity_proto_rawDescGZIP(), []int{128}
 }
 
 func (x *GetPlayerDataRequest) GetClientId() int32 {
@@ -10846,7 +11046,7 @@ type GetPlayerDataResponse struct {
 func (x *GetPlayerDataResponse) Reset() {
 	*x = GetPlayerDataResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[126]
+		mi := &file_identity_proto_msgTypes[129]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -10859,7 +11059,7 @@ func (x *GetPlayerDataResponse) String() string {
 func (*GetPlayerDataResponse) ProtoMessage() {}
 
 func (x *GetPlayerDataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[126]
+	mi := &file_identity_proto_msgTypes[129]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10872,7 +11072,7 @@ func (x *GetPlayerDataResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPlayerDataResponse.ProtoReflect.Descriptor instead.
 func (*GetPlayerDataResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{126}
+	return file_identity_proto_rawDescGZIP(), []int{129}
 }
 
 func (x *GetPlayerDataResponse) GetSuccess() bool {
@@ -10919,7 +11119,7 @@ type UpdatePlayerDataRequest struct {
 func (x *UpdatePlayerDataRequest) Reset() {
 	*x = UpdatePlayerDataRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[127]
+		mi := &file_identity_proto_msgTypes[130]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -10932,7 +11132,7 @@ func (x *UpdatePlayerDataRequest) String() string {
 func (*UpdatePlayerDataRequest) ProtoMessage() {}
 
 func (x *UpdatePlayerDataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[127]
+	mi := &file_identity_proto_msgTypes[130]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10945,7 +11145,7 @@ func (x *UpdatePlayerDataRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdatePlayerDataRequest.ProtoReflect.Descriptor instead.
 func (*UpdatePlayerDataRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{127}
+	return file_identity_proto_rawDescGZIP(), []int{130}
 }
 
 func (x *UpdatePlayerDataRequest) GetClientId() int32 {
@@ -11063,7 +11263,7 @@ type PlayerWalletData struct {
 func (x *PlayerWalletData) Reset() {
 	*x = PlayerWalletData{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[128]
+		mi := &file_identity_proto_msgTypes[131]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11076,7 +11276,7 @@ func (x *PlayerWalletData) String() string {
 func (*PlayerWalletData) ProtoMessage() {}
 
 func (x *PlayerWalletData) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[128]
+	mi := &file_identity_proto_msgTypes[131]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11089,7 +11289,7 @@ func (x *PlayerWalletData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PlayerWalletData.ProtoReflect.Descriptor instead.
 func (*PlayerWalletData) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{128}
+	return file_identity_proto_rawDescGZIP(), []int{131}
 }
 
 func (x *PlayerWalletData) GetSportBalance() float32 {
@@ -11199,7 +11399,7 @@ type PlayerBonusData struct {
 func (x *PlayerBonusData) Reset() {
 	*x = PlayerBonusData{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[129]
+		mi := &file_identity_proto_msgTypes[132]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11212,7 +11412,7 @@ func (x *PlayerBonusData) String() string {
 func (*PlayerBonusData) ProtoMessage() {}
 
 func (x *PlayerBonusData) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[129]
+	mi := &file_identity_proto_msgTypes[132]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11225,7 +11425,7 @@ func (x *PlayerBonusData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PlayerBonusData.ProtoReflect.Descriptor instead.
 func (*PlayerBonusData) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{129}
+	return file_identity_proto_rawDescGZIP(), []int{132}
 }
 
 type ChangePasswordRequest struct {
@@ -11242,7 +11442,7 @@ type ChangePasswordRequest struct {
 func (x *ChangePasswordRequest) Reset() {
 	*x = ChangePasswordRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[130]
+		mi := &file_identity_proto_msgTypes[133]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11255,7 +11455,7 @@ func (x *ChangePasswordRequest) String() string {
 func (*ChangePasswordRequest) ProtoMessage() {}
 
 func (x *ChangePasswordRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[130]
+	mi := &file_identity_proto_msgTypes[133]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11268,7 +11468,7 @@ func (x *ChangePasswordRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChangePasswordRequest.ProtoReflect.Descriptor instead.
 func (*ChangePasswordRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{130}
+	return file_identity_proto_rawDescGZIP(), []int{133}
 }
 
 func (x *ChangePasswordRequest) GetClientId() int32 {
@@ -11312,7 +11512,7 @@ type ResetPasswordRequest struct {
 func (x *ResetPasswordRequest) Reset() {
 	*x = ResetPasswordRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[131]
+		mi := &file_identity_proto_msgTypes[134]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11325,7 +11525,7 @@ func (x *ResetPasswordRequest) String() string {
 func (*ResetPasswordRequest) ProtoMessage() {}
 
 func (x *ResetPasswordRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[131]
+	mi := &file_identity_proto_msgTypes[134]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11338,7 +11538,7 @@ func (x *ResetPasswordRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ResetPasswordRequest.ProtoReflect.Descriptor instead.
 func (*ResetPasswordRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{131}
+	return file_identity_proto_rawDescGZIP(), []int{134}
 }
 
 func (x *ResetPasswordRequest) GetClientId() int32 {
@@ -11379,7 +11579,7 @@ type PaginationResponse struct {
 func (x *PaginationResponse) Reset() {
 	*x = PaginationResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[132]
+		mi := &file_identity_proto_msgTypes[135]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11392,7 +11592,7 @@ func (x *PaginationResponse) String() string {
 func (*PaginationResponse) ProtoMessage() {}
 
 func (x *PaginationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[132]
+	mi := &file_identity_proto_msgTypes[135]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11405,7 +11605,7 @@ func (x *PaginationResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PaginationResponse.ProtoReflect.Descriptor instead.
 func (*PaginationResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{132}
+	return file_identity_proto_rawDescGZIP(), []int{135}
 }
 
 func (x *PaginationResponse) GetMessage() string {
@@ -11474,7 +11674,7 @@ type Country struct {
 func (x *Country) Reset() {
 	*x = Country{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[133]
+		mi := &file_identity_proto_msgTypes[136]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11487,7 +11687,7 @@ func (x *Country) String() string {
 func (*Country) ProtoMessage() {}
 
 func (x *Country) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[133]
+	mi := &file_identity_proto_msgTypes[136]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11500,7 +11700,7 @@ func (x *Country) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Country.ProtoReflect.Descriptor instead.
 func (*Country) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{133}
+	return file_identity_proto_rawDescGZIP(), []int{136}
 }
 
 func (x *Country) GetId() int32 {
@@ -11563,7 +11763,7 @@ type GetStatesRequest struct {
 func (x *GetStatesRequest) Reset() {
 	*x = GetStatesRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[134]
+		mi := &file_identity_proto_msgTypes[137]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11576,7 +11776,7 @@ func (x *GetStatesRequest) String() string {
 func (*GetStatesRequest) ProtoMessage() {}
 
 func (x *GetStatesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[134]
+	mi := &file_identity_proto_msgTypes[137]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11589,7 +11789,7 @@ func (x *GetStatesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetStatesRequest.ProtoReflect.Descriptor instead.
 func (*GetStatesRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{134}
+	return file_identity_proto_rawDescGZIP(), []int{137}
 }
 
 func (x *GetStatesRequest) GetCountryId() int32 {
@@ -11611,7 +11811,7 @@ type SessionRequest struct {
 func (x *SessionRequest) Reset() {
 	*x = SessionRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[135]
+		mi := &file_identity_proto_msgTypes[138]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11624,7 +11824,7 @@ func (x *SessionRequest) String() string {
 func (*SessionRequest) ProtoMessage() {}
 
 func (x *SessionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[135]
+	mi := &file_identity_proto_msgTypes[138]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11637,7 +11837,7 @@ func (x *SessionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SessionRequest.ProtoReflect.Descriptor instead.
 func (*SessionRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{135}
+	return file_identity_proto_rawDescGZIP(), []int{138}
 }
 
 func (x *SessionRequest) GetClientId() int32 {
@@ -11666,7 +11866,7 @@ type State struct {
 func (x *State) Reset() {
 	*x = State{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[136]
+		mi := &file_identity_proto_msgTypes[139]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11679,7 +11879,7 @@ func (x *State) String() string {
 func (*State) ProtoMessage() {}
 
 func (x *State) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[136]
+	mi := &file_identity_proto_msgTypes[139]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11692,7 +11892,7 @@ func (x *State) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use State.ProtoReflect.Descriptor instead.
 func (*State) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{136}
+	return file_identity_proto_rawDescGZIP(), []int{139}
 }
 
 func (x *State) GetId() int32 {
@@ -11720,7 +11920,7 @@ type GetCountryResponse struct {
 func (x *GetCountryResponse) Reset() {
 	*x = GetCountryResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[137]
+		mi := &file_identity_proto_msgTypes[140]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11733,7 +11933,7 @@ func (x *GetCountryResponse) String() string {
 func (*GetCountryResponse) ProtoMessage() {}
 
 func (x *GetCountryResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[137]
+	mi := &file_identity_proto_msgTypes[140]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11746,7 +11946,7 @@ func (x *GetCountryResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCountryResponse.ProtoReflect.Descriptor instead.
 func (*GetCountryResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{137}
+	return file_identity_proto_rawDescGZIP(), []int{140}
 }
 
 func (x *GetCountryResponse) GetCountries() []*Country {
@@ -11767,7 +11967,7 @@ type StateResponse struct {
 func (x *StateResponse) Reset() {
 	*x = StateResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[138]
+		mi := &file_identity_proto_msgTypes[141]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11780,7 +11980,7 @@ func (x *StateResponse) String() string {
 func (*StateResponse) ProtoMessage() {}
 
 func (x *StateResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[138]
+	mi := &file_identity_proto_msgTypes[141]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11793,7 +11993,7 @@ func (x *StateResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StateResponse.ProtoReflect.Descriptor instead.
 func (*StateResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{138}
+	return file_identity_proto_rawDescGZIP(), []int{141}
 }
 
 func (x *StateResponse) GetStates() []*State {
@@ -11815,7 +12015,7 @@ type XpressLoginRequest struct {
 func (x *XpressLoginRequest) Reset() {
 	*x = XpressLoginRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[139]
+		mi := &file_identity_proto_msgTypes[142]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11828,7 +12028,7 @@ func (x *XpressLoginRequest) String() string {
 func (*XpressLoginRequest) ProtoMessage() {}
 
 func (x *XpressLoginRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[139]
+	mi := &file_identity_proto_msgTypes[142]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11841,7 +12041,7 @@ func (x *XpressLoginRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use XpressLoginRequest.ProtoReflect.Descriptor instead.
 func (*XpressLoginRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{139}
+	return file_identity_proto_rawDescGZIP(), []int{142}
 }
 
 func (x *XpressLoginRequest) GetClientId() uint32 {
@@ -11872,7 +12072,7 @@ type XpressLoginResponse struct {
 func (x *XpressLoginResponse) Reset() {
 	*x = XpressLoginResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[140]
+		mi := &file_identity_proto_msgTypes[143]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11885,7 +12085,7 @@ func (x *XpressLoginResponse) String() string {
 func (*XpressLoginResponse) ProtoMessage() {}
 
 func (x *XpressLoginResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[140]
+	mi := &file_identity_proto_msgTypes[143]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11898,7 +12098,7 @@ func (x *XpressLoginResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use XpressLoginResponse.ProtoReflect.Descriptor instead.
 func (*XpressLoginResponse) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{140}
+	return file_identity_proto_rawDescGZIP(), []int{143}
 }
 
 func (x *XpressLoginResponse) GetStatus() bool {
@@ -11938,7 +12138,7 @@ type EmptyRequest struct {
 func (x *EmptyRequest) Reset() {
 	*x = EmptyRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[141]
+		mi := &file_identity_proto_msgTypes[144]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11951,7 +12151,7 @@ func (x *EmptyRequest) String() string {
 func (*EmptyRequest) ProtoMessage() {}
 
 func (x *EmptyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[141]
+	mi := &file_identity_proto_msgTypes[144]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11964,7 +12164,7 @@ func (x *EmptyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EmptyRequest.ProtoReflect.Descriptor instead.
 func (*EmptyRequest) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{141}
+	return file_identity_proto_rawDescGZIP(), []int{144}
 }
 
 type MetaData struct {
@@ -11983,7 +12183,7 @@ type MetaData struct {
 func (x *MetaData) Reset() {
 	*x = MetaData{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[142]
+		mi := &file_identity_proto_msgTypes[145]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11996,7 +12196,7 @@ func (x *MetaData) String() string {
 func (*MetaData) ProtoMessage() {}
 
 func (x *MetaData) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[142]
+	mi := &file_identity_proto_msgTypes[145]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12009,7 +12209,7 @@ func (x *MetaData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MetaData.ProtoReflect.Descriptor instead.
 func (*MetaData) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{142}
+	return file_identity_proto_rawDescGZIP(), []int{145}
 }
 
 func (x *MetaData) GetPage() int32 {
@@ -12054,6 +12254,244 @@ func (x *MetaData) GetPrevPage() int32 {
 	return 0
 }
 
+// User Import Messages
+type ImportUserData struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ClientId    int32    `protobuf:"varint,1,opt,name=clientId,proto3" json:"clientId,omitempty"`
+	Username    string   `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+	PhoneNumber string   `protobuf:"bytes,3,opt,name=phoneNumber,proto3" json:"phoneNumber,omitempty"`
+	FirstName   *string  `protobuf:"bytes,4,opt,name=firstName,proto3,oneof" json:"firstName,omitempty"`
+	LastName    *string  `protobuf:"bytes,5,opt,name=lastName,proto3,oneof" json:"lastName,omitempty"`
+	Email       *string  `protobuf:"bytes,6,opt,name=email,proto3,oneof" json:"email,omitempty"`
+	CreatedAt   *string  `protobuf:"bytes,7,opt,name=createdAt,proto3,oneof" json:"createdAt,omitempty"`
+	Balance     *float32 `protobuf:"fixed32,8,opt,name=balance,proto3,oneof" json:"balance,omitempty"`
+}
+
+func (x *ImportUserData) Reset() {
+	*x = ImportUserData{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_identity_proto_msgTypes[146]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ImportUserData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ImportUserData) ProtoMessage() {}
+
+func (x *ImportUserData) ProtoReflect() protoreflect.Message {
+	mi := &file_identity_proto_msgTypes[146]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ImportUserData.ProtoReflect.Descriptor instead.
+func (*ImportUserData) Descriptor() ([]byte, []int) {
+	return file_identity_proto_rawDescGZIP(), []int{146}
+}
+
+func (x *ImportUserData) GetClientId() int32 {
+	if x != nil {
+		return x.ClientId
+	}
+	return 0
+}
+
+func (x *ImportUserData) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *ImportUserData) GetPhoneNumber() string {
+	if x != nil {
+		return x.PhoneNumber
+	}
+	return ""
+}
+
+func (x *ImportUserData) GetFirstName() string {
+	if x != nil && x.FirstName != nil {
+		return *x.FirstName
+	}
+	return ""
+}
+
+func (x *ImportUserData) GetLastName() string {
+	if x != nil && x.LastName != nil {
+		return *x.LastName
+	}
+	return ""
+}
+
+func (x *ImportUserData) GetEmail() string {
+	if x != nil && x.Email != nil {
+		return *x.Email
+	}
+	return ""
+}
+
+func (x *ImportUserData) GetCreatedAt() string {
+	if x != nil && x.CreatedAt != nil {
+		return *x.CreatedAt
+	}
+	return ""
+}
+
+func (x *ImportUserData) GetBalance() float32 {
+	if x != nil && x.Balance != nil {
+		return *x.Balance
+	}
+	return 0
+}
+
+type ImportUsersRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Users []*ImportUserData `protobuf:"bytes,1,rep,name=users,proto3" json:"users,omitempty"`
+}
+
+func (x *ImportUsersRequest) Reset() {
+	*x = ImportUsersRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_identity_proto_msgTypes[147]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ImportUsersRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ImportUsersRequest) ProtoMessage() {}
+
+func (x *ImportUsersRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_identity_proto_msgTypes[147]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ImportUsersRequest.ProtoReflect.Descriptor instead.
+func (*ImportUsersRequest) Descriptor() ([]byte, []int) {
+	return file_identity_proto_rawDescGZIP(), []int{147}
+}
+
+func (x *ImportUsersRequest) GetUsers() []*ImportUserData {
+	if x != nil {
+		return x.Users
+	}
+	return nil
+}
+
+type ImportUsersResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Success        bool     `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message        string   `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	TotalProcessed int32    `protobuf:"varint,3,opt,name=totalProcessed,proto3" json:"totalProcessed,omitempty"`
+	TotalCreated   int32    `protobuf:"varint,4,opt,name=totalCreated,proto3" json:"totalCreated,omitempty"`
+	TotalSkipped   int32    `protobuf:"varint,5,opt,name=totalSkipped,proto3" json:"totalSkipped,omitempty"`
+	Errors         []string `protobuf:"bytes,6,rep,name=errors,proto3" json:"errors,omitempty"`
+}
+
+func (x *ImportUsersResponse) Reset() {
+	*x = ImportUsersResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_identity_proto_msgTypes[148]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ImportUsersResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ImportUsersResponse) ProtoMessage() {}
+
+func (x *ImportUsersResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_identity_proto_msgTypes[148]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ImportUsersResponse.ProtoReflect.Descriptor instead.
+func (*ImportUsersResponse) Descriptor() ([]byte, []int) {
+	return file_identity_proto_rawDescGZIP(), []int{148}
+}
+
+func (x *ImportUsersResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ImportUsersResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *ImportUsersResponse) GetTotalProcessed() int32 {
+	if x != nil {
+		return x.TotalProcessed
+	}
+	return 0
+}
+
+func (x *ImportUsersResponse) GetTotalCreated() int32 {
+	if x != nil {
+		return x.TotalCreated
+	}
+	return 0
+}
+
+func (x *ImportUsersResponse) GetTotalSkipped() int32 {
+	if x != nil {
+		return x.TotalSkipped
+	}
+	return 0
+}
+
+func (x *ImportUsersResponse) GetErrors() []string {
+	if x != nil {
+		return x.Errors
+	}
+	return nil
+}
+
 type GetUserIdNameResponse_Users struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -12066,7 +12504,7 @@ type GetUserIdNameResponse_Users struct {
 func (x *GetUserIdNameResponse_Users) Reset() {
 	*x = GetUserIdNameResponse_Users{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[143]
+		mi := &file_identity_proto_msgTypes[149]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -12079,7 +12517,7 @@ func (x *GetUserIdNameResponse_Users) String() string {
 func (*GetUserIdNameResponse_Users) ProtoMessage() {}
 
 func (x *GetUserIdNameResponse_Users) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[143]
+	mi := &file_identity_proto_msgTypes[149]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12092,7 +12530,7 @@ func (x *GetUserIdNameResponse_Users) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserIdNameResponse_Users.ProtoReflect.Descriptor instead.
 func (*GetUserIdNameResponse_Users) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{60, 0}
+	return file_identity_proto_rawDescGZIP(), []int{63, 0}
 }
 
 func (x *GetUserIdNameResponse_Users) GetId() int32 {
@@ -12122,7 +12560,7 @@ type ValidateResponse_User struct {
 func (x *ValidateResponse_User) Reset() {
 	*x = ValidateResponse_User{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[144]
+		mi := &file_identity_proto_msgTypes[150]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -12135,7 +12573,7 @@ func (x *ValidateResponse_User) String() string {
 func (*ValidateResponse_User) ProtoMessage() {}
 
 func (x *ValidateResponse_User) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[144]
+	mi := &file_identity_proto_msgTypes[150]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12148,7 +12586,7 @@ func (x *ValidateResponse_User) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ValidateResponse_User.ProtoReflect.Descriptor instead.
 func (*ValidateResponse_User) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{94, 0}
+	return file_identity_proto_rawDescGZIP(), []int{97, 0}
 }
 
 func (x *ValidateResponse_User) GetId() int32 {
@@ -12186,7 +12624,7 @@ type GetUserByUsernameResponse_Data struct {
 func (x *GetUserByUsernameResponse_Data) Reset() {
 	*x = GetUserByUsernameResponse_Data{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[145]
+		mi := &file_identity_proto_msgTypes[151]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -12199,7 +12637,7 @@ func (x *GetUserByUsernameResponse_Data) String() string {
 func (*GetUserByUsernameResponse_Data) ProtoMessage() {}
 
 func (x *GetUserByUsernameResponse_Data) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[145]
+	mi := &file_identity_proto_msgTypes[151]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12212,7 +12650,7 @@ func (x *GetUserByUsernameResponse_Data) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserByUsernameResponse_Data.ProtoReflect.Descriptor instead.
 func (*GetUserByUsernameResponse_Data) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{119, 0}
+	return file_identity_proto_rawDescGZIP(), []int{122, 0}
 }
 
 func (x *GetUserByUsernameResponse_Data) GetReferenceID() string {
@@ -12256,7 +12694,7 @@ type GetPlayerDataResponse_PlayerData struct {
 func (x *GetPlayerDataResponse_PlayerData) Reset() {
 	*x = GetPlayerDataResponse_PlayerData{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[146]
+		mi := &file_identity_proto_msgTypes[152]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -12269,7 +12707,7 @@ func (x *GetPlayerDataResponse_PlayerData) String() string {
 func (*GetPlayerDataResponse_PlayerData) ProtoMessage() {}
 
 func (x *GetPlayerDataResponse_PlayerData) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[146]
+	mi := &file_identity_proto_msgTypes[152]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12282,7 +12720,7 @@ func (x *GetPlayerDataResponse_PlayerData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPlayerDataResponse_PlayerData.ProtoReflect.Descriptor instead.
 func (*GetPlayerDataResponse_PlayerData) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{126, 0}
+	return file_identity_proto_rawDescGZIP(), []int{129, 0}
 }
 
 func (x *GetPlayerDataResponse_PlayerData) GetUser() *Player {
@@ -12323,7 +12761,7 @@ type XpressLoginResponse_XpressData struct {
 func (x *XpressLoginResponse_XpressData) Reset() {
 	*x = XpressLoginResponse_XpressData{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_identity_proto_msgTypes[147]
+		mi := &file_identity_proto_msgTypes[153]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -12336,7 +12774,7 @@ func (x *XpressLoginResponse_XpressData) String() string {
 func (*XpressLoginResponse_XpressData) ProtoMessage() {}
 
 func (x *XpressLoginResponse_XpressData) ProtoReflect() protoreflect.Message {
-	mi := &file_identity_proto_msgTypes[147]
+	mi := &file_identity_proto_msgTypes[153]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12349,7 +12787,7 @@ func (x *XpressLoginResponse_XpressData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use XpressLoginResponse_XpressData.ProtoReflect.Descriptor instead.
 func (*XpressLoginResponse_XpressData) Descriptor() ([]byte, []int) {
-	return file_identity_proto_rawDescGZIP(), []int{140, 0}
+	return file_identity_proto_rawDescGZIP(), []int{143, 0}
 }
 
 func (x *XpressLoginResponse_XpressData) GetPlayerId() string {
@@ -12407,7 +12845,38 @@ var file_identity_proto_rawDesc = []byte{
 	0x0a, 0x0e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x12, 0x08, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x1a, 0x1c, 0x67, 0x6f, 0x6f, 0x67,
 	0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x73, 0x74, 0x72, 0x75,
-	0x63, 0x74, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x6f, 0x0a, 0x0d, 0x41, 0x72, 0x72, 0x61,
+	0x63, 0x74, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xf9, 0x01, 0x0a, 0x0c, 0x54, 0x6f, 0x70,
+	0x41, 0x66, 0x66, 0x69, 0x6c, 0x69, 0x61, 0x74, 0x65, 0x12, 0x21, 0x0a, 0x0c, 0x61, 0x66, 0x66,
+	0x69, 0x6c, 0x69, 0x61, 0x74, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52,
+	0x0b, 0x61, 0x66, 0x66, 0x69, 0x6c, 0x69, 0x61, 0x74, 0x65, 0x49, 0x64, 0x12, 0x1f, 0x0a, 0x08,
+	0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x48, 0x00,
+	0x52, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x88, 0x01, 0x01, 0x12, 0x21, 0x0a,
+	0x0c, 0x73, 0x69, 0x67, 0x6e, 0x75, 0x70, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20,
+	0x01, 0x28, 0x05, 0x52, 0x0b, 0x73, 0x69, 0x67, 0x6e, 0x75, 0x70, 0x43, 0x6f, 0x75, 0x6e, 0x74,
+	0x12, 0x27, 0x0a, 0x0c, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x44, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74,
+	0x18, 0x04, 0x20, 0x01, 0x28, 0x05, 0x48, 0x01, 0x52, 0x0c, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x44,
+	0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x88, 0x01, 0x01, 0x12, 0x29, 0x0a, 0x0d, 0x74, 0x6f, 0x74,
+	0x61, 0x6c, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x18, 0x05, 0x20, 0x01, 0x28, 0x05,
+	0x48, 0x02, 0x52, 0x0d, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61,
+	0x77, 0x88, 0x01, 0x01, 0x42, 0x0b, 0x0a, 0x09, 0x5f, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d,
+	0x65, 0x42, 0x0f, 0x0a, 0x0d, 0x5f, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x44, 0x65, 0x70, 0x6f, 0x73,
+	0x69, 0x74, 0x42, 0x10, 0x0a, 0x0e, 0x5f, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x57, 0x69, 0x74, 0x68,
+	0x64, 0x72, 0x61, 0x77, 0x22, 0x72, 0x0a, 0x12, 0x41, 0x66, 0x66, 0x69, 0x6c, 0x69, 0x61, 0x74,
+	0x65, 0x53, 0x74, 0x61, 0x74, 0x73, 0x44, 0x61, 0x74, 0x61, 0x12, 0x1e, 0x0a, 0x0a, 0x74, 0x6f,
+	0x74, 0x61, 0x6c, 0x55, 0x73, 0x65, 0x72, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x0a,
+	0x74, 0x6f, 0x74, 0x61, 0x6c, 0x55, 0x73, 0x65, 0x72, 0x73, 0x12, 0x3c, 0x0a, 0x0d, 0x74, 0x6f,
+	0x70, 0x41, 0x66, 0x66, 0x69, 0x6c, 0x69, 0x61, 0x74, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28,
+	0x0b, 0x32, 0x16, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x54, 0x6f, 0x70,
+	0x41, 0x66, 0x66, 0x69, 0x6c, 0x69, 0x61, 0x74, 0x65, 0x52, 0x0d, 0x74, 0x6f, 0x70, 0x41, 0x66,
+	0x66, 0x69, 0x6c, 0x69, 0x61, 0x74, 0x65, 0x73, 0x22, 0x7e, 0x0a, 0x16, 0x41, 0x66, 0x66, 0x69,
+	0x6c, 0x69, 0x61, 0x74, 0x65, 0x53, 0x74, 0x61, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x73, 0x75, 0x63, 0x63, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x08, 0x52, 0x07, 0x73, 0x75, 0x63, 0x63, 0x65, 0x73, 0x73, 0x12, 0x18, 0x0a, 0x07,
+	0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d,
+	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x30, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x03,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
+	0x41, 0x66, 0x66, 0x69, 0x6c, 0x69, 0x61, 0x74, 0x65, 0x53, 0x74, 0x61, 0x74, 0x73, 0x44, 0x61,
+	0x74, 0x61, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0x6f, 0x0a, 0x0d, 0x41, 0x72, 0x72, 0x61,
 	0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x61,
 	0x74, 0x75, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75,
 	0x73, 0x12, 0x18, 0x0a, 0x07, 0x73, 0x75, 0x63, 0x63, 0x65, 0x73, 0x73, 0x18, 0x02, 0x20, 0x01,
@@ -14310,695 +14779,741 @@ var file_identity_proto_rawDesc = []byte{
 	0x12, 0x1a, 0x0a, 0x08, 0x6e, 0x65, 0x78, 0x74, 0x50, 0x61, 0x67, 0x65, 0x18, 0x05, 0x20, 0x01,
 	0x28, 0x05, 0x52, 0x08, 0x6e, 0x65, 0x78, 0x74, 0x50, 0x61, 0x67, 0x65, 0x12, 0x1a, 0x0a, 0x08,
 	0x70, 0x72, 0x65, 0x76, 0x50, 0x61, 0x67, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x05, 0x52, 0x08,
-	0x70, 0x72, 0x65, 0x76, 0x50, 0x61, 0x67, 0x65, 0x32, 0xd0, 0x55, 0x0a, 0x0f, 0x49, 0x64, 0x65,
-	0x6e, 0x74, 0x69, 0x74, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x5c, 0x0a, 0x17,
-	0x48, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x44, 0x61, 0x69, 0x6c, 0x79, 0x54, 0x72, 0x61, 0x6e, 0x73,
-	0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x22, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
-	0x74, 0x79, 0x2e, 0x44, 0x61, 0x69, 0x6c, 0x79, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74,
-	0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64,
-	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x46, 0x0a, 0x09, 0x48, 0x61,
-	0x6e, 0x64, 0x6c, 0x65, 0x50, 0x69, 0x6e, 0x12, 0x1a, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
-	0x74, 0x79, 0x2e, 0x48, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x50, 0x69, 0x6e, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43,
-	0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a,
-	0x22, 0x00, 0x12, 0x50, 0x0a, 0x0e, 0x48, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x54, 0x72, 0x61, 0x6e,
-	0x73, 0x66, 0x65, 0x72, 0x12, 0x1f, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
-	0x48, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x66, 0x65, 0x72, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
-	0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f,
-	0x62, 0x6a, 0x22, 0x00, 0x12, 0x45, 0x0a, 0x08, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72,
-	0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x72, 0x65, 0x61,
-	0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1a, 0x2e,
-	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65,
-	0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x11, 0x52,
-	0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x41, 0x66, 0x66, 0x69, 0x6c, 0x69, 0x61, 0x74, 0x65,
-	0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x72, 0x65, 0x61,
-	0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1a, 0x2e,
-	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65,
-	0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x3a, 0x0a, 0x05, 0x4c,
-	0x6f, 0x67, 0x69, 0x6e, 0x12, 0x16, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
-	0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x17, 0x2e, 0x69,
-	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x50, 0x0a, 0x0f, 0x58, 0x70, 0x72, 0x65, 0x73,
-	0x73, 0x47, 0x61, 0x6d, 0x65, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x12, 0x1c, 0x2e, 0x69, 0x64, 0x65,
-	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x58, 0x70, 0x72, 0x65, 0x73, 0x73, 0x4c, 0x6f, 0x67, 0x69,
-	0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
-	0x69, 0x74, 0x79, 0x2e, 0x58, 0x70, 0x72, 0x65, 0x73, 0x73, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x4f, 0x0a, 0x10, 0x56, 0x61, 0x6c,
-	0x69, 0x64, 0x61, 0x74, 0x65, 0x41, 0x75, 0x74, 0x68, 0x43, 0x6f, 0x64, 0x65, 0x12, 0x1c, 0x2e,
-	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x58, 0x70, 0x72, 0x65, 0x73, 0x73, 0x4c,
-	0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64,
-	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4d, 0x0a, 0x10, 0x58, 0x70,
-	0x72, 0x65, 0x73, 0x73, 0x47, 0x61, 0x6d, 0x65, 0x4c, 0x6f, 0x67, 0x6f, 0x75, 0x74, 0x12, 0x18,
-	0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x53, 0x65, 0x73, 0x73, 0x69, 0x6f,
-	0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
-	0x69, 0x74, 0x79, 0x2e, 0x58, 0x70, 0x72, 0x65, 0x73, 0x73, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x43, 0x0a, 0x08, 0x56, 0x61, 0x6c,
-	0x69, 0x64, 0x61, 0x74, 0x65, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
-	0x2e, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x1a, 0x1a, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x56, 0x61, 0x6c, 0x69,
-	0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x56,
-	0x0a, 0x11, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x43,
-	0x6f, 0x64, 0x65, 0x12, 0x1a, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47,
-	0x65, 0x74, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x23, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x56, 0x61, 0x6c, 0x69, 0x64,
-	0x61, 0x74, 0x65, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x43, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x4f, 0x0a, 0x0e, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61,
-	0x74, 0x65, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
-	0x69, 0x74, 0x79, 0x2e, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x1a, 0x20, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x56,
-	0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x53, 0x0a, 0x0f, 0x4c, 0x69, 0x73, 0x74, 0x54,
-	0x65, 0x73, 0x74, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x21, 0x2e, 0x69, 0x64, 0x65,
-	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x54, 0x65, 0x73, 0x74, 0x41, 0x63,
-	0x63, 0x6f, 0x75, 0x6e, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e,
-	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x50, 0x0a, 0x0d,
-	0x54, 0x6f, 0x67, 0x67, 0x6c, 0x65, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x1d, 0x2e,
-	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74,
-	0x65, 0x54, 0x65, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1e, 0x2e, 0x69,
-	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65,
-	0x54, 0x65, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x55,
-	0x0a, 0x0e, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x44, 0x65, 0x74, 0x61, 0x69, 0x6c, 0x73,
-	0x12, 0x1f, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x55,
-	0x73, 0x65, 0x72, 0x44, 0x65, 0x74, 0x61, 0x69, 0x6c, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x1a, 0x20, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74,
-	0x55, 0x73, 0x65, 0x72, 0x44, 0x65, 0x74, 0x61, 0x69, 0x6c, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x0b, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72,
-	0x4c, 0x6f, 0x67, 0x73, 0x12, 0x1f, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
-	0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x44, 0x65, 0x74, 0x61, 0x69, 0x6c, 0x73, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
-	0x2e, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x4c, 0x6f, 0x67, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x46, 0x0a, 0x0c, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43,
-	0x6c, 0x69, 0x65, 0x6e, 0x74, 0x12, 0x17, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
-	0x2e, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b,
-	0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4e, 0x0a,
-	0x10, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f,
-	0x6e, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x50, 0x65, 0x72,
-	0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b,
-	0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x5c, 0x0a,
-	0x14, 0x41, 0x73, 0x73, 0x69, 0x67, 0x6e, 0x52, 0x6f, 0x6c, 0x65, 0x50, 0x65, 0x72, 0x6d, 0x69,
-	0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x25, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
-	0x2e, 0x41, 0x73, 0x73, 0x69, 0x67, 0x6e, 0x52, 0x6f, 0x6c, 0x65, 0x50, 0x65, 0x72, 0x6d, 0x69,
-	0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69,
-	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4f, 0x0a, 0x11, 0x47,
-	0x65, 0x74, 0x41, 0x75, 0x74, 0x68, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
-	0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x53, 0x69, 0x6e, 0x67,
-	0x6c, 0x65, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e,
-	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x44, 0x0a, 0x08,
-	0x46, 0x69, 0x6e, 0x64, 0x55, 0x73, 0x65, 0x72, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
-	0x69, 0x74, 0x79, 0x2e, 0x46, 0x69, 0x6e, 0x64, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43,
-	0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a,
-	0x22, 0x00, 0x12, 0x3f, 0x0a, 0x08, 0x53, 0x61, 0x76, 0x65, 0x52, 0x6f, 0x6c, 0x65, 0x12, 0x15,
-	0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x52, 0x6f, 0x6c, 0x65, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1a, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
-	0x2e, 0x53, 0x61, 0x76, 0x65, 0x52, 0x6f, 0x6c, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x22, 0x00, 0x12, 0x43, 0x0a, 0x08, 0x47, 0x65, 0x74, 0x52, 0x6f, 0x6c, 0x65, 0x73, 0x12,
-	0x16, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
-	0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00, 0x12, 0x46, 0x0a, 0x0e, 0x47, 0x65, 0x74, 0x41,
-	0x67, 0x65, 0x6e, 0x63, 0x79, 0x52, 0x6f, 0x6c, 0x65, 0x73, 0x12, 0x16, 0x2e, 0x69, 0x64, 0x65,
-	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x1a, 0x1a, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65,
-	0x74, 0x52, 0x6f, 0x6c, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00,
-	0x12, 0x48, 0x0a, 0x0a, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x52, 0x6f, 0x6c, 0x65, 0x12, 0x1b,
-	0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65,
-	0x52, 0x6f, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64,
-	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4d, 0x0a, 0x12, 0x46, 0x69,
-	0x6e, 0x64, 0x41, 0x6c, 0x6c, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x73,
-	0x12, 0x16, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x45, 0x6d, 0x70, 0x74,
-	0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
-	0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00, 0x12, 0x49, 0x0a, 0x0e, 0x46, 0x69, 0x6e,
-	0x64, 0x41, 0x6c, 0x6c, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x73, 0x12, 0x16, 0x2e, 0x69, 0x64,
-	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43,
-	0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x41, 0x72, 0x72,
-	0x61, 0x79, 0x22, 0x00, 0x12, 0x4c, 0x0a, 0x0c, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x43, 0x6c,
-	0x69, 0x65, 0x6e, 0x74, 0x12, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
-	0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43,
-	0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a,
-	0x22, 0x00, 0x12, 0x54, 0x0a, 0x10, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x50, 0x65, 0x72, 0x6d,
-	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x21, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
-	0x79, 0x2e, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69,
-	0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e,
-	0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4b, 0x0a, 0x0d, 0x55, 0x70, 0x64, 0x61,
-	0x74, 0x65, 0x44, 0x65, 0x74, 0x61, 0x69, 0x6c, 0x73, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e,
-	0x74, 0x69, 0x74, 0x79, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
-	0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x10, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x52,
-	0x65, 0x74, 0x61, 0x69, 0x6c, 0x55, 0x73, 0x65, 0x72, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e,
-	0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
-	0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x10, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52,
-	0x65, 0x74, 0x61, 0x69, 0x6c, 0x55, 0x73, 0x65, 0x72, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e,
-	0x74, 0x69, 0x74, 0x79, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
-	0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4d, 0x0a, 0x0f, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x41,
-	0x64, 0x6d, 0x69, 0x6e, 0x55, 0x73, 0x65, 0x72, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
-	0x69, 0x74, 0x79, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
-	0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f,
-	0x62, 0x6a, 0x22, 0x00, 0x12, 0x4b, 0x0a, 0x0d, 0x47, 0x65, 0x74, 0x41, 0x64, 0x6d, 0x69, 0x6e,
-	0x55, 0x73, 0x65, 0x72, 0x73, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
-	0x2e, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d,
-	0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22,
-	0x00, 0x12, 0x48, 0x0a, 0x0a, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x12,
-	0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x53, 0x69, 0x6e, 0x67, 0x6c,
-	0x65, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69,
-	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x5c, 0x0a, 0x14, 0x43,
-	0x68, 0x61, 0x6e, 0x67, 0x65, 0x55, 0x73, 0x65, 0x72, 0x54, 0x79, 0x70, 0x65, 0x53, 0x74, 0x61,
-	0x74, 0x75, 0x73, 0x12, 0x25, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43,
-	0x68, 0x61, 0x6e, 0x67, 0x65, 0x55, 0x73, 0x65, 0x72, 0x54, 0x79, 0x70, 0x65, 0x53, 0x74, 0x61,
-	0x74, 0x75, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65,
-	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x46, 0x0a, 0x09, 0x47, 0x65, 0x74,
-	0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x12, 0x1a, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
-	0x79, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65,
-	0x74, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
-	0x00, 0x12, 0x55, 0x0a, 0x0e, 0x47, 0x65, 0x74, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x44,
-	0x61, 0x74, 0x61, 0x12, 0x1f, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47,
-	0x65, 0x74, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x44, 0x61, 0x74, 0x61, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x1a, 0x20, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
-	0x47, 0x65, 0x74, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x44, 0x61, 0x74, 0x61, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x50, 0x0a, 0x0d, 0x53, 0x65, 0x61, 0x72,
-	0x63, 0x68, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x73, 0x12, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e,
-	0x74, 0x69, 0x74, 0x79, 0x2e, 0x53, 0x65, 0x61, 0x72, 0x63, 0x68, 0x50, 0x6c, 0x61, 0x79, 0x65,
-	0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1e, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
-	0x69, 0x74, 0x79, 0x2e, 0x53, 0x65, 0x61, 0x72, 0x63, 0x68, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x4f, 0x0a, 0x11, 0x55, 0x70,
-	0x64, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x44, 0x65, 0x74, 0x61, 0x69, 0x6c, 0x73, 0x12,
-	0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74,
-	0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69,
-	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x5e, 0x0a, 0x11, 0x47,
-	0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x42, 0x79, 0x55, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65,
-	0x12, 0x22, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x55,
-	0x73, 0x65, 0x72, 0x42, 0x79, 0x55, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x1a, 0x23, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
-	0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x42, 0x79, 0x55, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d,
-	0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x56, 0x0a, 0x13, 0x4f,
-	0x6e, 0x6c, 0x69, 0x6e, 0x65, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x73, 0x52, 0x65, 0x70, 0x6f,
-	0x72, 0x74, 0x12, 0x1e, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x4f, 0x6e,
-	0x6c, 0x69, 0x6e, 0x65, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x50, 0x6c,
-	0x61, 0x79, 0x65, 0x72, 0x73, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x22, 0x00, 0x12, 0x5a, 0x0a, 0x12, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x52, 0x65, 0x70, 0x6f, 0x72, 0x74, 0x12, 0x23, 0x2e, 0x69, 0x64, 0x65, 0x6e,
-	0x74, 0x69, 0x74, 0x79, 0x2e, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x52, 0x65, 0x70, 0x6f, 0x72, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d,
-	0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72,
-	0x73, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12,
-	0x58, 0x0a, 0x12, 0x46, 0x65, 0x74, 0x63, 0x68, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x46, 0x69,
-	0x6c, 0x74, 0x65, 0x72, 0x73, 0x12, 0x22, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
-	0x2e, 0x46, 0x65, 0x74, 0x63, 0x68, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x46, 0x69, 0x6c, 0x74,
-	0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x69, 0x64, 0x65, 0x6e,
-	0x74, 0x69, 0x74, 0x79, 0x2e, 0x50, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x52, 0x0a, 0x0d, 0x47, 0x65, 0x74,
-	0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x44, 0x61, 0x74, 0x61, 0x12, 0x1e, 0x2e, 0x69, 0x64, 0x65,
-	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x44,
-	0x61, 0x74, 0x61, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1f, 0x2e, 0x69, 0x64, 0x65,
-	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x44,
-	0x61, 0x74, 0x61, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x54, 0x0a,
-	0x10, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x44, 0x61, 0x74,
-	0x61, 0x12, 0x21, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x55, 0x70, 0x64,
-	0x61, 0x74, 0x65, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x44, 0x61, 0x74, 0x61, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
-	0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62,
-	0x6a, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x12, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6c, 0x61,
-	0x79, 0x65, 0x72, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e,
-	0x74, 0x69, 0x74, 0x79, 0x2e, 0x46, 0x69, 0x6e, 0x64, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
-	0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62,
-	0x6a, 0x22, 0x00, 0x12, 0x50, 0x0a, 0x0e, 0x43, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x50, 0x61, 0x73,
-	0x73, 0x77, 0x6f, 0x72, 0x64, 0x12, 0x1f, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
-	0x2e, 0x43, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
-	0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x0d, 0x52, 0x65, 0x73, 0x65, 0x74, 0x50, 0x61,
-	0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x12, 0x1e, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
-	0x79, 0x2e, 0x52, 0x65, 0x73, 0x65, 0x74, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
-	0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x50, 0x0a, 0x11, 0x53, 0x61, 0x76, 0x65, 0x50, 0x6c, 0x61,
-	0x79, 0x65, 0x72, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x1c, 0x2e, 0x69, 0x64, 0x65,
-	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x53, 0x61, 0x76, 0x65, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e,
-	0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
-	0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x5a, 0x0a, 0x12, 0x46, 0x65, 0x74, 0x63, 0x68,
-	0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x23, 0x2e,
-	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x46, 0x65, 0x74, 0x63, 0x68, 0x50, 0x6c,
-	0x61, 0x79, 0x65, 0x72, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f,
-	0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x41, 0x72, 0x72, 0x61,
-	0x79, 0x22, 0x00, 0x12, 0x4c, 0x0a, 0x0c, 0x41, 0x64, 0x64, 0x54, 0x6f, 0x53, 0x65, 0x67, 0x6d,
-	0x65, 0x6e, 0x74, 0x12, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x41,
-	0x64, 0x64, 0x54, 0x6f, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x70, 0x72, 0x65, 0x76, 0x50, 0x61, 0x67, 0x65, 0x22, 0xca, 0x02, 0x0a, 0x0e, 0x49, 0x6d, 0x70,
+	0x6f, 0x72, 0x74, 0x55, 0x73, 0x65, 0x72, 0x44, 0x61, 0x74, 0x61, 0x12, 0x1a, 0x0a, 0x08, 0x63,
+	0x6c, 0x69, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x08, 0x63,
+	0x6c, 0x69, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x12, 0x1a, 0x0a, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e,
+	0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e,
+	0x61, 0x6d, 0x65, 0x12, 0x20, 0x0a, 0x0b, 0x70, 0x68, 0x6f, 0x6e, 0x65, 0x4e, 0x75, 0x6d, 0x62,
+	0x65, 0x72, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x70, 0x68, 0x6f, 0x6e, 0x65, 0x4e,
+	0x75, 0x6d, 0x62, 0x65, 0x72, 0x12, 0x21, 0x0a, 0x09, 0x66, 0x69, 0x72, 0x73, 0x74, 0x4e, 0x61,
+	0x6d, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x48, 0x00, 0x52, 0x09, 0x66, 0x69, 0x72, 0x73,
+	0x74, 0x4e, 0x61, 0x6d, 0x65, 0x88, 0x01, 0x01, 0x12, 0x1f, 0x0a, 0x08, 0x6c, 0x61, 0x73, 0x74,
+	0x4e, 0x61, 0x6d, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x48, 0x01, 0x52, 0x08, 0x6c, 0x61,
+	0x73, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x88, 0x01, 0x01, 0x12, 0x19, 0x0a, 0x05, 0x65, 0x6d, 0x61,
+	0x69, 0x6c, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x48, 0x02, 0x52, 0x05, 0x65, 0x6d, 0x61, 0x69,
+	0x6c, 0x88, 0x01, 0x01, 0x12, 0x21, 0x0a, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x41,
+	0x74, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x48, 0x03, 0x52, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74,
+	0x65, 0x64, 0x41, 0x74, 0x88, 0x01, 0x01, 0x12, 0x1d, 0x0a, 0x07, 0x62, 0x61, 0x6c, 0x61, 0x6e,
+	0x63, 0x65, 0x18, 0x08, 0x20, 0x01, 0x28, 0x02, 0x48, 0x04, 0x52, 0x07, 0x62, 0x61, 0x6c, 0x61,
+	0x6e, 0x63, 0x65, 0x88, 0x01, 0x01, 0x42, 0x0c, 0x0a, 0x0a, 0x5f, 0x66, 0x69, 0x72, 0x73, 0x74,
+	0x4e, 0x61, 0x6d, 0x65, 0x42, 0x0b, 0x0a, 0x09, 0x5f, 0x6c, 0x61, 0x73, 0x74, 0x4e, 0x61, 0x6d,
+	0x65, 0x42, 0x08, 0x0a, 0x06, 0x5f, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x42, 0x0c, 0x0a, 0x0a, 0x5f,
+	0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74, 0x42, 0x0a, 0x0a, 0x08, 0x5f, 0x62, 0x61,
+	0x6c, 0x61, 0x6e, 0x63, 0x65, 0x22, 0x44, 0x0a, 0x12, 0x49, 0x6d, 0x70, 0x6f, 0x72, 0x74, 0x55,
+	0x73, 0x65, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x2e, 0x0a, 0x05, 0x75,
+	0x73, 0x65, 0x72, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x18, 0x2e, 0x69, 0x64, 0x65,
+	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x49, 0x6d, 0x70, 0x6f, 0x72, 0x74, 0x55, 0x73, 0x65, 0x72,
+	0x44, 0x61, 0x74, 0x61, 0x52, 0x05, 0x75, 0x73, 0x65, 0x72, 0x73, 0x22, 0xd1, 0x01, 0x0a, 0x13,
+	0x49, 0x6d, 0x70, 0x6f, 0x72, 0x74, 0x55, 0x73, 0x65, 0x72, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x73, 0x75, 0x63, 0x63, 0x65, 0x73, 0x73, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x73, 0x75, 0x63, 0x63, 0x65, 0x73, 0x73, 0x12, 0x18, 0x0a,
+	0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07,
+	0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x26, 0x0a, 0x0e, 0x74, 0x6f, 0x74, 0x61, 0x6c,
+	0x50, 0x72, 0x6f, 0x63, 0x65, 0x73, 0x73, 0x65, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x05, 0x52,
+	0x0e, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x50, 0x72, 0x6f, 0x63, 0x65, 0x73, 0x73, 0x65, 0x64, 0x12,
+	0x22, 0x0a, 0x0c, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x18,
+	0x04, 0x20, 0x01, 0x28, 0x05, 0x52, 0x0c, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x43, 0x72, 0x65, 0x61,
+	0x74, 0x65, 0x64, 0x12, 0x22, 0x0a, 0x0c, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x53, 0x6b, 0x69, 0x70,
+	0x70, 0x65, 0x64, 0x18, 0x05, 0x20, 0x01, 0x28, 0x05, 0x52, 0x0c, 0x74, 0x6f, 0x74, 0x61, 0x6c,
+	0x53, 0x6b, 0x69, 0x70, 0x70, 0x65, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x65, 0x72, 0x72, 0x6f, 0x72,
+	0x73, 0x18, 0x06, 0x20, 0x03, 0x28, 0x09, 0x52, 0x06, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x73, 0x32,
+	0xf2, 0x56, 0x0a, 0x0f, 0x49, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x53, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x12, 0x5c, 0x0a, 0x17, 0x48, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x44, 0x61, 0x69,
+	0x6c, 0x79, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x22,
+	0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x44, 0x61, 0x69, 0x6c, 0x79, 0x54,
+	0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65,
 	0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f,
 	0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22,
-	0x00, 0x12, 0x52, 0x0a, 0x0f, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x54, 0x6f, 0x53, 0x65, 0x67,
-	0x6d, 0x65, 0x6e, 0x74, 0x12, 0x20, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
-	0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x73, 0x54, 0x6f, 0x53,
-	0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
-	0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x51, 0x0a, 0x13, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x50,
-	0x6c, 0x61, 0x79, 0x65, 0x72, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x1b, 0x2e, 0x69,
-	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x49, 0x74,
-	0x65, 0x6d, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e,
+	0x00, 0x12, 0x46, 0x0a, 0x09, 0x48, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x50, 0x69, 0x6e, 0x12, 0x1a,
+	0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x48, 0x61, 0x6e, 0x64, 0x6c, 0x65,
+	0x50, 0x69, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65,
+	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x50, 0x0a, 0x0e, 0x48, 0x61, 0x6e,
+	0x64, 0x6c, 0x65, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x66, 0x65, 0x72, 0x12, 0x1f, 0x2e, 0x69, 0x64,
+	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x48, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x54, 0x72, 0x61,
+	0x6e, 0x73, 0x66, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x45, 0x0a, 0x08, 0x52,
+	0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
+	0x74, 0x79, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x1a, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
+	0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x22, 0x00, 0x12, 0x4e, 0x0a, 0x11, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x41, 0x66,
+	0x66, 0x69, 0x6c, 0x69, 0x61, 0x74, 0x65, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
+	0x74, 0x79, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x1a, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
+	0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x22, 0x00, 0x12, 0x3a, 0x0a, 0x05, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x12, 0x16, 0x2e, 0x69, 0x64,
+	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x17, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x4c,
+	0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x50,
+	0x0a, 0x0f, 0x58, 0x70, 0x72, 0x65, 0x73, 0x73, 0x47, 0x61, 0x6d, 0x65, 0x4c, 0x6f, 0x67, 0x69,
+	0x6e, 0x12, 0x1c, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x58, 0x70, 0x72,
+	0x65, 0x73, 0x73, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x58, 0x70, 0x72, 0x65, 0x73,
+	0x73, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00,
+	0x12, 0x4f, 0x0a, 0x10, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x41, 0x75, 0x74, 0x68,
+	0x43, 0x6f, 0x64, 0x65, 0x12, 0x1c, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
+	0x58, 0x70, 0x72, 0x65, 0x73, 0x73, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f,
+	0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22,
+	0x00, 0x12, 0x4d, 0x0a, 0x10, 0x58, 0x70, 0x72, 0x65, 0x73, 0x73, 0x47, 0x61, 0x6d, 0x65, 0x4c,
+	0x6f, 0x67, 0x6f, 0x75, 0x74, 0x12, 0x18, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
+	0x2e, 0x53, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x58, 0x70, 0x72, 0x65, 0x73,
+	0x73, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00,
+	0x12, 0x43, 0x0a, 0x08, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x12, 0x19, 0x2e, 0x69,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1a, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
+	0x74, 0x79, 0x2e, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x56, 0x0a, 0x11, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74,
+	0x65, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x43, 0x6f, 0x64, 0x65, 0x12, 0x1a, 0x2e, 0x69, 0x64, 0x65,
+	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x23, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
+	0x79, 0x2e, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x43,
+	0x6f, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x4f, 0x0a,
+	0x0e, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x12,
+	0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x56, 0x61, 0x6c, 0x69, 0x64,
+	0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x20, 0x2e, 0x69, 0x64, 0x65,
+	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x43, 0x6c,
+	0x69, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x53,
+	0x0a, 0x0f, 0x4c, 0x69, 0x73, 0x74, 0x54, 0x65, 0x73, 0x74, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e,
+	0x74, 0x12, 0x21, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x4c, 0x69, 0x73,
+	0x74, 0x54, 0x65, 0x73, 0x74, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x73, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
+	0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62,
+	0x6a, 0x22, 0x00, 0x12, 0x50, 0x0a, 0x0d, 0x54, 0x6f, 0x67, 0x67, 0x6c, 0x65, 0x41, 0x63, 0x63,
+	0x6f, 0x75, 0x6e, 0x74, 0x12, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
+	0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x54, 0x65, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x1e, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x56,
+	0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x54, 0x65, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x55, 0x0a, 0x0e, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72,
+	0x44, 0x65, 0x74, 0x61, 0x69, 0x6c, 0x73, 0x12, 0x1f, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
+	0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x44, 0x65, 0x74, 0x61, 0x69, 0x6c,
+	0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x20, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
+	0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x44, 0x65, 0x74, 0x61, 0x69,
+	0x6c, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x0b,
+	0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x4c, 0x6f, 0x67, 0x73, 0x12, 0x1f, 0x2e, 0x69, 0x64,
+	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x44, 0x65,
+	0x74, 0x61, 0x69, 0x6c, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x69,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x4c,
+	0x6f, 0x67, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x46, 0x0a, 0x0c,
+	0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x12, 0x17, 0x2e, 0x69,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
+	0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f,
+	0x62, 0x6a, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x10, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x65,
+	0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
+	0x69, 0x74, 0x79, 0x2e, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
+	0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f,
+	0x62, 0x6a, 0x22, 0x00, 0x12, 0x5c, 0x0a, 0x14, 0x41, 0x73, 0x73, 0x69, 0x67, 0x6e, 0x52, 0x6f,
+	0x6c, 0x65, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x25, 0x2e, 0x69,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x41, 0x73, 0x73, 0x69, 0x67, 0x6e, 0x52, 0x6f,
+	0x6c, 0x65, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43,
+	0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a,
+	0x22, 0x00, 0x12, 0x4f, 0x0a, 0x11, 0x47, 0x65, 0x74, 0x41, 0x75, 0x74, 0x68, 0x50, 0x65, 0x72,
+	0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
+	0x74, 0x79, 0x2e, 0x53, 0x69, 0x6e, 0x67, 0x6c, 0x65, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
+	0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62,
+	0x6a, 0x22, 0x00, 0x12, 0x44, 0x0a, 0x08, 0x46, 0x69, 0x6e, 0x64, 0x55, 0x73, 0x65, 0x72, 0x12,
+	0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x46, 0x69, 0x6e, 0x64, 0x55,
+	0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65,
+	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x3f, 0x0a, 0x08, 0x53, 0x61, 0x76,
+	0x65, 0x52, 0x6f, 0x6c, 0x65, 0x12, 0x15, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
+	0x2e, 0x52, 0x6f, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1a, 0x2e, 0x69,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x53, 0x61, 0x76, 0x65, 0x52, 0x6f, 0x6c, 0x65,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x43, 0x0a, 0x08, 0x47, 0x65,
+	0x74, 0x52, 0x6f, 0x6c, 0x65, 0x73, 0x12, 0x16, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
+	0x79, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d,
+	0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00, 0x12,
+	0x46, 0x0a, 0x0e, 0x47, 0x65, 0x74, 0x41, 0x67, 0x65, 0x6e, 0x63, 0x79, 0x52, 0x6f, 0x6c, 0x65,
+	0x73, 0x12, 0x16, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x45, 0x6d, 0x70,
+	0x74, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1a, 0x2e, 0x69, 0x64, 0x65, 0x6e,
+	0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x52, 0x6f, 0x6c, 0x65, 0x73, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x48, 0x0a, 0x0a, 0x52, 0x65, 0x6d, 0x6f, 0x76,
+	0x65, 0x52, 0x6f, 0x6c, 0x65, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
+	0x2e, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x52, 0x6f, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f,
+	0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22,
+	0x00, 0x12, 0x4d, 0x0a, 0x12, 0x46, 0x69, 0x6e, 0x64, 0x41, 0x6c, 0x6c, 0x50, 0x65, 0x72, 0x6d,
+	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x16, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
+	0x74, 0x79, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f,
+	0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00,
+	0x12, 0x49, 0x0a, 0x0e, 0x46, 0x69, 0x6e, 0x64, 0x41, 0x6c, 0x6c, 0x43, 0x6c, 0x69, 0x65, 0x6e,
+	0x74, 0x73, 0x12, 0x16, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x45, 0x6d,
+	0x70, 0x74, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65,
+	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00, 0x12, 0x4c, 0x0a, 0x0c, 0x52,
+	0x65, 0x6d, 0x6f, 0x76, 0x65, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x12, 0x1d, 0x2e, 0x69, 0x64,
+	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x43, 0x6c, 0x69,
+	0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65,
+	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x54, 0x0a, 0x10, 0x52, 0x65, 0x6d,
+	0x6f, 0x76, 0x65, 0x50, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x21, 0x2e,
+	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x50,
+	0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d,
+	0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12,
+	0x4b, 0x0a, 0x0d, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x65, 0x74, 0x61, 0x69, 0x6c, 0x73,
+	0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x55, 0x70, 0x64, 0x61,
+	0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e,
+	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x10,
+	0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x52, 0x65, 0x74, 0x61, 0x69, 0x6c, 0x55, 0x73, 0x65, 0x72,
+	0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x72, 0x65, 0x61,
+	0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e,
+	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x10,
+	0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x74, 0x61, 0x69, 0x6c, 0x55, 0x73, 0x65, 0x72,
+	0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x55, 0x70, 0x64, 0x61,
+	0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e,
+	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4d, 0x0a, 0x0f,
+	0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x55, 0x73, 0x65, 0x72, 0x12,
+	0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74,
+	0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4b, 0x0a, 0x0d, 0x47,
+	0x65, 0x74, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x55, 0x73, 0x65, 0x72, 0x73, 0x12, 0x19, 0x2e, 0x69,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x49, 0x64,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
+	0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00, 0x12, 0x48, 0x0a, 0x0a, 0x44, 0x65, 0x6c, 0x65,
+	0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
+	0x79, 0x2e, 0x53, 0x69, 0x6e, 0x67, 0x6c, 0x65, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43,
+	0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a,
+	0x22, 0x00, 0x12, 0x5c, 0x0a, 0x14, 0x43, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x55, 0x73, 0x65, 0x72,
+	0x54, 0x79, 0x70, 0x65, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x25, 0x2e, 0x69, 0x64, 0x65,
+	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x55, 0x73, 0x65, 0x72,
+	0x54, 0x79, 0x70, 0x65, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d,
+	0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00,
+	0x12, 0x46, 0x0a, 0x09, 0x47, 0x65, 0x74, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x12, 0x1a, 0x2e,
+	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x6c, 0x69, 0x65,
+	0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e,
+	0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x55, 0x0a, 0x0e, 0x47, 0x65, 0x74, 0x50,
+	0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x44, 0x61, 0x74, 0x61, 0x12, 0x1f, 0x2e, 0x69, 0x64, 0x65,
+	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74,
+	0x44, 0x61, 0x74, 0x61, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x20, 0x2e, 0x69, 0x64,
+	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e,
+	0x74, 0x44, 0x61, 0x74, 0x61, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12,
+	0x50, 0x0a, 0x0d, 0x53, 0x65, 0x61, 0x72, 0x63, 0x68, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x73,
+	0x12, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x53, 0x65, 0x61, 0x72,
+	0x63, 0x68, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x1e, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x53, 0x65, 0x61, 0x72, 0x63,
+	0x68, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
+	0x00, 0x12, 0x4f, 0x0a, 0x11, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x44,
+	0x65, 0x74, 0x61, 0x69, 0x6c, 0x73, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
+	0x79, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43,
+	0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a,
+	0x22, 0x00, 0x12, 0x5e, 0x0a, 0x11, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x42, 0x79, 0x55,
+	0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x22, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
+	0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x42, 0x79, 0x55, 0x73, 0x65, 0x72,
+	0x6e, 0x61, 0x6d, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x23, 0x2e, 0x69, 0x64,
+	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x42, 0x79,
+	0x55, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x22, 0x00, 0x12, 0x56, 0x0a, 0x13, 0x4f, 0x6e, 0x6c, 0x69, 0x6e, 0x65, 0x50, 0x6c, 0x61, 0x79,
+	0x65, 0x72, 0x73, 0x52, 0x65, 0x70, 0x6f, 0x72, 0x74, 0x12, 0x1e, 0x2e, 0x69, 0x64, 0x65, 0x6e,
+	0x74, 0x69, 0x74, 0x79, 0x2e, 0x4f, 0x6e, 0x6c, 0x69, 0x6e, 0x65, 0x50, 0x6c, 0x61, 0x79, 0x65,
+	0x72, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e,
+	0x74, 0x69, 0x74, 0x79, 0x2e, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x73, 0x4c, 0x69, 0x73, 0x74,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x5a, 0x0a, 0x12, 0x52, 0x65,
+	0x67, 0x69, 0x73, 0x74, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x70, 0x6f, 0x72, 0x74,
+	0x12, 0x23, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x52, 0x65, 0x67, 0x69,
+	0x73, 0x74, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x70, 0x6f, 0x72, 0x74, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
+	0x2e, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x73, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x58, 0x0a, 0x12, 0x46, 0x65, 0x74, 0x63, 0x68, 0x50,
+	0x6c, 0x61, 0x79, 0x65, 0x72, 0x46, 0x69, 0x6c, 0x74, 0x65, 0x72, 0x73, 0x12, 0x22, 0x2e, 0x69,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x46, 0x65, 0x74, 0x63, 0x68, 0x50, 0x6c, 0x61,
+	0x79, 0x65, 0x72, 0x46, 0x69, 0x6c, 0x74, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x1c, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x50, 0x61, 0x67, 0x69,
+	0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00,
+	0x12, 0x52, 0x0a, 0x0d, 0x47, 0x65, 0x74, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x44, 0x61, 0x74,
+	0x61, 0x12, 0x1e, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74,
+	0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x44, 0x61, 0x74, 0x61, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x1f, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74,
+	0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x44, 0x61, 0x74, 0x61, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x22, 0x00, 0x12, 0x54, 0x0a, 0x10, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6c,
+	0x61, 0x79, 0x65, 0x72, 0x44, 0x61, 0x74, 0x61, 0x12, 0x21, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
+	0x69, 0x74, 0x79, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72,
+	0x44, 0x61, 0x74, 0x61, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64,
+	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x12, 0x55, 0x70,
+	0x64, 0x61, 0x74, 0x65, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73,
+	0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x46, 0x69, 0x6e, 0x64,
+	0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64,
+	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x50, 0x0a, 0x0e, 0x43, 0x68,
+	0x61, 0x6e, 0x67, 0x65, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x12, 0x1f, 0x2e, 0x69,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x50, 0x61,
+	0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e,
+	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x0d,
+	0x52, 0x65, 0x73, 0x65, 0x74, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x12, 0x1e, 0x2e,
+	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x52, 0x65, 0x73, 0x65, 0x74, 0x50, 0x61,
+	0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e,
+	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x50, 0x0a, 0x11,
+	0x53, 0x61, 0x76, 0x65, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e,
+	0x74, 0x12, 0x1c, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x53, 0x61, 0x76,
+	0x65, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f,
+	0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x5a,
+	0x0a, 0x12, 0x46, 0x65, 0x74, 0x63, 0x68, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x53, 0x65, 0x67,
+	0x6d, 0x65, 0x6e, 0x74, 0x12, 0x23, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
+	0x46, 0x65, 0x74, 0x63, 0x68, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x53, 0x65, 0x67, 0x6d, 0x65,
+	0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e,
 	0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x55, 0x0a, 0x17, 0x52, 0x65, 0x6d, 0x6f,
-	0x76, 0x65, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x46, 0x72, 0x6f, 0x6d, 0x53, 0x65, 0x67, 0x6d,
+	0x6e, 0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00, 0x12, 0x4c, 0x0a, 0x0c, 0x41, 0x64,
+	0x64, 0x54, 0x6f, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x1d, 0x2e, 0x69, 0x64, 0x65,
+	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x41, 0x64, 0x64, 0x54, 0x6f, 0x53, 0x65, 0x67, 0x6d, 0x65,
+	0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e,
+	0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x52, 0x0a, 0x0f, 0x55, 0x70, 0x6c, 0x6f,
+	0x61, 0x64, 0x54, 0x6f, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x20, 0x2e, 0x69, 0x64,
+	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x50, 0x6c, 0x61,
+	0x79, 0x65, 0x72, 0x73, 0x54, 0x6f, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x1a, 0x1b, 0x2e,
+	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x51, 0x0a, 0x13,
+	0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x53, 0x65, 0x67, 0x6d,
 	0x65, 0x6e, 0x74, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x44,
 	0x65, 0x6c, 0x65, 0x74, 0x65, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
 	0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d,
 	0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12,
-	0x57, 0x0a, 0x11, 0x47, 0x65, 0x74, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x50, 0x6c, 0x61,
-	0x79, 0x65, 0x72, 0x73, 0x12, 0x21, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
-	0x47, 0x65, 0x74, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
+	0x55, 0x0a, 0x17, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x46,
+	0x72, 0x6f, 0x6d, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65,
+	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x49, 0x74, 0x65, 0x6d,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
 	0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00, 0x12, 0x51, 0x0a, 0x13, 0x47, 0x72, 0x61, 0x6e,
-	0x74, 0x42, 0x6f, 0x6e, 0x75, 0x73, 0x54, 0x6f, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x12,
-	0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x72, 0x61, 0x6e, 0x74,
-	0x42, 0x6f, 0x6e, 0x75, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69,
-	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x46, 0x0a, 0x0c, 0x47,
-	0x65, 0x74, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x72, 0x69, 0x65, 0x73, 0x12, 0x16, 0x2e, 0x69, 0x64,
-	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47,
-	0x65, 0x74, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x72, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x22, 0x00, 0x12, 0x4b, 0x0a, 0x12, 0x47, 0x65, 0x74, 0x53, 0x74, 0x61, 0x74, 0x65, 0x73,
-	0x42, 0x79, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x1a, 0x2e, 0x69, 0x64, 0x65, 0x6e,
-	0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x53, 0x74, 0x61, 0x74, 0x65, 0x73, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x17, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
-	0x2e, 0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00,
-	0x12, 0x50, 0x0a, 0x15, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x58, 0x70, 0x72, 0x65,
-	0x73, 0x73, 0x53, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x18, 0x2e, 0x69, 0x64, 0x65, 0x6e,
-	0x74, 0x69, 0x74, 0x79, 0x2e, 0x53, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x57, 0x0a, 0x11, 0x47, 0x65, 0x74, 0x53, 0x65, 0x67,
+	0x6d, 0x65, 0x6e, 0x74, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x73, 0x12, 0x21, 0x2e, 0x69, 0x64,
+	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e,
+	0x74, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d,
+	0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00, 0x12,
+	0x51, 0x0a, 0x13, 0x47, 0x72, 0x61, 0x6e, 0x74, 0x42, 0x6f, 0x6e, 0x75, 0x73, 0x54, 0x6f, 0x53,
+	0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
+	0x79, 0x2e, 0x47, 0x72, 0x61, 0x6e, 0x74, 0x42, 0x6f, 0x6e, 0x75, 0x73, 0x52, 0x65, 0x71, 0x75,
 	0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43,
 	0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a,
-	0x22, 0x00, 0x12, 0x48, 0x0a, 0x0c, 0x53, 0x61, 0x76, 0x65, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e,
-	0x67, 0x73, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x53, 0x65,
+	0x22, 0x00, 0x12, 0x46, 0x0a, 0x0c, 0x47, 0x65, 0x74, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x72, 0x69,
+	0x65, 0x73, 0x12, 0x16, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x45, 0x6d,
+	0x70, 0x74, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x69, 0x64, 0x65,
+	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x72, 0x79,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x4b, 0x0a, 0x12, 0x47, 0x65,
+	0x74, 0x53, 0x74, 0x61, 0x74, 0x65, 0x73, 0x42, 0x79, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x72, 0x79,
+	0x12, 0x1a, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x53,
+	0x74, 0x61, 0x74, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x17, 0x2e, 0x69,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x53, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x50, 0x0a, 0x15, 0x56, 0x61, 0x6c, 0x69, 0x64,
+	0x61, 0x74, 0x65, 0x58, 0x70, 0x72, 0x65, 0x73, 0x73, 0x53, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e,
+	0x12, 0x18, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x53, 0x65, 0x73, 0x73,
+	0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65,
+	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x48, 0x0a, 0x0c, 0x53, 0x61, 0x76,
+	0x65, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e,
+	0x74, 0x69, 0x74, 0x79, 0x2e, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
+	0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62,
+	0x6a, 0x22, 0x00, 0x12, 0x4c, 0x0a, 0x10, 0x53, 0x61, 0x76, 0x65, 0x52, 0x69, 0x73, 0x6b, 0x53,
+	0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
+	0x74, 0x79, 0x2e, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f,
+	0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22,
+	0x00, 0x12, 0x58, 0x0a, 0x14, 0x53, 0x61, 0x76, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x69, 0x73,
+	0x6b, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x12, 0x21, 0x2e, 0x69, 0x64, 0x65, 0x6e,
+	0x74, 0x69, 0x74, 0x79, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x52, 0x69, 0x73, 0x6b, 0x53, 0x65, 0x74,
+	0x74, 0x69, 0x6e, 0x67, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4c, 0x0a, 0x0b, 0x47,
+	0x65, 0x74, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x12, 0x1c, 0x2e, 0x69, 0x64, 0x65,
+	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67,
+	0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
+	0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00, 0x12, 0x51, 0x0a, 0x12, 0x47, 0x65, 0x74,
+	0x47, 0x6c, 0x6f, 0x62, 0x61, 0x6c, 0x56, 0x61, 0x72, 0x69, 0x61, 0x62, 0x6c, 0x65, 0x73, 0x12,
+	0x1c, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x53, 0x65,
 	0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e,
 	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4c, 0x0a, 0x10,
-	0x53, 0x61, 0x76, 0x65, 0x52, 0x69, 0x73, 0x6b, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73,
-	0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x53, 0x65, 0x74, 0x74,
-	0x69, 0x6e, 0x67, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64,
-	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x58, 0x0a, 0x14, 0x53, 0x61,
-	0x76, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x69, 0x73, 0x6b, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e,
-	0x67, 0x73, 0x12, 0x21, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x55, 0x73,
-	0x65, 0x72, 0x52, 0x69, 0x73, 0x6b, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
-	0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f,
-	0x62, 0x6a, 0x22, 0x00, 0x12, 0x4c, 0x0a, 0x0b, 0x47, 0x65, 0x74, 0x53, 0x65, 0x74, 0x74, 0x69,
-	0x6e, 0x67, 0x73, 0x12, 0x1c, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47,
-	0x65, 0x74, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x47, 0x0a, 0x0b,
+	0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x42, 0x65, 0x74, 0x12, 0x19, 0x2e, 0x69, 0x64,
+	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x50, 0x6c, 0x61, 0x63, 0x65, 0x42, 0x65, 0x74, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
+	0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x67, 0x0a, 0x15, 0x47, 0x65, 0x74, 0x57, 0x69, 0x74, 0x68,
+	0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x12, 0x26,
+	0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x57, 0x69, 0x74,
+	0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x24, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
+	0x79, 0x2e, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x53, 0x65, 0x74, 0x74,
+	0x69, 0x6e, 0x67, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x55,
+	0x0a, 0x10, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x49, 0x64, 0x61, 0x6e, 0x64, 0x4e, 0x61,
+	0x6d, 0x65, 0x12, 0x1e, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65,
+	0x74, 0x55, 0x73, 0x65, 0x72, 0x49, 0x64, 0x4e, 0x61, 0x6d, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x1f, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65,
+	0x74, 0x55, 0x73, 0x65, 0x72, 0x49, 0x64, 0x4e, 0x61, 0x6d, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x55, 0x0a, 0x13, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72,
+	0x52, 0x69, 0x73, 0x6b, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x12, 0x1f, 0x2e, 0x69,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x52, 0x69, 0x73, 0x6b, 0x53,
+	0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e,
+	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x61, 0x0a, 0x1b,
+	0x46, 0x65, 0x74, 0x63, 0x68, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x4c, 0x6f, 0x73, 0x65, 0x72,
+	0x73, 0x42, 0x79, 0x42, 0x65, 0x74, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x22, 0x2e, 0x69, 0x64,
+	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x46, 0x65, 0x74, 0x63, 0x68, 0x50, 0x6c, 0x61, 0x79,
+	0x65, 0x72, 0x46, 0x69, 0x6c, 0x74, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x1c, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x50, 0x61, 0x67, 0x69, 0x6e,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12,
+	0x4e, 0x0a, 0x0f, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x55, 0x73,
+	0x65, 0x72, 0x12, 0x1c, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x72,
+	0x65, 0x61, 0x74, 0x65, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d,
+	0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12,
+	0x50, 0x0a, 0x0f, 0x47, 0x65, 0x74, 0x50, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x41, 0x67, 0x65,
+	0x6e, 0x74, 0x12, 0x1e, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65,
+	0x74, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x55, 0x73, 0x65, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f,
+	0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22,
+	0x00, 0x12, 0x51, 0x0a, 0x0e, 0x4c, 0x69, 0x73, 0x74, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x55, 0x73,
+	0x65, 0x72, 0x73, 0x12, 0x1e, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47,
+	0x65, 0x74, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x55, 0x73, 0x65, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43,
+	0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x41, 0x72, 0x72,
+	0x61, 0x79, 0x22, 0x00, 0x12, 0x4b, 0x0a, 0x0a, 0x4c, 0x69, 0x73, 0x74, 0x41, 0x67, 0x65, 0x6e,
+	0x74, 0x73, 0x12, 0x1e, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65,
+	0x74, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x55, 0x73, 0x65, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f,
+	0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22,
+	0x00, 0x12, 0x54, 0x0a, 0x18, 0x41, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x41, 0x67, 0x65, 0x6e,
+	0x74, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x19, 0x2e,
+	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x41, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x61,
+	0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
+	0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x0c, 0x47, 0x65, 0x74, 0x41, 0x67,
+	0x65, 0x6e, 0x74, 0x55, 0x73, 0x65, 0x72, 0x12, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
+	0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x55, 0x73, 0x65, 0x72, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
+	0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00, 0x12, 0x59, 0x0a, 0x15, 0x67, 0x65, 0x74, 0x43, 0x6f,
+	0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x73,
+	0x12, 0x1f, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x43,
+	0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
 	0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d,
 	0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79,
-	0x22, 0x00, 0x12, 0x51, 0x0a, 0x12, 0x47, 0x65, 0x74, 0x47, 0x6c, 0x6f, 0x62, 0x61, 0x6c, 0x56,
-	0x61, 0x72, 0x69, 0x61, 0x62, 0x6c, 0x65, 0x73, 0x12, 0x1c, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
-	0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
-	0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x47, 0x0a, 0x0b, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74,
-	0x65, 0x42, 0x65, 0x74, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
-	0x50, 0x6c, 0x61, 0x63, 0x65, 0x42, 0x65, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f,
-	0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x67,
-	0x0a, 0x15, 0x47, 0x65, 0x74, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c, 0x53,
-	0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x12, 0x26, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
-	0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x61, 0x6c,
-	0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x24, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x57, 0x69, 0x74, 0x68, 0x64,
-	0x72, 0x61, 0x77, 0x61, 0x6c, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x55, 0x0a, 0x10, 0x47, 0x65, 0x74, 0x55, 0x73,
-	0x65, 0x72, 0x49, 0x64, 0x61, 0x6e, 0x64, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x1e, 0x2e, 0x69, 0x64,
-	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x49, 0x64,
-	0x4e, 0x61, 0x6d, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1f, 0x2e, 0x69, 0x64,
-	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x49, 0x64,
-	0x4e, 0x61, 0x6d, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x55,
-	0x0a, 0x13, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x52, 0x69, 0x73, 0x6b, 0x53, 0x65, 0x74,
-	0x74, 0x69, 0x6e, 0x67, 0x73, 0x12, 0x1f, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
-	0x2e, 0x47, 0x65, 0x74, 0x52, 0x69, 0x73, 0x6b, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
-	0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x61, 0x0a, 0x1b, 0x46, 0x65, 0x74, 0x63, 0x68, 0x50, 0x6c,
-	0x61, 0x79, 0x65, 0x72, 0x4c, 0x6f, 0x73, 0x65, 0x72, 0x73, 0x42, 0x79, 0x42, 0x65, 0x74, 0x43,
-	0x6f, 0x75, 0x6e, 0x74, 0x12, 0x22, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
-	0x46, 0x65, 0x74, 0x63, 0x68, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x46, 0x69, 0x6c, 0x74, 0x65,
-	0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
-	0x69, 0x74, 0x79, 0x2e, 0x50, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x0f, 0x63, 0x72, 0x65, 0x61,
-	0x74, 0x65, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x55, 0x73, 0x65, 0x72, 0x12, 0x1c, 0x2e, 0x69, 0x64,
-	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x41, 0x67, 0x65,
-	0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e,
-	0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x50, 0x0a, 0x0f, 0x47, 0x65, 0x74, 0x50,
-	0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x12, 0x1e, 0x2e, 0x69, 0x64,
-	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x55,
-	0x73, 0x65, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64,
-	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x51, 0x0a, 0x0e, 0x4c, 0x69,
-	0x73, 0x74, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x55, 0x73, 0x65, 0x72, 0x73, 0x12, 0x1e, 0x2e, 0x69,
-	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x41, 0x67, 0x65, 0x6e, 0x74,
-	0x55, 0x73, 0x65, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69,
-	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00, 0x12, 0x4b, 0x0a,
-	0x0a, 0x4c, 0x69, 0x73, 0x74, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x73, 0x12, 0x1e, 0x2e, 0x69, 0x64,
-	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x55,
-	0x73, 0x65, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64,
-	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x54, 0x0a, 0x18, 0x41, 0x70,
-	0x70, 0x72, 0x6f, 0x76, 0x65, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74,
-	0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
-	0x79, 0x2e, 0x41, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x61, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d,
-	0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00,
-	0x12, 0x4e, 0x0a, 0x0c, 0x47, 0x65, 0x74, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x55, 0x73, 0x65, 0x72,
-	0x12, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x41,
-	0x67, 0x65, 0x6e, 0x74, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f,
-	0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00,
-	0x12, 0x59, 0x0a, 0x15, 0x67, 0x65, 0x74, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f,
-	0x6e, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x12, 0x1f, 0x2e, 0x69, 0x64, 0x65, 0x6e,
-	0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69,
-	0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65,
-	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00, 0x12, 0x55, 0x0a, 0x17, 0x63,
-	0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x50,
-	0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
-	0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x50, 0x72, 0x6f, 0x66,
-	0x69, 0x6c, 0x65, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43,
-	0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a,
-	0x22, 0x00, 0x12, 0x55, 0x0a, 0x17, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x43, 0x6f, 0x6d, 0x6d,
+	0x22, 0x00, 0x12, 0x55, 0x0a, 0x17, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x6f, 0x6d, 0x6d,
 	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x12, 0x1b, 0x2e,
 	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73,
 	0x69, 0x6f, 0x6e, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65,
 	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x63, 0x0a, 0x1b, 0x61, 0x73, 0x73,
-	0x69, 0x67, 0x6e, 0x55, 0x73, 0x65, 0x72, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f,
-	0x6e, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x12, 0x25, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
-	0x69, 0x74, 0x79, 0x2e, 0x41, 0x73, 0x73, 0x69, 0x67, 0x6e, 0x55, 0x73, 0x65, 0x72, 0x43, 0x6f,
-	0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x1a,
-	0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f,
-	0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x59,
-	0x0a, 0x19, 0x67, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73,
-	0x69, 0x6f, 0x6e, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x12, 0x1b, 0x2e, 0x69, 0x64,
-	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x53, 0x69, 0x6e, 0x67, 0x6c, 0x65, 0x49, 0x74, 0x65,
-	0x6d, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
-	0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00, 0x12, 0x65, 0x0a, 0x1b, 0x72, 0x65, 0x6d,
-	0x6f, 0x76, 0x65, 0x55, 0x73, 0x65, 0x72, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f,
-	0x6e, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x12, 0x25, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
-	0x69, 0x74, 0x79, 0x2e, 0x41, 0x73, 0x73, 0x69, 0x67, 0x6e, 0x55, 0x73, 0x65, 0x72, 0x43, 0x6f,
-	0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x1a,
+	0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x55, 0x0a, 0x17, 0x75, 0x70, 0x64,
+	0x61, 0x74, 0x65, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x50, 0x72, 0x6f,
+	0x66, 0x69, 0x6c, 0x65, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
+	0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c,
+	0x65, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d,
+	0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00,
+	0x12, 0x63, 0x0a, 0x1b, 0x61, 0x73, 0x73, 0x69, 0x67, 0x6e, 0x55, 0x73, 0x65, 0x72, 0x43, 0x6f,
+	0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x12,
+	0x25, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x41, 0x73, 0x73, 0x69, 0x67,
+	0x6e, 0x55, 0x73, 0x65, 0x72, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x50,
+	0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
+	0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x59, 0x0a, 0x19, 0x67, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72,
+	0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c,
+	0x65, 0x73, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x53, 0x69,
+	0x6e, 0x67, 0x6c, 0x65, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
 	0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f,
 	0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00,
-	0x12, 0x52, 0x0a, 0x14, 0x67, 0x65, 0x74, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f,
-	0x6e, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
-	0x69, 0x74, 0x79, 0x2e, 0x53, 0x69, 0x6e, 0x67, 0x6c, 0x65, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
-	0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f,
-	0x62, 0x6a, 0x22, 0x00, 0x12, 0x55, 0x0a, 0x17, 0x64, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x43, 0x6f,
+	0x12, 0x65, 0x0a, 0x1b, 0x72, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x55, 0x73, 0x65, 0x72, 0x43, 0x6f,
+	0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x12,
+	0x25, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x41, 0x73, 0x73, 0x69, 0x67,
+	0x6e, 0x55, 0x73, 0x65, 0x72, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x50,
+	0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
+	0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00, 0x12, 0x52, 0x0a, 0x14, 0x67, 0x65, 0x74, 0x43, 0x6f,
 	0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x12,
 	0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x53, 0x69, 0x6e, 0x67, 0x6c,
 	0x65, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69,
 	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x5d, 0x0a, 0x19, 0x67,
-	0x65, 0x74, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x50, 0x72, 0x6f, 0x66,
-	0x69, 0x6c, 0x65, 0x55, 0x73, 0x65, 0x72, 0x73, 0x12, 0x1f, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
-	0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f,
-	0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e,
-	0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00, 0x12, 0x5a, 0x0a, 0x13, 0x63, 0x61,
-	0x6c, 0x63, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f,
-	0x6e, 0x12, 0x24, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x61, 0x6c,
-	0x63, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
-	0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x54, 0x0a, 0x10, 0x70, 0x61, 0x79, 0x6f, 0x75, 0x74,
-	0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x21, 0x2e, 0x69, 0x64, 0x65,
-	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x50, 0x61, 0x79, 0x6f, 0x75, 0x74, 0x43, 0x6f, 0x6d, 0x6d,
-	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e,
-	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4d, 0x0a, 0x0c,
-	0x67, 0x65, 0x74, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x54, 0x72, 0x65, 0x65, 0x12, 0x1e, 0x2e, 0x69,
-	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x41, 0x67, 0x65, 0x6e, 0x74,
-	0x55, 0x73, 0x65, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69,
-	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x50, 0x0a, 0x0f, 0x67,
-	0x65, 0x74, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x73, 0x12, 0x1e,
-	0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x41, 0x67, 0x65,
-	0x6e, 0x74, 0x55, 0x73, 0x65, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x55, 0x0a, 0x17, 0x64,
+	0x65, 0x6c, 0x65, 0x74, 0x65, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x50,
+	0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
+	0x79, 0x2e, 0x53, 0x69, 0x6e, 0x67, 0x6c, 0x65, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43,
+	0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a,
+	0x22, 0x00, 0x12, 0x5d, 0x0a, 0x19, 0x67, 0x65, 0x74, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73,
+	0x69, 0x6f, 0x6e, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x55, 0x73, 0x65, 0x72, 0x73, 0x12,
+	0x1f, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x6f,
+	0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d,
+	0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22,
+	0x00, 0x12, 0x5a, 0x0a, 0x13, 0x63, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x43, 0x6f,
+	0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x24, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
+	0x69, 0x74, 0x79, 0x2e, 0x43, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x43, 0x6f, 0x6d,
+	0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b,
 	0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4d, 0x0a,
-	0x0e, 0x67, 0x65, 0x74, 0x42, 0x6f, 0x6e, 0x75, 0x73, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x73, 0x12,
-	0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x53, 0x69, 0x6e, 0x67, 0x6c,
-	0x65, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x69,
-	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x42, 0x6f, 0x6e, 0x75, 0x73, 0x47, 0x72, 0x6f,
-	0x75, 0x70, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x4a, 0x0a, 0x11,
-	0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x42, 0x6f, 0x6e, 0x75, 0x73, 0x47, 0x72, 0x6f, 0x75, 0x70,
-	0x73, 0x12, 0x15, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x42, 0x6f, 0x6e,
-	0x75, 0x73, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x73, 0x1a, 0x1c, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
-	0x69, 0x74, 0x79, 0x2e, 0x42, 0x6f, 0x6e, 0x75, 0x73, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x4a, 0x0a, 0x10, 0x63, 0x72, 0x65, 0x61,
-	0x74, 0x65, 0x50, 0x6f, 0x77, 0x65, 0x72, 0x42, 0x6f, 0x6e, 0x75, 0x73, 0x12, 0x16, 0x2e, 0x69,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x54, 0x0a,
+	0x10, 0x70, 0x61, 0x79, 0x6f, 0x75, 0x74, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f,
+	0x6e, 0x12, 0x21, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x50, 0x61, 0x79,
+	0x6f, 0x75, 0x74, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
+	0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62,
+	0x6a, 0x22, 0x00, 0x12, 0x4d, 0x0a, 0x0c, 0x67, 0x65, 0x74, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x54,
+	0x72, 0x65, 0x65, 0x12, 0x1e, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47,
+	0x65, 0x74, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x55, 0x73, 0x65, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43,
+	0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a,
+	0x22, 0x00, 0x12, 0x50, 0x0a, 0x0f, 0x67, 0x65, 0x74, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x50, 0x6c,
+	0x61, 0x79, 0x65, 0x72, 0x73, 0x12, 0x1e, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
+	0x2e, 0x47, 0x65, 0x74, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x55, 0x73, 0x65, 0x72, 0x73, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
+	0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f,
+	0x62, 0x6a, 0x22, 0x00, 0x12, 0x4d, 0x0a, 0x0e, 0x67, 0x65, 0x74, 0x42, 0x6f, 0x6e, 0x75, 0x73,
+	0x47, 0x72, 0x6f, 0x75, 0x70, 0x73, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
+	0x79, 0x2e, 0x53, 0x69, 0x6e, 0x67, 0x6c, 0x65, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x42,
+	0x6f, 0x6e, 0x75, 0x73, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x22, 0x00, 0x12, 0x4a, 0x0a, 0x11, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x42, 0x6f, 0x6e,
+	0x75, 0x73, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x73, 0x12, 0x15, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
+	0x69, 0x74, 0x79, 0x2e, 0x42, 0x6f, 0x6e, 0x75, 0x73, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x73, 0x1a,
+	0x1c, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x42, 0x6f, 0x6e, 0x75, 0x73,
+	0x47, 0x72, 0x6f, 0x75, 0x70, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12,
+	0x4a, 0x0a, 0x10, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x77, 0x65, 0x72, 0x42, 0x6f,
+	0x6e, 0x75, 0x73, 0x12, 0x16, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x50,
+	0x6f, 0x77, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x69, 0x64,
+	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x50, 0x6f, 0x77, 0x65, 0x72, 0x42, 0x6f, 0x6e, 0x75,
+	0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x47, 0x0a, 0x0d, 0x67,
+	0x65, 0x74, 0x50, 0x6f, 0x77, 0x65, 0x72, 0x42, 0x6f, 0x6e, 0x75, 0x73, 0x12, 0x16, 0x2e, 0x69,
 	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x50, 0x6f, 0x77, 0x65, 0x72, 0x52, 0x65, 0x71,
 	0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
 	0x50, 0x6f, 0x77, 0x65, 0x72, 0x42, 0x6f, 0x6e, 0x75, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x22, 0x00, 0x12, 0x47, 0x0a, 0x0d, 0x67, 0x65, 0x74, 0x50, 0x6f, 0x77, 0x65, 0x72,
-	0x42, 0x6f, 0x6e, 0x75, 0x73, 0x12, 0x16, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
-	0x2e, 0x50, 0x6f, 0x77, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e,
-	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x50, 0x6f, 0x77, 0x65, 0x72, 0x42, 0x6f,
-	0x6e, 0x75, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x48, 0x0a,
-	0x10, 0x70, 0x61, 0x79, 0x4f, 0x75, 0x74, 0x50, 0x6f, 0x77, 0x65, 0x72, 0x42, 0x6f, 0x6e, 0x75,
-	0x73, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x50, 0x61, 0x79,
-	0x50, 0x6f, 0x77, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x17, 0x2e, 0x69,
-	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x50, 0x6f, 0x77, 0x65, 0x72, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x48, 0x0a, 0x0e, 0x67, 0x65, 0x74, 0x4e, 0x6f,
-	0x72, 0x6d, 0x61, 0x6c, 0x42, 0x6f, 0x6e, 0x75, 0x73, 0x12, 0x1a, 0x2e, 0x69, 0x64, 0x65, 0x6e,
-	0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x4e, 0x6f, 0x72, 0x6d, 0x61, 0x6c, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x18, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
-	0x2e, 0x4e, 0x6f, 0x72, 0x6d, 0x61, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
-	0x00, 0x12, 0x51, 0x0a, 0x14, 0x63, 0x61, 0x6c, 0x63, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x4e, 0x6f,
-	0x72, 0x6d, 0x61, 0x6c, 0x42, 0x6f, 0x6e, 0x75, 0x73, 0x12, 0x1a, 0x2e, 0x69, 0x64, 0x65, 0x6e,
-	0x74, 0x69, 0x74, 0x79, 0x2e, 0x50, 0x61, 0x79, 0x4e, 0x6f, 0x72, 0x6d, 0x61, 0x6c, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
-	0x2e, 0x50, 0x61, 0x79, 0x4e, 0x6f, 0x72, 0x6d, 0x61, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x11, 0x70, 0x61, 0x79, 0x4f, 0x75, 0x74, 0x4e, 0x6f,
-	0x72, 0x6d, 0x61, 0x6c, 0x42, 0x6f, 0x6e, 0x75, 0x73, 0x12, 0x1a, 0x2e, 0x69, 0x64, 0x65, 0x6e,
-	0x74, 0x69, 0x74, 0x79, 0x2e, 0x50, 0x61, 0x79, 0x4e, 0x6f, 0x72, 0x6d, 0x61, 0x6c, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
-	0x2e, 0x50, 0x61, 0x79, 0x4e, 0x6f, 0x72, 0x6d, 0x61, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x22, 0x00, 0x12, 0x58, 0x0a, 0x15, 0x67, 0x65, 0x74, 0x4e, 0x65, 0x74, 0x77, 0x6f,
-	0x72, 0x6b, 0x53, 0x61, 0x6c, 0x65, 0x73, 0x52, 0x65, 0x70, 0x6f, 0x72, 0x74, 0x12, 0x20, 0x2e,
-	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x4e, 0x65, 0x74, 0x77,
-	0x6f, 0x72, 0x6b, 0x53, 0x61, 0x6c, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f,
-	0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4d,
-	0x0a, 0x0f, 0x67, 0x65, 0x74, 0x54, 0x72, 0x61, 0x63, 0x6b, 0x69, 0x65, 0x72, 0x4b, 0x65, 0x79,
-	0x73, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x53, 0x69, 0x6e,
-	0x67, 0x6c, 0x65, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b,
-	0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x49, 0x0a,
-	0x0a, 0x67, 0x65, 0x74, 0x41, 0x6c, 0x6c, 0x4c, 0x6f, 0x67, 0x73, 0x12, 0x1b, 0x2e, 0x69, 0x64,
-	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x41, 0x6c, 0x6c, 0x4c, 0x6f, 0x67,
-	0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
-	0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x41, 0x6c, 0x6c, 0x4c, 0x6f, 0x67, 0x73, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x46, 0x0a, 0x09, 0x63, 0x72, 0x65, 0x61,
-	0x74, 0x65, 0x4c, 0x6f, 0x67, 0x12, 0x1a, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
-	0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4c, 0x6f, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x72, 0x65,
-	0x61, 0x74, 0x65, 0x4c, 0x6f, 0x67, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00,
-	0x12, 0x48, 0x0a, 0x0a, 0x43, 0x6c, 0x69, 0x6e, 0x74, 0x55, 0x73, 0x65, 0x72, 0x73, 0x12, 0x19,
-	0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74,
-	0x49, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e,
-	0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00, 0x12, 0x4f, 0x0a, 0x13, 0x67, 0x65,
-	0x74, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x53, 0x74, 0x61, 0x74, 0x69, 0x73, 0x74, 0x69, 0x63,
-	0x73, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6c, 0x69,
-	0x65, 0x6e, 0x74, 0x49, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69,
-	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x48, 0x0a, 0x0d, 0x66,
-	0x69, 0x6e, 0x64, 0x4f, 0x6e, 0x65, 0x42, 0x61, 0x6e, 0x6e, 0x65, 0x72, 0x12, 0x18, 0x2e, 0x69,
-	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x46, 0x69, 0x6e, 0x64, 0x4f, 0x6e, 0x65, 0x52,
+	0x73, 0x65, 0x22, 0x00, 0x12, 0x48, 0x0a, 0x10, 0x70, 0x61, 0x79, 0x4f, 0x75, 0x74, 0x50, 0x6f,
+	0x77, 0x65, 0x72, 0x42, 0x6f, 0x6e, 0x75, 0x73, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
+	0x69, 0x74, 0x79, 0x2e, 0x50, 0x61, 0x79, 0x50, 0x6f, 0x77, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x17, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x50,
+	0x6f, 0x77, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x48,
+	0x0a, 0x0e, 0x67, 0x65, 0x74, 0x4e, 0x6f, 0x72, 0x6d, 0x61, 0x6c, 0x42, 0x6f, 0x6e, 0x75, 0x73,
+	0x12, 0x1a, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x4e,
+	0x6f, 0x72, 0x6d, 0x61, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x18, 0x2e, 0x69,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x4e, 0x6f, 0x72, 0x6d, 0x61, 0x6c, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x51, 0x0a, 0x14, 0x63, 0x61, 0x6c, 0x63,
+	0x75, 0x6c, 0x61, 0x74, 0x65, 0x4e, 0x6f, 0x72, 0x6d, 0x61, 0x6c, 0x42, 0x6f, 0x6e, 0x75, 0x73,
+	0x12, 0x1a, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x50, 0x61, 0x79, 0x4e,
+	0x6f, 0x72, 0x6d, 0x61, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x50, 0x61, 0x79, 0x4e, 0x6f, 0x72, 0x6d, 0x61,
+	0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x11, 0x70,
+	0x61, 0x79, 0x4f, 0x75, 0x74, 0x4e, 0x6f, 0x72, 0x6d, 0x61, 0x6c, 0x42, 0x6f, 0x6e, 0x75, 0x73,
+	0x12, 0x1a, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x50, 0x61, 0x79, 0x4e,
+	0x6f, 0x72, 0x6d, 0x61, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x50, 0x61, 0x79, 0x4e, 0x6f, 0x72, 0x6d, 0x61,
+	0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x58, 0x0a, 0x15, 0x67,
+	0x65, 0x74, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x53, 0x61, 0x6c, 0x65, 0x73, 0x52, 0x65,
+	0x70, 0x6f, 0x72, 0x74, 0x12, 0x20, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
+	0x47, 0x65, 0x74, 0x4e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x53, 0x61, 0x6c, 0x65, 0x73, 0x52,
 	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
 	0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4a, 0x0a, 0x0e, 0x46, 0x69, 0x6e, 0x64, 0x41, 0x6c, 0x6c,
-	0x42, 0x61, 0x6e, 0x6e, 0x65, 0x72, 0x73, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
-	0x74, 0x79, 0x2e, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f,
-	0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22,
-	0x00, 0x12, 0x4b, 0x0a, 0x0f, 0x75, 0x73, 0x65, 0x72, 0x46, 0x65, 0x74, 0x63, 0x68, 0x42, 0x61,
-	0x6e, 0x6e, 0x65, 0x72, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
-	0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f,
-	0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4c,
-	0x0a, 0x0c, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x42, 0x61, 0x6e, 0x6e, 0x65, 0x72, 0x12, 0x1d,
-	0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65,
-	0x42, 0x61, 0x6e, 0x6e, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e,
+	0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4d, 0x0a, 0x0f, 0x67, 0x65, 0x74, 0x54, 0x72, 0x61, 0x63,
+	0x6b, 0x69, 0x65, 0x72, 0x4b, 0x65, 0x79, 0x73, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
+	0x69, 0x74, 0x79, 0x2e, 0x53, 0x69, 0x6e, 0x67, 0x6c, 0x65, 0x49, 0x74, 0x65, 0x6d, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
+	0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f,
+	0x62, 0x6a, 0x22, 0x00, 0x12, 0x49, 0x0a, 0x0a, 0x67, 0x65, 0x74, 0x41, 0x6c, 0x6c, 0x4c, 0x6f,
+	0x67, 0x73, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65,
+	0x74, 0x41, 0x6c, 0x6c, 0x4c, 0x6f, 0x67, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x1c, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x41, 0x6c,
+	0x6c, 0x4c, 0x6f, 0x67, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12,
+	0x46, 0x0a, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4c, 0x6f, 0x67, 0x12, 0x1a, 0x2e, 0x69,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4c, 0x6f,
+	0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
+	0x69, 0x74, 0x79, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4c, 0x6f, 0x67, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x48, 0x0a, 0x0a, 0x43, 0x6c, 0x69, 0x6e, 0x74,
+	0x55, 0x73, 0x65, 0x72, 0x73, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
+	0x2e, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d,
+	0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22,
+	0x00, 0x12, 0x4f, 0x0a, 0x13, 0x67, 0x65, 0x74, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x53, 0x74,
+	0x61, 0x74, 0x69, 0x73, 0x74, 0x69, 0x63, 0x73, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
+	0x69, 0x74, 0x79, 0x2e, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43,
+	0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a,
+	0x22, 0x00, 0x12, 0x48, 0x0a, 0x0d, 0x66, 0x69, 0x6e, 0x64, 0x4f, 0x6e, 0x65, 0x42, 0x61, 0x6e,
+	0x6e, 0x65, 0x72, 0x12, 0x18, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x46,
+	0x69, 0x6e, 0x64, 0x4f, 0x6e, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e,
 	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x47, 0x0a, 0x0c,
-	0x64, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x42, 0x61, 0x6e, 0x6e, 0x65, 0x72, 0x12, 0x18, 0x2e, 0x69,
-	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x46, 0x69, 0x6e, 0x64, 0x4f, 0x6e, 0x65, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4a, 0x0a, 0x0e,
+	0x46, 0x69, 0x6e, 0x64, 0x41, 0x6c, 0x6c, 0x42, 0x61, 0x6e, 0x6e, 0x65, 0x72, 0x73, 0x12, 0x19,
+	0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74,
+	0x49, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e,
+	0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4b, 0x0a, 0x0f, 0x75, 0x73, 0x65, 0x72,
+	0x46, 0x65, 0x74, 0x63, 0x68, 0x42, 0x61, 0x6e, 0x6e, 0x65, 0x72, 0x12, 0x19, 0x2e, 0x69, 0x64,
+	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x52,
 	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
 	0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4c, 0x0a, 0x0c, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x42,
+	0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4c, 0x0a, 0x0c, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x42,
 	0x61, 0x6e, 0x6e, 0x65, 0x72, 0x12, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
 	0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x42, 0x61, 0x6e, 0x6e, 0x65, 0x72, 0x52, 0x65, 0x71,
 	0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
 	0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62,
-	0x6a, 0x22, 0x00, 0x12, 0x46, 0x0a, 0x0b, 0x66, 0x69, 0x6e, 0x64, 0x4f, 0x6e, 0x65, 0x50, 0x61,
-	0x67, 0x65, 0x12, 0x18, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x46, 0x69,
-	0x6e, 0x64, 0x4f, 0x6e, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69,
-	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x48, 0x0a, 0x0c, 0x46,
-	0x69, 0x6e, 0x64, 0x41, 0x6c, 0x6c, 0x50, 0x61, 0x67, 0x65, 0x73, 0x12, 0x19, 0x2e, 0x69, 0x64,
-	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
-	0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x49, 0x0a, 0x0d, 0x75, 0x73, 0x65, 0x72, 0x46, 0x65, 0x74,
-	0x63, 0x68, 0x50, 0x61, 0x67, 0x65, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
-	0x79, 0x2e, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d,
-	0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00,
-	0x12, 0x48, 0x0a, 0x0a, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x67, 0x65, 0x12, 0x1b,
-	0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65,
-	0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64,
+	0x6a, 0x22, 0x00, 0x12, 0x47, 0x0a, 0x0c, 0x64, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x42, 0x61, 0x6e,
+	0x6e, 0x65, 0x72, 0x12, 0x18, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x46,
+	0x69, 0x6e, 0x64, 0x4f, 0x6e, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e,
+	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4c, 0x0a, 0x0c,
+	0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x42, 0x61, 0x6e, 0x6e, 0x65, 0x72, 0x12, 0x1d, 0x2e, 0x69,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x42, 0x61,
+	0x6e, 0x6e, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64,
 	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x45, 0x0a, 0x0a, 0x64, 0x65,
-	0x6c, 0x65, 0x74, 0x65, 0x50, 0x61, 0x67, 0x65, 0x12, 0x18, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
-	0x69, 0x74, 0x79, 0x2e, 0x46, 0x69, 0x6e, 0x64, 0x4f, 0x6e, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f,
-	0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22,
-	0x00, 0x12, 0x48, 0x0a, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x61, 0x67, 0x65, 0x12,
-	0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74,
-	0x65, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69,
-	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x46, 0x0a, 0x0b, 0x66,
-	0x69, 0x6e, 0x64, 0x4f, 0x6e, 0x65, 0x4d, 0x65, 0x6e, 0x75, 0x12, 0x18, 0x2e, 0x69, 0x64, 0x65,
-	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x46, 0x69, 0x6e, 0x64, 0x4f, 0x6e, 0x65, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
-	0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62,
-	0x6a, 0x22, 0x00, 0x12, 0x47, 0x0a, 0x0b, 0x46, 0x69, 0x6e, 0x64, 0x41, 0x6c, 0x6c, 0x4d, 0x65,
-	0x6e, 0x75, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6c,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x46, 0x0a, 0x0b, 0x66, 0x69,
+	0x6e, 0x64, 0x4f, 0x6e, 0x65, 0x50, 0x61, 0x67, 0x65, 0x12, 0x18, 0x2e, 0x69, 0x64, 0x65, 0x6e,
+	0x74, 0x69, 0x74, 0x79, 0x2e, 0x46, 0x69, 0x6e, 0x64, 0x4f, 0x6e, 0x65, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43,
+	0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a,
+	0x22, 0x00, 0x12, 0x48, 0x0a, 0x0c, 0x46, 0x69, 0x6e, 0x64, 0x41, 0x6c, 0x6c, 0x50, 0x61, 0x67,
+	0x65, 0x73, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6c,
 	0x69, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e,
 	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52,
 	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x49, 0x0a, 0x0d,
-	0x75, 0x73, 0x65, 0x72, 0x46, 0x65, 0x74, 0x63, 0x68, 0x4d, 0x65, 0x6e, 0x75, 0x12, 0x19, 0x2e,
+	0x75, 0x73, 0x65, 0x72, 0x46, 0x65, 0x74, 0x63, 0x68, 0x50, 0x61, 0x67, 0x65, 0x12, 0x19, 0x2e,
 	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x49,
 	0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
 	0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
 	0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x48, 0x0a, 0x0a, 0x75, 0x70, 0x64, 0x61, 0x74,
-	0x65, 0x4d, 0x65, 0x6e, 0x75, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
-	0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4d, 0x65, 0x6e, 0x75, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x65, 0x50, 0x61, 0x67, 0x65, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
+	0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65,
 	0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f,
 	0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22,
-	0x00, 0x12, 0x45, 0x0a, 0x0a, 0x64, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x4d, 0x65, 0x6e, 0x75, 0x12,
+	0x00, 0x12, 0x45, 0x0a, 0x0a, 0x64, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x50, 0x61, 0x67, 0x65, 0x12,
 	0x18, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x46, 0x69, 0x6e, 0x64, 0x4f,
 	0x6e, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e,
 	0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f,
 	0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x48, 0x0a, 0x0a, 0x63, 0x72, 0x65, 0x61,
-	0x74, 0x65, 0x4d, 0x65, 0x6e, 0x75, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
-	0x79, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4d, 0x65, 0x6e, 0x75, 0x52, 0x65, 0x71, 0x75,
+	0x74, 0x65, 0x50, 0x61, 0x67, 0x65, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
+	0x79, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75,
 	0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43,
 	0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a,
-	0x22, 0x00, 0x12, 0x40, 0x0a, 0x09, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4b, 0x79, 0x63, 0x12,
-	0x14, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x4b, 0x79, 0x63, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
-	0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f,
-	0x62, 0x6a, 0x22, 0x00, 0x12, 0x43, 0x0a, 0x08, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x4b, 0x79, 0x63,
-	0x12, 0x18, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x46, 0x69, 0x6e, 0x64,
-	0x4f, 0x6e, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65,
+	0x22, 0x00, 0x12, 0x46, 0x0a, 0x0b, 0x66, 0x69, 0x6e, 0x64, 0x4f, 0x6e, 0x65, 0x4d, 0x65, 0x6e,
+	0x75, 0x12, 0x18, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x46, 0x69, 0x6e,
+	0x64, 0x4f, 0x6e, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64,
+	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x47, 0x0a, 0x0b, 0x46, 0x69,
+	0x6e, 0x64, 0x41, 0x6c, 0x6c, 0x4d, 0x65, 0x6e, 0x75, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e,
+	0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
+	0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62,
+	0x6a, 0x22, 0x00, 0x12, 0x49, 0x0a, 0x0d, 0x75, 0x73, 0x65, 0x72, 0x46, 0x65, 0x74, 0x63, 0x68,
+	0x4d, 0x65, 0x6e, 0x75, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
+	0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f,
+	0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x48,
+	0x0a, 0x0a, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x4d, 0x65, 0x6e, 0x75, 0x12, 0x1b, 0x2e, 0x69,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4d, 0x65,
+	0x6e, 0x75, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e,
+	0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x45, 0x0a, 0x0a, 0x64, 0x65, 0x6c, 0x65,
+	0x74, 0x65, 0x4d, 0x65, 0x6e, 0x75, 0x12, 0x18, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
+	0x79, 0x2e, 0x46, 0x69, 0x6e, 0x64, 0x4f, 0x6e, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d,
+	0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12,
+	0x48, 0x0a, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4d, 0x65, 0x6e, 0x75, 0x12, 0x1b, 0x2e,
+	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4d,
+	0x65, 0x6e, 0x75, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65,
 	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x48, 0x0a, 0x0a, 0x4c, 0x69, 0x73,
-	0x74, 0x41, 0x6c, 0x6c, 0x4b, 0x79, 0x63, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
-	0x74, 0x79, 0x2e, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f,
-	0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x41, 0x72, 0x72, 0x61,
-	0x79, 0x22, 0x00, 0x12, 0x48, 0x0a, 0x09, 0x4c, 0x69, 0x73, 0x74, 0x42, 0x61, 0x6e, 0x6b, 0x73,
-	0x12, 0x1a, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x4c, 0x69, 0x73, 0x74,
-	0x42, 0x61, 0x6e, 0x6b, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69,
+	0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x40, 0x0a, 0x09, 0x43, 0x72, 0x65,
+	0x61, 0x74, 0x65, 0x4b, 0x79, 0x63, 0x12, 0x14, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
+	0x79, 0x2e, 0x4b, 0x79, 0x63, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69,
 	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00, 0x12, 0x47, 0x0a,
-	0x0b, 0x46, 0x65, 0x74, 0x63, 0x68, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x73, 0x12, 0x19, 0x2e, 0x69,
-	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x49, 0x64,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
-	0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4a, 0x0a, 0x0c, 0x46, 0x65, 0x74, 0x63, 0x68, 0x55,
-	0x73, 0x65, 0x72, 0x73, 0x49, 0x64, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
-	0x79, 0x2e, 0x46, 0x69, 0x6e, 0x64, 0x55, 0x73, 0x65, 0x72, 0x49, 0x64, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43,
-	0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a,
-	0x22, 0x00, 0x12, 0x53, 0x0a, 0x13, 0x46, 0x65, 0x74, 0x63, 0x68, 0x55, 0x73, 0x65, 0x72, 0x52,
-	0x65, 0x66, 0x65, 0x72, 0x72, 0x61, 0x6c, 0x49, 0x64, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e,
-	0x74, 0x69, 0x74, 0x79, 0x2e, 0x46, 0x69, 0x6e, 0x64, 0x55, 0x73, 0x65, 0x72, 0x49, 0x64, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
-	0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00, 0x12, 0x54, 0x0a, 0x10, 0x41, 0x64, 0x64, 0x41, 0x6e,
-	0x64, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x55, 0x73, 0x65, 0x72, 0x12, 0x21, 0x2e, 0x69, 0x64,
-	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x41, 0x64, 0x64, 0x41, 0x6e, 0x64, 0x52, 0x65, 0x6d,
-	0x6f, 0x76, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x43, 0x0a, 0x08, 0x43,
+	0x68, 0x65, 0x63, 0x6b, 0x4b, 0x79, 0x63, 0x12, 0x18, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
+	0x74, 0x79, 0x2e, 0x46, 0x69, 0x6e, 0x64, 0x4f, 0x6e, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d,
+	0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00,
+	0x12, 0x48, 0x0a, 0x0a, 0x4c, 0x69, 0x73, 0x74, 0x41, 0x6c, 0x6c, 0x4b, 0x79, 0x63, 0x12, 0x19,
+	0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74,
+	0x49, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e,
+	0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00, 0x12, 0x48, 0x0a, 0x09, 0x4c, 0x69,
+	0x73, 0x74, 0x42, 0x61, 0x6e, 0x6b, 0x73, 0x12, 0x1a, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
+	0x74, 0x79, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x42, 0x61, 0x6e, 0x6b, 0x73, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43,
+	0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x41, 0x72, 0x72,
+	0x61, 0x79, 0x22, 0x00, 0x12, 0x47, 0x0a, 0x0b, 0x46, 0x65, 0x74, 0x63, 0x68, 0x41, 0x67, 0x65,
+	0x6e, 0x74, 0x73, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43,
+	0x6c, 0x69, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b,
 	0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e,
 	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4a, 0x0a,
-	0x0f, 0x47, 0x65, 0x74, 0x41, 0x66, 0x66, 0x69, 0x6c, 0x69, 0x61, 0x74, 0x65, 0x49, 0x64, 0x73,
-	0x12, 0x16, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x45, 0x6d, 0x70, 0x74,
-	0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74,
-	0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x11, 0x47, 0x65, 0x74,
-	0x41, 0x66, 0x66, 0x69, 0x6c, 0x69, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x73, 0x12, 0x1a,
-	0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x41, 0x66, 0x66, 0x69, 0x6c, 0x69,
-	0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65,
-	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x41, 0x66, 0x66, 0x69, 0x6c, 0x69, 0x61, 0x74, 0x65, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x4d, 0x0a, 0x10, 0x47, 0x65, 0x74,
-	0x41, 0x66, 0x66, 0x69, 0x6c, 0x69, 0x61, 0x74, 0x65, 0x44, 0x61, 0x74, 0x61, 0x12, 0x1a, 0x2e,
-	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x41, 0x66, 0x66, 0x69, 0x6c, 0x69, 0x61,
-	0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e,
-	0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4a, 0x0a, 0x0e, 0x47, 0x65, 0x74, 0x53,
-	0x75, 0x70, 0x65, 0x72, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x73, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65,
-	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x52, 0x65,
+	0x0c, 0x46, 0x65, 0x74, 0x63, 0x68, 0x55, 0x73, 0x65, 0x72, 0x73, 0x49, 0x64, 0x12, 0x1b, 0x2e,
+	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x46, 0x69, 0x6e, 0x64, 0x55, 0x73, 0x65,
+	0x72, 0x49, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65,
+	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x53, 0x0a, 0x13, 0x46, 0x65, 0x74,
+	0x63, 0x68, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x66, 0x65, 0x72, 0x72, 0x61, 0x6c, 0x49, 0x64,
+	0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x46, 0x69, 0x6e, 0x64,
+	0x55, 0x73, 0x65, 0x72, 0x49, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e,
+	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00, 0x12, 0x54,
+	0x0a, 0x10, 0x41, 0x64, 0x64, 0x41, 0x6e, 0x64, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x55, 0x73,
+	0x65, 0x72, 0x12, 0x21, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x41, 0x64,
+	0x64, 0x41, 0x6e, 0x64, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65,
 	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
 	0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f,
-	0x62, 0x6a, 0x22, 0x00, 0x12, 0x5f, 0x0a, 0x1f, 0x47, 0x65, 0x74, 0x52, 0x65, 0x66, 0x65, 0x72,
-	0x72, 0x61, 0x6c, 0x55, 0x73, 0x65, 0x72, 0x49, 0x64, 0x73, 0x46, 0x6f, 0x72, 0x43, 0x6f, 0x6d,
-	0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
-	0x74, 0x79, 0x2e, 0x46, 0x69, 0x6e, 0x64, 0x55, 0x73, 0x65, 0x72, 0x49, 0x64, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
-	0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x41, 0x72,
-	0x72, 0x61, 0x79, 0x22, 0x00, 0x12, 0x51, 0x0a, 0x14, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x75, 0x70,
-	0x65, 0x72, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x73, 0x55, 0x73, 0x65, 0x72, 0x73, 0x12, 0x1e, 0x2e,
-	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x47, 0x65, 0x74, 0x41, 0x67, 0x65, 0x6e,
-	0x74, 0x55, 0x73, 0x65, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x17, 0x2e,
-	0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x41, 0x72, 0x72, 0x61, 0x79, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x51, 0x0a, 0x13, 0x47, 0x65, 0x74, 0x43,
-	0x6c, 0x69, 0x65, 0x6e, 0x74, 0x41, 0x66, 0x66, 0x69, 0x6c, 0x69, 0x61, 0x74, 0x65, 0x73, 0x12,
-	0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6c, 0x69, 0x65, 0x6e,
-	0x74, 0x49, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65,
-	0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00, 0x42, 0x1f, 0x5a, 0x1d, 0x77,
-	0x61, 0x6c, 0x6c, 0x65, 0x74, 0x2d, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2f, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x2f, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0x62, 0x6a, 0x22, 0x00, 0x12, 0x4a, 0x0a, 0x0f, 0x47, 0x65, 0x74, 0x41, 0x66, 0x66, 0x69, 0x6c,
+	0x69, 0x61, 0x74, 0x65, 0x49, 0x64, 0x73, 0x12, 0x16, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
+	0x74, 0x79, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f,
+	0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00,
+	0x12, 0x4e, 0x0a, 0x11, 0x47, 0x65, 0x74, 0x41, 0x66, 0x66, 0x69, 0x6c, 0x69, 0x61, 0x74, 0x65,
+	0x55, 0x73, 0x65, 0x72, 0x73, 0x12, 0x1a, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
+	0x2e, 0x41, 0x66, 0x66, 0x69, 0x6c, 0x69, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x41, 0x66, 0x66,
+	0x69, 0x6c, 0x69, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00,
+	0x12, 0x4d, 0x0a, 0x10, 0x47, 0x65, 0x74, 0x41, 0x66, 0x66, 0x69, 0x6c, 0x69, 0x61, 0x74, 0x65,
+	0x44, 0x61, 0x74, 0x61, 0x12, 0x1a, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
+	0x41, 0x66, 0x66, 0x69, 0x6c, 0x69, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d,
+	0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12,
+	0x4a, 0x0a, 0x0e, 0x47, 0x65, 0x74, 0x53, 0x75, 0x70, 0x65, 0x72, 0x41, 0x67, 0x65, 0x6e, 0x74,
+	0x73, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6c, 0x69,
+	0x65, 0x6e, 0x74, 0x49, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x5f, 0x0a, 0x1f, 0x47,
+	0x65, 0x74, 0x52, 0x65, 0x66, 0x65, 0x72, 0x72, 0x61, 0x6c, 0x55, 0x73, 0x65, 0x72, 0x49, 0x64,
+	0x73, 0x46, 0x6f, 0x72, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x1b,
+	0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x46, 0x69, 0x6e, 0x64, 0x55, 0x73,
+	0x65, 0x72, 0x49, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64,
+	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79, 0x22, 0x00, 0x12, 0x51, 0x0a, 0x14,
+	0x4c, 0x69, 0x73, 0x74, 0x53, 0x75, 0x70, 0x65, 0x72, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x73, 0x55,
+	0x73, 0x65, 0x72, 0x73, 0x12, 0x1e, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
+	0x47, 0x65, 0x74, 0x41, 0x67, 0x65, 0x6e, 0x74, 0x55, 0x73, 0x65, 0x72, 0x73, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x17, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e,
+	0x41, 0x72, 0x72, 0x61, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12,
+	0x51, 0x0a, 0x13, 0x47, 0x65, 0x74, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x41, 0x66, 0x66, 0x69,
+	0x6c, 0x69, 0x61, 0x74, 0x65, 0x73, 0x12, 0x19, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
+	0x79, 0x2e, 0x43, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d,
+	0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x41, 0x72, 0x72, 0x61, 0x79,
+	0x22, 0x00, 0x12, 0x52, 0x0a, 0x15, 0x47, 0x65, 0x74, 0x41, 0x66, 0x66, 0x69, 0x6c, 0x69, 0x61,
+	0x74, 0x65, 0x73, 0x4f, 0x76, 0x65, 0x72, 0x76, 0x69, 0x65, 0x77, 0x12, 0x1a, 0x2e, 0x69, 0x64,
+	0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x41, 0x66, 0x66, 0x69, 0x6c, 0x69, 0x61, 0x74, 0x65,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69,
+	0x74, 0x79, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x4f, 0x62, 0x6a, 0x22, 0x00, 0x12, 0x4c, 0x0a, 0x0b, 0x49, 0x6d, 0x70, 0x6f, 0x72, 0x74,
+	0x55, 0x73, 0x65, 0x72, 0x73, 0x12, 0x1c, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79,
+	0x2e, 0x49, 0x6d, 0x70, 0x6f, 0x72, 0x74, 0x55, 0x73, 0x65, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x2e, 0x49,
+	0x6d, 0x70, 0x6f, 0x72, 0x74, 0x55, 0x73, 0x65, 0x72, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x22, 0x00, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -15013,479 +15528,492 @@ func file_identity_proto_rawDescGZIP() []byte {
 	return file_identity_proto_rawDescData
 }
 
-var file_identity_proto_msgTypes = make([]protoimpl.MessageInfo, 148)
+var file_identity_proto_msgTypes = make([]protoimpl.MessageInfo, 154)
 var file_identity_proto_goTypes = []interface{}{
-	(*ArrayResponse)(nil),                    // 0: identity.ArrayResponse
-	(*AffiliateRequest)(nil),                 // 1: identity.AffiliateRequest
-	(*Pagination)(nil),                       // 2: identity.Pagination
-	(*AffiliateResponse)(nil),                // 3: identity.AffiliateResponse
-	(*AddAndRemoveUserRequest)(nil),          // 4: identity.AddAndRemoveUserRequest
-	(*FindUserIdRequest)(nil),                // 5: identity.FindUserIdRequest
-	(*ListBanksRequest)(nil),                 // 6: identity.ListBanksRequest
-	(*KycRequest)(nil),                       // 7: identity.KycRequest
-	(*BasicUser)(nil),                        // 8: identity.BasicUser
-	(*ClientIdRequest)(nil),                  // 9: identity.ClientIdRequest
-	(*FindOneRequest)(nil),                   // 10: identity.FindOneRequest
-	(*ApprovalRequest)(nil),                  // 11: identity.ApprovalRequest
-	(*AdditionalInfo)(nil),                   // 12: identity.AdditionalInfo
-	(*CreateBannerRequest)(nil),              // 13: identity.CreateBannerRequest
-	(*CreatePageRequest)(nil),                // 14: identity.CreatePageRequest
-	(*CreateMenuRequest)(nil),                // 15: identity.CreateMenuRequest
-	(*AuditLog)(nil),                         // 16: identity.AuditLog
-	(*CreateLogRequest)(nil),                 // 17: identity.CreateLogRequest
-	(*AuditUser)(nil),                        // 18: identity.AuditUser
-	(*CreateLogResponse)(nil),                // 19: identity.CreateLogResponse
-	(*AuditQuery)(nil),                       // 20: identity.AuditQuery
-	(*GetAllLogsRequest)(nil),                // 21: identity.GetAllLogsRequest
-	(*GetAllLogsResponse)(nil),               // 22: identity.GetAllLogsResponse
-	(*HandlePinRequest)(nil),                 // 23: identity.HandlePinRequest
-	(*GetNetworkSalesRequest)(nil),           // 24: identity.GetNetworkSalesRequest
-	(*DailyTransactionsRequest)(nil),         // 25: identity.DailyTransactionsRequest
-	(*HandleTransferRequest)(nil),            // 26: identity.HandleTransferRequest
-	(*PowerRequest)(nil),                     // 27: identity.PowerRequest
-	(*BetData)(nil),                          // 28: identity.BetData
-	(*Response)(nil),                         // 29: identity.Response
-	(*CurrentWeekData)(nil),                  // 30: identity.CurrentWeekData
-	(*CurrentMonth)(nil),                     // 31: identity.CurrentMonth
-	(*Meta)(nil),                             // 32: identity.Meta
-	(*NormalResponse)(nil),                   // 33: identity.NormalResponse
-	(*PayNormalResponse)(nil),                // 34: identity.PayNormalResponse
-	(*NormalPayout)(nil),                     // 35: identity.NormalPayout
-	(*PowerBonusData)(nil),                   // 36: identity.PowerBonusData
-	(*PayPowerRequest)(nil),                  // 37: identity.PayPowerRequest
-	(*PowerCountData)(nil),                   // 38: identity.PowerCountData
-	(*PowerResponse)(nil),                    // 39: identity.PowerResponse
-	(*PowerBonusResponse)(nil),               // 40: identity.PowerBonusResponse
-	(*GetNormalRequest)(nil),                 // 41: identity.GetNormalRequest
-	(*PayNormalRequest)(nil),                 // 42: identity.PayNormalRequest
-	(*BonusGroup)(nil),                       // 43: identity.BonusGroup
-	(*BonusGroups)(nil),                      // 44: identity.BonusGroups
-	(*BonusGroupResponse)(nil),               // 45: identity.BonusGroupResponse
-	(*GetAgentUserRequest)(nil),              // 46: identity.GetAgentUserRequest
-	(*GetAgentUsersRequest)(nil),             // 47: identity.GetAgentUsersRequest
-	(*GetCommissionsRequest)(nil),            // 48: identity.GetCommissionsRequest
-	(*CalculateCommissionRequest)(nil),       // 49: identity.CalculateCommissionRequest
-	(*PayoutCommissionRequest)(nil),          // 50: identity.PayoutCommissionRequest
-	(*PayoutCommissionData)(nil),             // 51: identity.PayoutCommissionData
-	(*CommissionProfile)(nil),                // 52: identity.CommissionProfile
-	(*SingleItemRequest)(nil),                // 53: identity.SingleItemRequest
-	(*AssignUserCommissionProfile)(nil),      // 54: identity.AssignUserCommissionProfile
-	(*Commission)(nil),                       // 55: identity.Commission
-	(*CommissionTurnover)(nil),               // 56: identity.CommissionTurnover
-	(*GetRiskSettingRequest)(nil),            // 57: identity.GetRiskSettingRequest
-	(*FindUserRequest)(nil),                  // 58: identity.FindUserRequest
-	(*GetUserIdNameRequest)(nil),             // 59: identity.GetUserIdNameRequest
-	(*GetUserIdNameResponse)(nil),            // 60: identity.GetUserIdNameResponse
-	(*GetWithdrawalSettingsRequest)(nil),     // 61: identity.GetWithdrawalSettingsRequest
-	(*WithdrawalSettingsResponse)(nil),       // 62: identity.WithdrawalSettingsResponse
-	(*PlaceBetRequest)(nil),                  // 63: identity.PlaceBetRequest
-	(*BetSelection)(nil),                     // 64: identity.BetSelection
-	(*GetSettingsRequest)(nil),               // 65: identity.GetSettingsRequest
-	(*SettingsRequest)(nil),                  // 66: identity.SettingsRequest
-	(*UserRiskSettingsRequest)(nil),          // 67: identity.UserRiskSettingsRequest
-	(*SaveSegmentRequest)(nil),               // 68: identity.SaveSegmentRequest
-	(*GrantBonusRequest)(nil),                // 69: identity.GrantBonusRequest
-	(*FetchPlayerSegmentRequest)(nil),        // 70: identity.FetchPlayerSegmentRequest
-	(*GetSegmentPlayerRequest)(nil),          // 71: identity.GetSegmentPlayerRequest
-	(*DeleteItemRequest)(nil),                // 72: identity.DeleteItemRequest
-	(*AddToSegmentRequest)(nil),              // 73: identity.AddToSegmentRequest
-	(*UploadPlayersToSegment)(nil),           // 74: identity.UploadPlayersToSegment
-	(*FetchPlayerFilterRequest)(nil),         // 75: identity.FetchPlayerFilterRequest
-	(*FetchPlayerFilterResponse)(nil),        // 76: identity.FetchPlayerFilterResponse
-	(*TransactionEntity)(nil),                // 77: identity.TransactionEntity
-	(*UserInfo)(nil),                         // 78: identity.UserInfo
-	(*UserData)(nil),                         // 79: identity.UserData
-	(*ChangeUserTypeStatusRequest)(nil),      // 80: identity.ChangeUserTypeStatusRequest
-	(*CreateUserRequest)(nil),                // 81: identity.CreateUserRequest
-	(*CreateAgentRequest)(nil),               // 82: identity.CreateAgentRequest
-	(*UpdateUserRequest)(nil),                // 83: identity.UpdateUserRequest
-	(*User)(nil),                             // 84: identity.User
-	(*RegisterResponse)(nil),                 // 85: identity.RegisterResponse
-	(*LoginRequest)(nil),                     // 86: identity.LoginRequest
-	(*LoginResponse)(nil),                    // 87: identity.LoginResponse
-	(*GetUserDetailsRequest)(nil),            // 88: identity.GetUserDetailsRequest
-	(*GetUserDetailsResponse)(nil),           // 89: identity.GetUserDetailsResponse
-	(*ValidateRequest)(nil),                  // 90: identity.ValidateRequest
-	(*ValidateTestRequest)(nil),              // 91: identity.ValidateTestRequest
-	(*ValidateTestResponse)(nil),             // 92: identity.ValidateTestResponse
-	(*ListTestAccountsRequest)(nil),          // 93: identity.ListTestAccountsRequest
-	(*ValidateResponse)(nil),                 // 94: identity.ValidateResponse
-	(*ValidateClientResponse)(nil),           // 95: identity.ValidateClientResponse
-	(*ValidateGroupCodeRequest)(nil),         // 96: identity.ValidateGroupCodeRequest
-	(*ValidateGroupCodeResponse)(nil),        // 97: identity.ValidateGroupCodeResponse
-	(*ClientRequest)(nil),                    // 98: identity.ClientRequest
-	(*RemoveClientRequest)(nil),              // 99: identity.RemoveClientRequest
-	(*RemovePermissionRequest)(nil),          // 100: identity.RemovePermissionRequest
-	(*RoleRequest)(nil),                      // 101: identity.RoleRequest
-	(*SaveRoleResponse)(nil),                 // 102: identity.SaveRoleResponse
-	(*GetRolesResponse)(nil),                 // 103: identity.GetRolesResponse
-	(*RemoveRoleRequest)(nil),                // 104: identity.RemoveRoleRequest
-	(*Role)(nil),                             // 105: identity.Role
-	(*PermissionRequest)(nil),                // 106: identity.PermissionRequest
-	(*AssignRolePermissionRequest)(nil),      // 107: identity.AssignRolePermissionRequest
-	(*GetPaymentDataRequest)(nil),            // 108: identity.GetPaymentDataRequest
-	(*GetPaymentDataResponse)(nil),           // 109: identity.GetPaymentDataResponse
-	(*GetClientRequest)(nil),                 // 110: identity.GetClientRequest
-	(*GetClientResponse)(nil),                // 111: identity.GetClientResponse
-	(*CommonResponseArray)(nil),              // 112: identity.CommonResponseArray
-	(*CommonResponseObj)(nil),                // 113: identity.CommonResponseObj
-	(*ClientData)(nil),                       // 114: identity.ClientData
-	(*SearchPlayerRequest)(nil),              // 115: identity.SearchPlayerRequest
-	(*SearchPlayerResponse)(nil),             // 116: identity.SearchPlayerResponse
-	(*Player)(nil),                           // 117: identity.Player
-	(*GetUserByUsernameRequest)(nil),         // 118: identity.GetUserByUsernameRequest
-	(*GetUserByUsernameResponse)(nil),        // 119: identity.GetUserByUsernameResponse
-	(*LoggedInUserData)(nil),                 // 120: identity.LoggedInUserData
-	(*GetUserLogResponse)(nil),               // 121: identity.GetUserLogResponse
-	(*OnlinePlayersRequest)(nil),             // 122: identity.OnlinePlayersRequest
-	(*RegistrationReportRequest)(nil),        // 123: identity.RegistrationReportRequest
-	(*PlayersListResponse)(nil),              // 124: identity.PlayersListResponse
-	(*GetPlayerDataRequest)(nil),             // 125: identity.GetPlayerDataRequest
-	(*GetPlayerDataResponse)(nil),            // 126: identity.GetPlayerDataResponse
-	(*UpdatePlayerDataRequest)(nil),          // 127: identity.UpdatePlayerDataRequest
-	(*PlayerWalletData)(nil),                 // 128: identity.PlayerWalletData
-	(*PlayerBonusData)(nil),                  // 129: identity.PlayerBonusData
-	(*ChangePasswordRequest)(nil),            // 130: identity.ChangePasswordRequest
-	(*ResetPasswordRequest)(nil),             // 131: identity.ResetPasswordRequest
-	(*PaginationResponse)(nil),               // 132: identity.PaginationResponse
-	(*Country)(nil),                          // 133: identity.Country
-	(*GetStatesRequest)(nil),                 // 134: identity.GetStatesRequest
-	(*SessionRequest)(nil),                   // 135: identity.SessionRequest
-	(*State)(nil),                            // 136: identity.State
-	(*GetCountryResponse)(nil),               // 137: identity.GetCountryResponse
-	(*StateResponse)(nil),                    // 138: identity.StateResponse
-	(*XpressLoginRequest)(nil),               // 139: identity.XpressLoginRequest
-	(*XpressLoginResponse)(nil),              // 140: identity.XpressLoginResponse
-	(*EmptyRequest)(nil),                     // 141: identity.EmptyRequest
-	(*MetaData)(nil),                         // 142: identity.MetaData
-	(*GetUserIdNameResponse_Users)(nil),      // 143: identity.GetUserIdNameResponse.Users
-	(*ValidateResponse_User)(nil),            // 144: identity.ValidateResponse.User
-	(*GetUserByUsernameResponse_Data)(nil),   // 145: identity.GetUserByUsernameResponse.Data
-	(*GetPlayerDataResponse_PlayerData)(nil), // 146: identity.GetPlayerDataResponse.PlayerData
-	(*XpressLoginResponse_XpressData)(nil),   // 147: identity.XpressLoginResponse.XpressData
-	(*structpb.Struct)(nil),                  // 148: google.protobuf.Struct
+	(*TopAffiliate)(nil),                     // 0: identity.TopAffiliate
+	(*AffiliateStatsData)(nil),               // 1: identity.AffiliateStatsData
+	(*AffiliateStatsResponse)(nil),           // 2: identity.AffiliateStatsResponse
+	(*ArrayResponse)(nil),                    // 3: identity.ArrayResponse
+	(*AffiliateRequest)(nil),                 // 4: identity.AffiliateRequest
+	(*Pagination)(nil),                       // 5: identity.Pagination
+	(*AffiliateResponse)(nil),                // 6: identity.AffiliateResponse
+	(*AddAndRemoveUserRequest)(nil),          // 7: identity.AddAndRemoveUserRequest
+	(*FindUserIdRequest)(nil),                // 8: identity.FindUserIdRequest
+	(*ListBanksRequest)(nil),                 // 9: identity.ListBanksRequest
+	(*KycRequest)(nil),                       // 10: identity.KycRequest
+	(*BasicUser)(nil),                        // 11: identity.BasicUser
+	(*ClientIdRequest)(nil),                  // 12: identity.ClientIdRequest
+	(*FindOneRequest)(nil),                   // 13: identity.FindOneRequest
+	(*ApprovalRequest)(nil),                  // 14: identity.ApprovalRequest
+	(*AdditionalInfo)(nil),                   // 15: identity.AdditionalInfo
+	(*CreateBannerRequest)(nil),              // 16: identity.CreateBannerRequest
+	(*CreatePageRequest)(nil),                // 17: identity.CreatePageRequest
+	(*CreateMenuRequest)(nil),                // 18: identity.CreateMenuRequest
+	(*AuditLog)(nil),                         // 19: identity.AuditLog
+	(*CreateLogRequest)(nil),                 // 20: identity.CreateLogRequest
+	(*AuditUser)(nil),                        // 21: identity.AuditUser
+	(*CreateLogResponse)(nil),                // 22: identity.CreateLogResponse
+	(*AuditQuery)(nil),                       // 23: identity.AuditQuery
+	(*GetAllLogsRequest)(nil),                // 24: identity.GetAllLogsRequest
+	(*GetAllLogsResponse)(nil),               // 25: identity.GetAllLogsResponse
+	(*HandlePinRequest)(nil),                 // 26: identity.HandlePinRequest
+	(*GetNetworkSalesRequest)(nil),           // 27: identity.GetNetworkSalesRequest
+	(*DailyTransactionsRequest)(nil),         // 28: identity.DailyTransactionsRequest
+	(*HandleTransferRequest)(nil),            // 29: identity.HandleTransferRequest
+	(*PowerRequest)(nil),                     // 30: identity.PowerRequest
+	(*BetData)(nil),                          // 31: identity.BetData
+	(*Response)(nil),                         // 32: identity.Response
+	(*CurrentWeekData)(nil),                  // 33: identity.CurrentWeekData
+	(*CurrentMonth)(nil),                     // 34: identity.CurrentMonth
+	(*Meta)(nil),                             // 35: identity.Meta
+	(*NormalResponse)(nil),                   // 36: identity.NormalResponse
+	(*PayNormalResponse)(nil),                // 37: identity.PayNormalResponse
+	(*NormalPayout)(nil),                     // 38: identity.NormalPayout
+	(*PowerBonusData)(nil),                   // 39: identity.PowerBonusData
+	(*PayPowerRequest)(nil),                  // 40: identity.PayPowerRequest
+	(*PowerCountData)(nil),                   // 41: identity.PowerCountData
+	(*PowerResponse)(nil),                    // 42: identity.PowerResponse
+	(*PowerBonusResponse)(nil),               // 43: identity.PowerBonusResponse
+	(*GetNormalRequest)(nil),                 // 44: identity.GetNormalRequest
+	(*PayNormalRequest)(nil),                 // 45: identity.PayNormalRequest
+	(*BonusGroup)(nil),                       // 46: identity.BonusGroup
+	(*BonusGroups)(nil),                      // 47: identity.BonusGroups
+	(*BonusGroupResponse)(nil),               // 48: identity.BonusGroupResponse
+	(*GetAgentUserRequest)(nil),              // 49: identity.GetAgentUserRequest
+	(*GetAgentUsersRequest)(nil),             // 50: identity.GetAgentUsersRequest
+	(*GetCommissionsRequest)(nil),            // 51: identity.GetCommissionsRequest
+	(*CalculateCommissionRequest)(nil),       // 52: identity.CalculateCommissionRequest
+	(*PayoutCommissionRequest)(nil),          // 53: identity.PayoutCommissionRequest
+	(*PayoutCommissionData)(nil),             // 54: identity.PayoutCommissionData
+	(*CommissionProfile)(nil),                // 55: identity.CommissionProfile
+	(*SingleItemRequest)(nil),                // 56: identity.SingleItemRequest
+	(*AssignUserCommissionProfile)(nil),      // 57: identity.AssignUserCommissionProfile
+	(*Commission)(nil),                       // 58: identity.Commission
+	(*CommissionTurnover)(nil),               // 59: identity.CommissionTurnover
+	(*GetRiskSettingRequest)(nil),            // 60: identity.GetRiskSettingRequest
+	(*FindUserRequest)(nil),                  // 61: identity.FindUserRequest
+	(*GetUserIdNameRequest)(nil),             // 62: identity.GetUserIdNameRequest
+	(*GetUserIdNameResponse)(nil),            // 63: identity.GetUserIdNameResponse
+	(*GetWithdrawalSettingsRequest)(nil),     // 64: identity.GetWithdrawalSettingsRequest
+	(*WithdrawalSettingsResponse)(nil),       // 65: identity.WithdrawalSettingsResponse
+	(*PlaceBetRequest)(nil),                  // 66: identity.PlaceBetRequest
+	(*BetSelection)(nil),                     // 67: identity.BetSelection
+	(*GetSettingsRequest)(nil),               // 68: identity.GetSettingsRequest
+	(*SettingsRequest)(nil),                  // 69: identity.SettingsRequest
+	(*UserRiskSettingsRequest)(nil),          // 70: identity.UserRiskSettingsRequest
+	(*SaveSegmentRequest)(nil),               // 71: identity.SaveSegmentRequest
+	(*GrantBonusRequest)(nil),                // 72: identity.GrantBonusRequest
+	(*FetchPlayerSegmentRequest)(nil),        // 73: identity.FetchPlayerSegmentRequest
+	(*GetSegmentPlayerRequest)(nil),          // 74: identity.GetSegmentPlayerRequest
+	(*DeleteItemRequest)(nil),                // 75: identity.DeleteItemRequest
+	(*AddToSegmentRequest)(nil),              // 76: identity.AddToSegmentRequest
+	(*UploadPlayersToSegment)(nil),           // 77: identity.UploadPlayersToSegment
+	(*FetchPlayerFilterRequest)(nil),         // 78: identity.FetchPlayerFilterRequest
+	(*FetchPlayerFilterResponse)(nil),        // 79: identity.FetchPlayerFilterResponse
+	(*TransactionEntity)(nil),                // 80: identity.TransactionEntity
+	(*UserInfo)(nil),                         // 81: identity.UserInfo
+	(*UserData)(nil),                         // 82: identity.UserData
+	(*ChangeUserTypeStatusRequest)(nil),      // 83: identity.ChangeUserTypeStatusRequest
+	(*CreateUserRequest)(nil),                // 84: identity.CreateUserRequest
+	(*CreateAgentRequest)(nil),               // 85: identity.CreateAgentRequest
+	(*UpdateUserRequest)(nil),                // 86: identity.UpdateUserRequest
+	(*User)(nil),                             // 87: identity.User
+	(*RegisterResponse)(nil),                 // 88: identity.RegisterResponse
+	(*LoginRequest)(nil),                     // 89: identity.LoginRequest
+	(*LoginResponse)(nil),                    // 90: identity.LoginResponse
+	(*GetUserDetailsRequest)(nil),            // 91: identity.GetUserDetailsRequest
+	(*GetUserDetailsResponse)(nil),           // 92: identity.GetUserDetailsResponse
+	(*ValidateRequest)(nil),                  // 93: identity.ValidateRequest
+	(*ValidateTestRequest)(nil),              // 94: identity.ValidateTestRequest
+	(*ValidateTestResponse)(nil),             // 95: identity.ValidateTestResponse
+	(*ListTestAccountsRequest)(nil),          // 96: identity.ListTestAccountsRequest
+	(*ValidateResponse)(nil),                 // 97: identity.ValidateResponse
+	(*ValidateClientResponse)(nil),           // 98: identity.ValidateClientResponse
+	(*ValidateGroupCodeRequest)(nil),         // 99: identity.ValidateGroupCodeRequest
+	(*ValidateGroupCodeResponse)(nil),        // 100: identity.ValidateGroupCodeResponse
+	(*ClientRequest)(nil),                    // 101: identity.ClientRequest
+	(*RemoveClientRequest)(nil),              // 102: identity.RemoveClientRequest
+	(*RemovePermissionRequest)(nil),          // 103: identity.RemovePermissionRequest
+	(*RoleRequest)(nil),                      // 104: identity.RoleRequest
+	(*SaveRoleResponse)(nil),                 // 105: identity.SaveRoleResponse
+	(*GetRolesResponse)(nil),                 // 106: identity.GetRolesResponse
+	(*RemoveRoleRequest)(nil),                // 107: identity.RemoveRoleRequest
+	(*Role)(nil),                             // 108: identity.Role
+	(*PermissionRequest)(nil),                // 109: identity.PermissionRequest
+	(*AssignRolePermissionRequest)(nil),      // 110: identity.AssignRolePermissionRequest
+	(*GetPaymentDataRequest)(nil),            // 111: identity.GetPaymentDataRequest
+	(*GetPaymentDataResponse)(nil),           // 112: identity.GetPaymentDataResponse
+	(*GetClientRequest)(nil),                 // 113: identity.GetClientRequest
+	(*GetClientResponse)(nil),                // 114: identity.GetClientResponse
+	(*CommonResponseArray)(nil),              // 115: identity.CommonResponseArray
+	(*CommonResponseObj)(nil),                // 116: identity.CommonResponseObj
+	(*ClientData)(nil),                       // 117: identity.ClientData
+	(*SearchPlayerRequest)(nil),              // 118: identity.SearchPlayerRequest
+	(*SearchPlayerResponse)(nil),             // 119: identity.SearchPlayerResponse
+	(*Player)(nil),                           // 120: identity.Player
+	(*GetUserByUsernameRequest)(nil),         // 121: identity.GetUserByUsernameRequest
+	(*GetUserByUsernameResponse)(nil),        // 122: identity.GetUserByUsernameResponse
+	(*LoggedInUserData)(nil),                 // 123: identity.LoggedInUserData
+	(*GetUserLogResponse)(nil),               // 124: identity.GetUserLogResponse
+	(*OnlinePlayersRequest)(nil),             // 125: identity.OnlinePlayersRequest
+	(*RegistrationReportRequest)(nil),        // 126: identity.RegistrationReportRequest
+	(*PlayersListResponse)(nil),              // 127: identity.PlayersListResponse
+	(*GetPlayerDataRequest)(nil),             // 128: identity.GetPlayerDataRequest
+	(*GetPlayerDataResponse)(nil),            // 129: identity.GetPlayerDataResponse
+	(*UpdatePlayerDataRequest)(nil),          // 130: identity.UpdatePlayerDataRequest
+	(*PlayerWalletData)(nil),                 // 131: identity.PlayerWalletData
+	(*PlayerBonusData)(nil),                  // 132: identity.PlayerBonusData
+	(*ChangePasswordRequest)(nil),            // 133: identity.ChangePasswordRequest
+	(*ResetPasswordRequest)(nil),             // 134: identity.ResetPasswordRequest
+	(*PaginationResponse)(nil),               // 135: identity.PaginationResponse
+	(*Country)(nil),                          // 136: identity.Country
+	(*GetStatesRequest)(nil),                 // 137: identity.GetStatesRequest
+	(*SessionRequest)(nil),                   // 138: identity.SessionRequest
+	(*State)(nil),                            // 139: identity.State
+	(*GetCountryResponse)(nil),               // 140: identity.GetCountryResponse
+	(*StateResponse)(nil),                    // 141: identity.StateResponse
+	(*XpressLoginRequest)(nil),               // 142: identity.XpressLoginRequest
+	(*XpressLoginResponse)(nil),              // 143: identity.XpressLoginResponse
+	(*EmptyRequest)(nil),                     // 144: identity.EmptyRequest
+	(*MetaData)(nil),                         // 145: identity.MetaData
+	(*ImportUserData)(nil),                   // 146: identity.ImportUserData
+	(*ImportUsersRequest)(nil),               // 147: identity.ImportUsersRequest
+	(*ImportUsersResponse)(nil),              // 148: identity.ImportUsersResponse
+	(*GetUserIdNameResponse_Users)(nil),      // 149: identity.GetUserIdNameResponse.Users
+	(*ValidateResponse_User)(nil),            // 150: identity.ValidateResponse.User
+	(*GetUserByUsernameResponse_Data)(nil),   // 151: identity.GetUserByUsernameResponse.Data
+	(*GetPlayerDataResponse_PlayerData)(nil), // 152: identity.GetPlayerDataResponse.PlayerData
+	(*XpressLoginResponse_XpressData)(nil),   // 153: identity.XpressLoginResponse.XpressData
+	(*structpb.Struct)(nil),                  // 154: google.protobuf.Struct
 }
 var file_identity_proto_depIdxs = []int32{
-	148, // 0: identity.AffiliateResponse.data:type_name -> google.protobuf.Struct
-	2,   // 1: identity.AffiliateResponse.pagination:type_name -> identity.Pagination
-	12,  // 2: identity.AuditLog.additionalInfo:type_name -> identity.AdditionalInfo
-	16,  // 3: identity.CreateLogRequest.auditLog:type_name -> identity.AuditLog
-	20,  // 4: identity.GetAllLogsRequest.auditQuery:type_name -> identity.AuditQuery
-	16,  // 5: identity.GetAllLogsResponse.logs:type_name -> identity.AuditLog
-	32,  // 6: identity.GetAllLogsResponse.meta:type_name -> identity.Meta
-	35,  // 7: identity.NormalResponse.data:type_name -> identity.NormalPayout
-	32,  // 8: identity.NormalResponse.meta:type_name -> identity.Meta
-	28,  // 9: identity.PowerBonusData.bets:type_name -> identity.BetData
-	38,  // 10: identity.PowerResponse.data:type_name -> identity.PowerCountData
-	36,  // 11: identity.PowerBonusResponse.data:type_name -> identity.PowerBonusData
-	32,  // 12: identity.GetNormalRequest.meta:type_name -> identity.Meta
-	43,  // 13: identity.BonusGroups.bonusGroups:type_name -> identity.BonusGroup
-	43,  // 14: identity.BonusGroupResponse.data:type_name -> identity.BonusGroup
-	51,  // 15: identity.PayoutCommissionRequest.data:type_name -> identity.PayoutCommissionData
-	56,  // 16: identity.CommissionProfile.turnovers:type_name -> identity.CommissionTurnover
-	52,  // 17: identity.CommissionTurnover.commissionProfile:type_name -> identity.CommissionProfile
-	143, // 18: identity.GetUserIdNameResponse.data:type_name -> identity.GetUserIdNameResponse.Users
-	64,  // 19: identity.PlaceBetRequest.selections:type_name -> identity.BetSelection
-	78,  // 20: identity.FetchPlayerFilterResponse.data:type_name -> identity.UserInfo
-	79,  // 21: identity.RegisterResponse.data:type_name -> identity.UserData
-	79,  // 22: identity.LoginResponse.data:type_name -> identity.UserData
-	79,  // 23: identity.GetUserDetailsResponse.data:type_name -> identity.UserData
-	144, // 24: identity.ValidateResponse.user:type_name -> identity.ValidateResponse.User
-	105, // 25: identity.SaveRoleResponse.data:type_name -> identity.Role
-	105, // 26: identity.GetRolesResponse.data:type_name -> identity.Role
-	114, // 27: identity.GetClientResponse.data:type_name -> identity.ClientData
-	148, // 28: identity.CommonResponseArray.data:type_name -> google.protobuf.Struct
-	148, // 29: identity.CommonResponseObj.data:type_name -> google.protobuf.Struct
-	117, // 30: identity.SearchPlayerResponse.data:type_name -> identity.Player
-	145, // 31: identity.GetUserByUsernameResponse.data:type_name -> identity.GetUserByUsernameResponse.Data
-	120, // 32: identity.GetUserLogResponse.loggedInUserData:type_name -> identity.LoggedInUserData
-	142, // 33: identity.GetUserLogResponse.metaData:type_name -> identity.MetaData
-	117, // 34: identity.PlayersListResponse.data:type_name -> identity.Player
-	146, // 35: identity.GetPlayerDataResponse.data:type_name -> identity.GetPlayerDataResponse.PlayerData
-	148, // 36: identity.PaginationResponse.data:type_name -> google.protobuf.Struct
-	133, // 37: identity.GetCountryResponse.countries:type_name -> identity.Country
-	136, // 38: identity.StateResponse.states:type_name -> identity.State
-	147, // 39: identity.XpressLoginResponse.data:type_name -> identity.XpressLoginResponse.XpressData
-	117, // 40: identity.GetPlayerDataResponse.PlayerData.user:type_name -> identity.Player
-	128, // 41: identity.GetPlayerDataResponse.PlayerData.wallet:type_name -> identity.PlayerWalletData
-	129, // 42: identity.GetPlayerDataResponse.PlayerData.bonus:type_name -> identity.PlayerBonusData
-	25,  // 43: identity.IdentityService.HandleDailyTransactions:input_type -> identity.DailyTransactionsRequest
-	23,  // 44: identity.IdentityService.HandlePin:input_type -> identity.HandlePinRequest
-	26,  // 45: identity.IdentityService.HandleTransfer:input_type -> identity.HandleTransferRequest
-	81,  // 46: identity.IdentityService.Register:input_type -> identity.CreateUserRequest
-	81,  // 47: identity.IdentityService.RegisterAffiliate:input_type -> identity.CreateUserRequest
-	86,  // 48: identity.IdentityService.Login:input_type -> identity.LoginRequest
-	139, // 49: identity.IdentityService.XpressGameLogin:input_type -> identity.XpressLoginRequest
-	139, // 50: identity.IdentityService.ValidateAuthCode:input_type -> identity.XpressLoginRequest
-	135, // 51: identity.IdentityService.XpressGameLogout:input_type -> identity.SessionRequest
-	90,  // 52: identity.IdentityService.Validate:input_type -> identity.ValidateRequest
-	110, // 53: identity.IdentityService.ValidateGroupCode:input_type -> identity.GetClientRequest
-	90,  // 54: identity.IdentityService.ValidateClient:input_type -> identity.ValidateRequest
-	93,  // 55: identity.IdentityService.ListTestAccount:input_type -> identity.ListTestAccountsRequest
-	91,  // 56: identity.IdentityService.ToggleAccount:input_type -> identity.ValidateTestRequest
-	88,  // 57: identity.IdentityService.GetUserDetails:input_type -> identity.GetUserDetailsRequest
-	88,  // 58: identity.IdentityService.GetUserLogs:input_type -> identity.GetUserDetailsRequest
-	98,  // 59: identity.IdentityService.CreateClient:input_type -> identity.ClientRequest
-	106, // 60: identity.IdentityService.CreatePermission:input_type -> identity.PermissionRequest
-	107, // 61: identity.IdentityService.AssignRolePermission:input_type -> identity.AssignRolePermissionRequest
-	53,  // 62: identity.IdentityService.GetAuthPermission:input_type -> identity.SingleItemRequest
-	58,  // 63: identity.IdentityService.FindUser:input_type -> identity.FindUserRequest
-	101, // 64: identity.IdentityService.SaveRole:input_type -> identity.RoleRequest
-	141, // 65: identity.IdentityService.GetRoles:input_type -> identity.EmptyRequest
-	141, // 66: identity.IdentityService.GetAgencyRoles:input_type -> identity.EmptyRequest
-	104, // 67: identity.IdentityService.RemoveRole:input_type -> identity.RemoveRoleRequest
-	141, // 68: identity.IdentityService.FindAllPermissions:input_type -> identity.EmptyRequest
-	141, // 69: identity.IdentityService.FindAllClients:input_type -> identity.EmptyRequest
-	99,  // 70: identity.IdentityService.RemoveClient:input_type -> identity.RemoveClientRequest
-	100, // 71: identity.IdentityService.RemovePermission:input_type -> identity.RemovePermissionRequest
-	83,  // 72: identity.IdentityService.UpdateDetails:input_type -> identity.UpdateUserRequest
-	81,  // 73: identity.IdentityService.CreateRetailUser:input_type -> identity.CreateUserRequest
-	83,  // 74: identity.IdentityService.UpdateRetailUser:input_type -> identity.UpdateUserRequest
-	81,  // 75: identity.IdentityService.CreateAdminUser:input_type -> identity.CreateUserRequest
-	9,   // 76: identity.IdentityService.GetAdminUsers:input_type -> identity.ClientIdRequest
-	53,  // 77: identity.IdentityService.DeleteUser:input_type -> identity.SingleItemRequest
-	80,  // 78: identity.IdentityService.ChangeUserTypeStatus:input_type -> identity.ChangeUserTypeStatusRequest
-	110, // 79: identity.IdentityService.GetClient:input_type -> identity.GetClientRequest
-	108, // 80: identity.IdentityService.GetPaymentData:input_type -> identity.GetPaymentDataRequest
-	115, // 81: identity.IdentityService.SearchPlayers:input_type -> identity.SearchPlayerRequest
-	83,  // 82: identity.IdentityService.UpdateUserDetails:input_type -> identity.UpdateUserRequest
-	118, // 83: identity.IdentityService.GetUserByUsername:input_type -> identity.GetUserByUsernameRequest
-	122, // 84: identity.IdentityService.OnlinePlayersReport:input_type -> identity.OnlinePlayersRequest
-	123, // 85: identity.IdentityService.RegistrationReport:input_type -> identity.RegistrationReportRequest
-	75,  // 86: identity.IdentityService.FetchPlayerFilters:input_type -> identity.FetchPlayerFilterRequest
-	125, // 87: identity.IdentityService.GetPlayerData:input_type -> identity.GetPlayerDataRequest
-	127, // 88: identity.IdentityService.UpdatePlayerData:input_type -> identity.UpdatePlayerDataRequest
-	58,  // 89: identity.IdentityService.UpdatePlayerStatus:input_type -> identity.FindUserRequest
-	130, // 90: identity.IdentityService.ChangePassword:input_type -> identity.ChangePasswordRequest
-	131, // 91: identity.IdentityService.ResetPassword:input_type -> identity.ResetPasswordRequest
-	68,  // 92: identity.IdentityService.SavePlayerSegment:input_type -> identity.SaveSegmentRequest
-	70,  // 93: identity.IdentityService.FetchPlayerSegment:input_type -> identity.FetchPlayerSegmentRequest
-	73,  // 94: identity.IdentityService.AddToSegment:input_type -> identity.AddToSegmentRequest
-	74,  // 95: identity.IdentityService.UploadToSegment:input_type -> identity.UploadPlayersToSegment
-	72,  // 96: identity.IdentityService.DeletePlayerSegment:input_type -> identity.DeleteItemRequest
-	72,  // 97: identity.IdentityService.RemovePlayerFromSegment:input_type -> identity.DeleteItemRequest
-	71,  // 98: identity.IdentityService.GetSegmentPlayers:input_type -> identity.GetSegmentPlayerRequest
-	69,  // 99: identity.IdentityService.GrantBonusToSegment:input_type -> identity.GrantBonusRequest
-	141, // 100: identity.IdentityService.GetCountries:input_type -> identity.EmptyRequest
-	134, // 101: identity.IdentityService.GetStatesByCountry:input_type -> identity.GetStatesRequest
-	135, // 102: identity.IdentityService.ValidateXpressSession:input_type -> identity.SessionRequest
-	66,  // 103: identity.IdentityService.SaveSettings:input_type -> identity.SettingsRequest
-	66,  // 104: identity.IdentityService.SaveRiskSettings:input_type -> identity.SettingsRequest
-	67,  // 105: identity.IdentityService.SaveUserRiskSettings:input_type -> identity.UserRiskSettingsRequest
-	65,  // 106: identity.IdentityService.GetSettings:input_type -> identity.GetSettingsRequest
-	65,  // 107: identity.IdentityService.GetGlobalVariables:input_type -> identity.GetSettingsRequest
-	63,  // 108: identity.IdentityService.ValidateBet:input_type -> identity.PlaceBetRequest
-	61,  // 109: identity.IdentityService.GetWithdrawalSettings:input_type -> identity.GetWithdrawalSettingsRequest
-	59,  // 110: identity.IdentityService.GetUserIdandName:input_type -> identity.GetUserIdNameRequest
-	57,  // 111: identity.IdentityService.GetUserRiskSettings:input_type -> identity.GetRiskSettingRequest
-	75,  // 112: identity.IdentityService.FetchPlayerLosersByBetCount:input_type -> identity.FetchPlayerFilterRequest
-	82,  // 113: identity.IdentityService.createAgentUser:input_type -> identity.CreateAgentRequest
-	47,  // 114: identity.IdentityService.GetPendingAgent:input_type -> identity.GetAgentUsersRequest
-	47,  // 115: identity.IdentityService.ListAgentUsers:input_type -> identity.GetAgentUsersRequest
-	47,  // 116: identity.IdentityService.ListAgents:input_type -> identity.GetAgentUsersRequest
-	11,  // 117: identity.IdentityService.ApproveAgentRegistration:input_type -> identity.ApprovalRequest
-	46,  // 118: identity.IdentityService.GetAgentUser:input_type -> identity.GetAgentUserRequest
-	48,  // 119: identity.IdentityService.getCommissionProfiles:input_type -> identity.GetCommissionsRequest
-	52,  // 120: identity.IdentityService.createCommissionProfile:input_type -> identity.CommissionProfile
-	52,  // 121: identity.IdentityService.updateCommissionProfile:input_type -> identity.CommissionProfile
-	54,  // 122: identity.IdentityService.assignUserCommissionProfile:input_type -> identity.AssignUserCommissionProfile
-	53,  // 123: identity.IdentityService.getUserCommissionProfiles:input_type -> identity.SingleItemRequest
-	54,  // 124: identity.IdentityService.removeUserCommissionProfile:input_type -> identity.AssignUserCommissionProfile
-	53,  // 125: identity.IdentityService.getCommissionProfile:input_type -> identity.SingleItemRequest
-	53,  // 126: identity.IdentityService.deleteCommissionProfile:input_type -> identity.SingleItemRequest
-	48,  // 127: identity.IdentityService.getCommissionProfileUsers:input_type -> identity.GetCommissionsRequest
-	49,  // 128: identity.IdentityService.calculateCommission:input_type -> identity.CalculateCommissionRequest
-	50,  // 129: identity.IdentityService.payoutCommission:input_type -> identity.PayoutCommissionRequest
-	47,  // 130: identity.IdentityService.getAgentTree:input_type -> identity.GetAgentUsersRequest
-	47,  // 131: identity.IdentityService.getAgentPlayers:input_type -> identity.GetAgentUsersRequest
-	53,  // 132: identity.IdentityService.getBonusGroups:input_type -> identity.SingleItemRequest
-	44,  // 133: identity.IdentityService.createBonusGroups:input_type -> identity.BonusGroups
-	27,  // 134: identity.IdentityService.createPowerBonus:input_type -> identity.PowerRequest
-	27,  // 135: identity.IdentityService.getPowerBonus:input_type -> identity.PowerRequest
-	37,  // 136: identity.IdentityService.payOutPowerBonus:input_type -> identity.PayPowerRequest
-	41,  // 137: identity.IdentityService.getNormalBonus:input_type -> identity.GetNormalRequest
-	42,  // 138: identity.IdentityService.calculateNormalBonus:input_type -> identity.PayNormalRequest
-	42,  // 139: identity.IdentityService.payOutNormalBonus:input_type -> identity.PayNormalRequest
-	24,  // 140: identity.IdentityService.getNetworkSalesReport:input_type -> identity.GetNetworkSalesRequest
-	53,  // 141: identity.IdentityService.getTrackierKeys:input_type -> identity.SingleItemRequest
-	21,  // 142: identity.IdentityService.getAllLogs:input_type -> identity.GetAllLogsRequest
-	17,  // 143: identity.IdentityService.createLog:input_type -> identity.CreateLogRequest
-	9,   // 144: identity.IdentityService.ClintUsers:input_type -> identity.ClientIdRequest
-	9,   // 145: identity.IdentityService.getPlayerStatistics:input_type -> identity.ClientIdRequest
-	10,  // 146: identity.IdentityService.findOneBanner:input_type -> identity.FindOneRequest
-	9,   // 147: identity.IdentityService.FindAllBanners:input_type -> identity.ClientIdRequest
-	9,   // 148: identity.IdentityService.userFetchBanner:input_type -> identity.ClientIdRequest
-	13,  // 149: identity.IdentityService.updateBanner:input_type -> identity.CreateBannerRequest
-	10,  // 150: identity.IdentityService.deleteBanner:input_type -> identity.FindOneRequest
-	13,  // 151: identity.IdentityService.createBanner:input_type -> identity.CreateBannerRequest
-	10,  // 152: identity.IdentityService.findOnePage:input_type -> identity.FindOneRequest
-	9,   // 153: identity.IdentityService.FindAllPages:input_type -> identity.ClientIdRequest
-	9,   // 154: identity.IdentityService.userFetchPage:input_type -> identity.ClientIdRequest
-	14,  // 155: identity.IdentityService.updatePage:input_type -> identity.CreatePageRequest
-	10,  // 156: identity.IdentityService.deletePage:input_type -> identity.FindOneRequest
-	14,  // 157: identity.IdentityService.createPage:input_type -> identity.CreatePageRequest
-	10,  // 158: identity.IdentityService.findOneMenu:input_type -> identity.FindOneRequest
-	9,   // 159: identity.IdentityService.FindAllMenu:input_type -> identity.ClientIdRequest
-	9,   // 160: identity.IdentityService.userFetchMenu:input_type -> identity.ClientIdRequest
-	15,  // 161: identity.IdentityService.updateMenu:input_type -> identity.CreateMenuRequest
-	10,  // 162: identity.IdentityService.deleteMenu:input_type -> identity.FindOneRequest
-	15,  // 163: identity.IdentityService.createMenu:input_type -> identity.CreateMenuRequest
-	7,   // 164: identity.IdentityService.CreateKyc:input_type -> identity.KycRequest
-	10,  // 165: identity.IdentityService.CheckKyc:input_type -> identity.FindOneRequest
-	9,   // 166: identity.IdentityService.ListAllKyc:input_type -> identity.ClientIdRequest
-	6,   // 167: identity.IdentityService.ListBanks:input_type -> identity.ListBanksRequest
-	9,   // 168: identity.IdentityService.FetchAgents:input_type -> identity.ClientIdRequest
-	5,   // 169: identity.IdentityService.FetchUsersId:input_type -> identity.FindUserIdRequest
-	5,   // 170: identity.IdentityService.FetchUserReferralId:input_type -> identity.FindUserIdRequest
-	4,   // 171: identity.IdentityService.AddAndRemoveUser:input_type -> identity.AddAndRemoveUserRequest
-	141, // 172: identity.IdentityService.GetAffiliateIds:input_type -> identity.EmptyRequest
-	1,   // 173: identity.IdentityService.GetAffiliateUsers:input_type -> identity.AffiliateRequest
-	1,   // 174: identity.IdentityService.GetAffiliateData:input_type -> identity.AffiliateRequest
-	9,   // 175: identity.IdentityService.GetSuperAgents:input_type -> identity.ClientIdRequest
-	5,   // 176: identity.IdentityService.GetReferralUserIdsForCommission:input_type -> identity.FindUserIdRequest
-	47,  // 177: identity.IdentityService.ListSuperAgentsUsers:input_type -> identity.GetAgentUsersRequest
-	9,   // 178: identity.IdentityService.GetClientAffiliates:input_type -> identity.ClientIdRequest
-	113, // 179: identity.IdentityService.HandleDailyTransactions:output_type -> identity.CommonResponseObj
-	113, // 180: identity.IdentityService.HandlePin:output_type -> identity.CommonResponseObj
-	113, // 181: identity.IdentityService.HandleTransfer:output_type -> identity.CommonResponseObj
-	85,  // 182: identity.IdentityService.Register:output_type -> identity.RegisterResponse
-	85,  // 183: identity.IdentityService.RegisterAffiliate:output_type -> identity.RegisterResponse
-	87,  // 184: identity.IdentityService.Login:output_type -> identity.LoginResponse
-	140, // 185: identity.IdentityService.XpressGameLogin:output_type -> identity.XpressLoginResponse
-	113, // 186: identity.IdentityService.ValidateAuthCode:output_type -> identity.CommonResponseObj
-	140, // 187: identity.IdentityService.XpressGameLogout:output_type -> identity.XpressLoginResponse
-	94,  // 188: identity.IdentityService.Validate:output_type -> identity.ValidateResponse
-	97,  // 189: identity.IdentityService.ValidateGroupCode:output_type -> identity.ValidateGroupCodeResponse
-	95,  // 190: identity.IdentityService.ValidateClient:output_type -> identity.ValidateClientResponse
-	113, // 191: identity.IdentityService.ListTestAccount:output_type -> identity.CommonResponseObj
-	92,  // 192: identity.IdentityService.ToggleAccount:output_type -> identity.ValidateTestResponse
-	89,  // 193: identity.IdentityService.GetUserDetails:output_type -> identity.GetUserDetailsResponse
-	121, // 194: identity.IdentityService.GetUserLogs:output_type -> identity.GetUserLogResponse
-	113, // 195: identity.IdentityService.CreateClient:output_type -> identity.CommonResponseObj
-	113, // 196: identity.IdentityService.CreatePermission:output_type -> identity.CommonResponseObj
-	113, // 197: identity.IdentityService.AssignRolePermission:output_type -> identity.CommonResponseObj
-	113, // 198: identity.IdentityService.GetAuthPermission:output_type -> identity.CommonResponseObj
-	113, // 199: identity.IdentityService.FindUser:output_type -> identity.CommonResponseObj
-	102, // 200: identity.IdentityService.SaveRole:output_type -> identity.SaveRoleResponse
-	112, // 201: identity.IdentityService.GetRoles:output_type -> identity.CommonResponseArray
-	103, // 202: identity.IdentityService.GetAgencyRoles:output_type -> identity.GetRolesResponse
-	113, // 203: identity.IdentityService.RemoveRole:output_type -> identity.CommonResponseObj
-	112, // 204: identity.IdentityService.FindAllPermissions:output_type -> identity.CommonResponseArray
-	112, // 205: identity.IdentityService.FindAllClients:output_type -> identity.CommonResponseArray
-	113, // 206: identity.IdentityService.RemoveClient:output_type -> identity.CommonResponseObj
-	113, // 207: identity.IdentityService.RemovePermission:output_type -> identity.CommonResponseObj
-	113, // 208: identity.IdentityService.UpdateDetails:output_type -> identity.CommonResponseObj
-	113, // 209: identity.IdentityService.CreateRetailUser:output_type -> identity.CommonResponseObj
-	113, // 210: identity.IdentityService.UpdateRetailUser:output_type -> identity.CommonResponseObj
-	113, // 211: identity.IdentityService.CreateAdminUser:output_type -> identity.CommonResponseObj
-	112, // 212: identity.IdentityService.GetAdminUsers:output_type -> identity.CommonResponseArray
-	113, // 213: identity.IdentityService.DeleteUser:output_type -> identity.CommonResponseObj
-	113, // 214: identity.IdentityService.ChangeUserTypeStatus:output_type -> identity.CommonResponseObj
-	111, // 215: identity.IdentityService.GetClient:output_type -> identity.GetClientResponse
-	109, // 216: identity.IdentityService.GetPaymentData:output_type -> identity.GetPaymentDataResponse
-	116, // 217: identity.IdentityService.SearchPlayers:output_type -> identity.SearchPlayerResponse
-	113, // 218: identity.IdentityService.UpdateUserDetails:output_type -> identity.CommonResponseObj
-	119, // 219: identity.IdentityService.GetUserByUsername:output_type -> identity.GetUserByUsernameResponse
-	124, // 220: identity.IdentityService.OnlinePlayersReport:output_type -> identity.PlayersListResponse
-	124, // 221: identity.IdentityService.RegistrationReport:output_type -> identity.PlayersListResponse
-	132, // 222: identity.IdentityService.FetchPlayerFilters:output_type -> identity.PaginationResponse
-	126, // 223: identity.IdentityService.GetPlayerData:output_type -> identity.GetPlayerDataResponse
-	113, // 224: identity.IdentityService.UpdatePlayerData:output_type -> identity.CommonResponseObj
-	113, // 225: identity.IdentityService.UpdatePlayerStatus:output_type -> identity.CommonResponseObj
-	113, // 226: identity.IdentityService.ChangePassword:output_type -> identity.CommonResponseObj
-	113, // 227: identity.IdentityService.ResetPassword:output_type -> identity.CommonResponseObj
-	113, // 228: identity.IdentityService.SavePlayerSegment:output_type -> identity.CommonResponseObj
-	112, // 229: identity.IdentityService.FetchPlayerSegment:output_type -> identity.CommonResponseArray
-	113, // 230: identity.IdentityService.AddToSegment:output_type -> identity.CommonResponseObj
-	113, // 231: identity.IdentityService.UploadToSegment:output_type -> identity.CommonResponseObj
-	113, // 232: identity.IdentityService.DeletePlayerSegment:output_type -> identity.CommonResponseObj
-	113, // 233: identity.IdentityService.RemovePlayerFromSegment:output_type -> identity.CommonResponseObj
-	112, // 234: identity.IdentityService.GetSegmentPlayers:output_type -> identity.CommonResponseArray
-	113, // 235: identity.IdentityService.GrantBonusToSegment:output_type -> identity.CommonResponseObj
-	137, // 236: identity.IdentityService.GetCountries:output_type -> identity.GetCountryResponse
-	138, // 237: identity.IdentityService.GetStatesByCountry:output_type -> identity.StateResponse
-	113, // 238: identity.IdentityService.ValidateXpressSession:output_type -> identity.CommonResponseObj
-	113, // 239: identity.IdentityService.SaveSettings:output_type -> identity.CommonResponseObj
-	113, // 240: identity.IdentityService.SaveRiskSettings:output_type -> identity.CommonResponseObj
-	113, // 241: identity.IdentityService.SaveUserRiskSettings:output_type -> identity.CommonResponseObj
-	112, // 242: identity.IdentityService.GetSettings:output_type -> identity.CommonResponseArray
-	113, // 243: identity.IdentityService.GetGlobalVariables:output_type -> identity.CommonResponseObj
-	113, // 244: identity.IdentityService.ValidateBet:output_type -> identity.CommonResponseObj
-	62,  // 245: identity.IdentityService.GetWithdrawalSettings:output_type -> identity.WithdrawalSettingsResponse
-	60,  // 246: identity.IdentityService.GetUserIdandName:output_type -> identity.GetUserIdNameResponse
-	113, // 247: identity.IdentityService.GetUserRiskSettings:output_type -> identity.CommonResponseObj
-	132, // 248: identity.IdentityService.FetchPlayerLosersByBetCount:output_type -> identity.PaginationResponse
-	113, // 249: identity.IdentityService.createAgentUser:output_type -> identity.CommonResponseObj
-	113, // 250: identity.IdentityService.GetPendingAgent:output_type -> identity.CommonResponseObj
-	112, // 251: identity.IdentityService.ListAgentUsers:output_type -> identity.CommonResponseArray
-	113, // 252: identity.IdentityService.ListAgents:output_type -> identity.CommonResponseObj
-	113, // 253: identity.IdentityService.ApproveAgentRegistration:output_type -> identity.CommonResponseObj
-	112, // 254: identity.IdentityService.GetAgentUser:output_type -> identity.CommonResponseArray
-	112, // 255: identity.IdentityService.getCommissionProfiles:output_type -> identity.CommonResponseArray
-	113, // 256: identity.IdentityService.createCommissionProfile:output_type -> identity.CommonResponseObj
-	113, // 257: identity.IdentityService.updateCommissionProfile:output_type -> identity.CommonResponseObj
-	113, // 258: identity.IdentityService.assignUserCommissionProfile:output_type -> identity.CommonResponseObj
-	112, // 259: identity.IdentityService.getUserCommissionProfiles:output_type -> identity.CommonResponseArray
-	112, // 260: identity.IdentityService.removeUserCommissionProfile:output_type -> identity.CommonResponseArray
-	113, // 261: identity.IdentityService.getCommissionProfile:output_type -> identity.CommonResponseObj
-	113, // 262: identity.IdentityService.deleteCommissionProfile:output_type -> identity.CommonResponseObj
-	112, // 263: identity.IdentityService.getCommissionProfileUsers:output_type -> identity.CommonResponseArray
-	113, // 264: identity.IdentityService.calculateCommission:output_type -> identity.CommonResponseObj
-	113, // 265: identity.IdentityService.payoutCommission:output_type -> identity.CommonResponseObj
-	113, // 266: identity.IdentityService.getAgentTree:output_type -> identity.CommonResponseObj
-	113, // 267: identity.IdentityService.getAgentPlayers:output_type -> identity.CommonResponseObj
-	45,  // 268: identity.IdentityService.getBonusGroups:output_type -> identity.BonusGroupResponse
-	45,  // 269: identity.IdentityService.createBonusGroups:output_type -> identity.BonusGroupResponse
-	40,  // 270: identity.IdentityService.createPowerBonus:output_type -> identity.PowerBonusResponse
-	40,  // 271: identity.IdentityService.getPowerBonus:output_type -> identity.PowerBonusResponse
-	39,  // 272: identity.IdentityService.payOutPowerBonus:output_type -> identity.PowerResponse
-	33,  // 273: identity.IdentityService.getNormalBonus:output_type -> identity.NormalResponse
-	34,  // 274: identity.IdentityService.calculateNormalBonus:output_type -> identity.PayNormalResponse
-	34,  // 275: identity.IdentityService.payOutNormalBonus:output_type -> identity.PayNormalResponse
-	113, // 276: identity.IdentityService.getNetworkSalesReport:output_type -> identity.CommonResponseObj
-	113, // 277: identity.IdentityService.getTrackierKeys:output_type -> identity.CommonResponseObj
-	22,  // 278: identity.IdentityService.getAllLogs:output_type -> identity.GetAllLogsResponse
-	19,  // 279: identity.IdentityService.createLog:output_type -> identity.CreateLogResponse
-	112, // 280: identity.IdentityService.ClintUsers:output_type -> identity.CommonResponseArray
-	113, // 281: identity.IdentityService.getPlayerStatistics:output_type -> identity.CommonResponseObj
-	113, // 282: identity.IdentityService.findOneBanner:output_type -> identity.CommonResponseObj
-	113, // 283: identity.IdentityService.FindAllBanners:output_type -> identity.CommonResponseObj
-	113, // 284: identity.IdentityService.userFetchBanner:output_type -> identity.CommonResponseObj
-	113, // 285: identity.IdentityService.updateBanner:output_type -> identity.CommonResponseObj
-	113, // 286: identity.IdentityService.deleteBanner:output_type -> identity.CommonResponseObj
-	113, // 287: identity.IdentityService.createBanner:output_type -> identity.CommonResponseObj
-	113, // 288: identity.IdentityService.findOnePage:output_type -> identity.CommonResponseObj
-	113, // 289: identity.IdentityService.FindAllPages:output_type -> identity.CommonResponseObj
-	113, // 290: identity.IdentityService.userFetchPage:output_type -> identity.CommonResponseObj
-	113, // 291: identity.IdentityService.updatePage:output_type -> identity.CommonResponseObj
-	113, // 292: identity.IdentityService.deletePage:output_type -> identity.CommonResponseObj
-	113, // 293: identity.IdentityService.createPage:output_type -> identity.CommonResponseObj
-	113, // 294: identity.IdentityService.findOneMenu:output_type -> identity.CommonResponseObj
-	113, // 295: identity.IdentityService.FindAllMenu:output_type -> identity.CommonResponseObj
-	113, // 296: identity.IdentityService.userFetchMenu:output_type -> identity.CommonResponseObj
-	113, // 297: identity.IdentityService.updateMenu:output_type -> identity.CommonResponseObj
-	113, // 298: identity.IdentityService.deleteMenu:output_type -> identity.CommonResponseObj
-	113, // 299: identity.IdentityService.createMenu:output_type -> identity.CommonResponseObj
-	113, // 300: identity.IdentityService.CreateKyc:output_type -> identity.CommonResponseObj
-	113, // 301: identity.IdentityService.CheckKyc:output_type -> identity.CommonResponseObj
-	112, // 302: identity.IdentityService.ListAllKyc:output_type -> identity.CommonResponseArray
-	112, // 303: identity.IdentityService.ListBanks:output_type -> identity.CommonResponseArray
-	113, // 304: identity.IdentityService.FetchAgents:output_type -> identity.CommonResponseObj
-	113, // 305: identity.IdentityService.FetchUsersId:output_type -> identity.CommonResponseObj
-	112, // 306: identity.IdentityService.FetchUserReferralId:output_type -> identity.CommonResponseArray
-	113, // 307: identity.IdentityService.AddAndRemoveUser:output_type -> identity.CommonResponseObj
-	112, // 308: identity.IdentityService.GetAffiliateIds:output_type -> identity.CommonResponseArray
-	3,   // 309: identity.IdentityService.GetAffiliateUsers:output_type -> identity.AffiliateResponse
-	113, // 310: identity.IdentityService.GetAffiliateData:output_type -> identity.CommonResponseObj
-	113, // 311: identity.IdentityService.GetSuperAgents:output_type -> identity.CommonResponseObj
-	112, // 312: identity.IdentityService.GetReferralUserIdsForCommission:output_type -> identity.CommonResponseArray
-	0,   // 313: identity.IdentityService.ListSuperAgentsUsers:output_type -> identity.ArrayResponse
-	112, // 314: identity.IdentityService.GetClientAffiliates:output_type -> identity.CommonResponseArray
-	179, // [179:315] is the sub-list for method output_type
-	43,  // [43:179] is the sub-list for method input_type
-	43,  // [43:43] is the sub-list for extension type_name
-	43,  // [43:43] is the sub-list for extension extendee
-	0,   // [0:43] is the sub-list for field type_name
+	0,   // 0: identity.AffiliateStatsData.topAffiliates:type_name -> identity.TopAffiliate
+	1,   // 1: identity.AffiliateStatsResponse.data:type_name -> identity.AffiliateStatsData
+	154, // 2: identity.AffiliateResponse.data:type_name -> google.protobuf.Struct
+	5,   // 3: identity.AffiliateResponse.pagination:type_name -> identity.Pagination
+	15,  // 4: identity.AuditLog.additionalInfo:type_name -> identity.AdditionalInfo
+	19,  // 5: identity.CreateLogRequest.auditLog:type_name -> identity.AuditLog
+	23,  // 6: identity.GetAllLogsRequest.auditQuery:type_name -> identity.AuditQuery
+	19,  // 7: identity.GetAllLogsResponse.logs:type_name -> identity.AuditLog
+	35,  // 8: identity.GetAllLogsResponse.meta:type_name -> identity.Meta
+	38,  // 9: identity.NormalResponse.data:type_name -> identity.NormalPayout
+	35,  // 10: identity.NormalResponse.meta:type_name -> identity.Meta
+	31,  // 11: identity.PowerBonusData.bets:type_name -> identity.BetData
+	41,  // 12: identity.PowerResponse.data:type_name -> identity.PowerCountData
+	39,  // 13: identity.PowerBonusResponse.data:type_name -> identity.PowerBonusData
+	35,  // 14: identity.GetNormalRequest.meta:type_name -> identity.Meta
+	46,  // 15: identity.BonusGroups.bonusGroups:type_name -> identity.BonusGroup
+	46,  // 16: identity.BonusGroupResponse.data:type_name -> identity.BonusGroup
+	54,  // 17: identity.PayoutCommissionRequest.data:type_name -> identity.PayoutCommissionData
+	59,  // 18: identity.CommissionProfile.turnovers:type_name -> identity.CommissionTurnover
+	55,  // 19: identity.CommissionTurnover.commissionProfile:type_name -> identity.CommissionProfile
+	149, // 20: identity.GetUserIdNameResponse.data:type_name -> identity.GetUserIdNameResponse.Users
+	67,  // 21: identity.PlaceBetRequest.selections:type_name -> identity.BetSelection
+	81,  // 22: identity.FetchPlayerFilterResponse.data:type_name -> identity.UserInfo
+	82,  // 23: identity.RegisterResponse.data:type_name -> identity.UserData
+	82,  // 24: identity.LoginResponse.data:type_name -> identity.UserData
+	82,  // 25: identity.GetUserDetailsResponse.data:type_name -> identity.UserData
+	150, // 26: identity.ValidateResponse.user:type_name -> identity.ValidateResponse.User
+	108, // 27: identity.SaveRoleResponse.data:type_name -> identity.Role
+	108, // 28: identity.GetRolesResponse.data:type_name -> identity.Role
+	117, // 29: identity.GetClientResponse.data:type_name -> identity.ClientData
+	154, // 30: identity.CommonResponseArray.data:type_name -> google.protobuf.Struct
+	154, // 31: identity.CommonResponseObj.data:type_name -> google.protobuf.Struct
+	120, // 32: identity.SearchPlayerResponse.data:type_name -> identity.Player
+	151, // 33: identity.GetUserByUsernameResponse.data:type_name -> identity.GetUserByUsernameResponse.Data
+	123, // 34: identity.GetUserLogResponse.loggedInUserData:type_name -> identity.LoggedInUserData
+	145, // 35: identity.GetUserLogResponse.metaData:type_name -> identity.MetaData
+	120, // 36: identity.PlayersListResponse.data:type_name -> identity.Player
+	152, // 37: identity.GetPlayerDataResponse.data:type_name -> identity.GetPlayerDataResponse.PlayerData
+	154, // 38: identity.PaginationResponse.data:type_name -> google.protobuf.Struct
+	136, // 39: identity.GetCountryResponse.countries:type_name -> identity.Country
+	139, // 40: identity.StateResponse.states:type_name -> identity.State
+	153, // 41: identity.XpressLoginResponse.data:type_name -> identity.XpressLoginResponse.XpressData
+	146, // 42: identity.ImportUsersRequest.users:type_name -> identity.ImportUserData
+	120, // 43: identity.GetPlayerDataResponse.PlayerData.user:type_name -> identity.Player
+	131, // 44: identity.GetPlayerDataResponse.PlayerData.wallet:type_name -> identity.PlayerWalletData
+	132, // 45: identity.GetPlayerDataResponse.PlayerData.bonus:type_name -> identity.PlayerBonusData
+	28,  // 46: identity.IdentityService.HandleDailyTransactions:input_type -> identity.DailyTransactionsRequest
+	26,  // 47: identity.IdentityService.HandlePin:input_type -> identity.HandlePinRequest
+	29,  // 48: identity.IdentityService.HandleTransfer:input_type -> identity.HandleTransferRequest
+	84,  // 49: identity.IdentityService.Register:input_type -> identity.CreateUserRequest
+	84,  // 50: identity.IdentityService.RegisterAffiliate:input_type -> identity.CreateUserRequest
+	89,  // 51: identity.IdentityService.Login:input_type -> identity.LoginRequest
+	142, // 52: identity.IdentityService.XpressGameLogin:input_type -> identity.XpressLoginRequest
+	142, // 53: identity.IdentityService.ValidateAuthCode:input_type -> identity.XpressLoginRequest
+	138, // 54: identity.IdentityService.XpressGameLogout:input_type -> identity.SessionRequest
+	93,  // 55: identity.IdentityService.Validate:input_type -> identity.ValidateRequest
+	113, // 56: identity.IdentityService.ValidateGroupCode:input_type -> identity.GetClientRequest
+	93,  // 57: identity.IdentityService.ValidateClient:input_type -> identity.ValidateRequest
+	96,  // 58: identity.IdentityService.ListTestAccount:input_type -> identity.ListTestAccountsRequest
+	94,  // 59: identity.IdentityService.ToggleAccount:input_type -> identity.ValidateTestRequest
+	91,  // 60: identity.IdentityService.GetUserDetails:input_type -> identity.GetUserDetailsRequest
+	91,  // 61: identity.IdentityService.GetUserLogs:input_type -> identity.GetUserDetailsRequest
+	101, // 62: identity.IdentityService.CreateClient:input_type -> identity.ClientRequest
+	109, // 63: identity.IdentityService.CreatePermission:input_type -> identity.PermissionRequest
+	110, // 64: identity.IdentityService.AssignRolePermission:input_type -> identity.AssignRolePermissionRequest
+	56,  // 65: identity.IdentityService.GetAuthPermission:input_type -> identity.SingleItemRequest
+	61,  // 66: identity.IdentityService.FindUser:input_type -> identity.FindUserRequest
+	104, // 67: identity.IdentityService.SaveRole:input_type -> identity.RoleRequest
+	144, // 68: identity.IdentityService.GetRoles:input_type -> identity.EmptyRequest
+	144, // 69: identity.IdentityService.GetAgencyRoles:input_type -> identity.EmptyRequest
+	107, // 70: identity.IdentityService.RemoveRole:input_type -> identity.RemoveRoleRequest
+	144, // 71: identity.IdentityService.FindAllPermissions:input_type -> identity.EmptyRequest
+	144, // 72: identity.IdentityService.FindAllClients:input_type -> identity.EmptyRequest
+	102, // 73: identity.IdentityService.RemoveClient:input_type -> identity.RemoveClientRequest
+	103, // 74: identity.IdentityService.RemovePermission:input_type -> identity.RemovePermissionRequest
+	86,  // 75: identity.IdentityService.UpdateDetails:input_type -> identity.UpdateUserRequest
+	84,  // 76: identity.IdentityService.CreateRetailUser:input_type -> identity.CreateUserRequest
+	86,  // 77: identity.IdentityService.UpdateRetailUser:input_type -> identity.UpdateUserRequest
+	84,  // 78: identity.IdentityService.CreateAdminUser:input_type -> identity.CreateUserRequest
+	12,  // 79: identity.IdentityService.GetAdminUsers:input_type -> identity.ClientIdRequest
+	56,  // 80: identity.IdentityService.DeleteUser:input_type -> identity.SingleItemRequest
+	83,  // 81: identity.IdentityService.ChangeUserTypeStatus:input_type -> identity.ChangeUserTypeStatusRequest
+	113, // 82: identity.IdentityService.GetClient:input_type -> identity.GetClientRequest
+	111, // 83: identity.IdentityService.GetPaymentData:input_type -> identity.GetPaymentDataRequest
+	118, // 84: identity.IdentityService.SearchPlayers:input_type -> identity.SearchPlayerRequest
+	86,  // 85: identity.IdentityService.UpdateUserDetails:input_type -> identity.UpdateUserRequest
+	121, // 86: identity.IdentityService.GetUserByUsername:input_type -> identity.GetUserByUsernameRequest
+	125, // 87: identity.IdentityService.OnlinePlayersReport:input_type -> identity.OnlinePlayersRequest
+	126, // 88: identity.IdentityService.RegistrationReport:input_type -> identity.RegistrationReportRequest
+	78,  // 89: identity.IdentityService.FetchPlayerFilters:input_type -> identity.FetchPlayerFilterRequest
+	128, // 90: identity.IdentityService.GetPlayerData:input_type -> identity.GetPlayerDataRequest
+	130, // 91: identity.IdentityService.UpdatePlayerData:input_type -> identity.UpdatePlayerDataRequest
+	61,  // 92: identity.IdentityService.UpdatePlayerStatus:input_type -> identity.FindUserRequest
+	133, // 93: identity.IdentityService.ChangePassword:input_type -> identity.ChangePasswordRequest
+	134, // 94: identity.IdentityService.ResetPassword:input_type -> identity.ResetPasswordRequest
+	71,  // 95: identity.IdentityService.SavePlayerSegment:input_type -> identity.SaveSegmentRequest
+	73,  // 96: identity.IdentityService.FetchPlayerSegment:input_type -> identity.FetchPlayerSegmentRequest
+	76,  // 97: identity.IdentityService.AddToSegment:input_type -> identity.AddToSegmentRequest
+	77,  // 98: identity.IdentityService.UploadToSegment:input_type -> identity.UploadPlayersToSegment
+	75,  // 99: identity.IdentityService.DeletePlayerSegment:input_type -> identity.DeleteItemRequest
+	75,  // 100: identity.IdentityService.RemovePlayerFromSegment:input_type -> identity.DeleteItemRequest
+	74,  // 101: identity.IdentityService.GetSegmentPlayers:input_type -> identity.GetSegmentPlayerRequest
+	72,  // 102: identity.IdentityService.GrantBonusToSegment:input_type -> identity.GrantBonusRequest
+	144, // 103: identity.IdentityService.GetCountries:input_type -> identity.EmptyRequest
+	137, // 104: identity.IdentityService.GetStatesByCountry:input_type -> identity.GetStatesRequest
+	138, // 105: identity.IdentityService.ValidateXpressSession:input_type -> identity.SessionRequest
+	69,  // 106: identity.IdentityService.SaveSettings:input_type -> identity.SettingsRequest
+	69,  // 107: identity.IdentityService.SaveRiskSettings:input_type -> identity.SettingsRequest
+	70,  // 108: identity.IdentityService.SaveUserRiskSettings:input_type -> identity.UserRiskSettingsRequest
+	68,  // 109: identity.IdentityService.GetSettings:input_type -> identity.GetSettingsRequest
+	68,  // 110: identity.IdentityService.GetGlobalVariables:input_type -> identity.GetSettingsRequest
+	66,  // 111: identity.IdentityService.ValidateBet:input_type -> identity.PlaceBetRequest
+	64,  // 112: identity.IdentityService.GetWithdrawalSettings:input_type -> identity.GetWithdrawalSettingsRequest
+	62,  // 113: identity.IdentityService.GetUserIdandName:input_type -> identity.GetUserIdNameRequest
+	60,  // 114: identity.IdentityService.GetUserRiskSettings:input_type -> identity.GetRiskSettingRequest
+	78,  // 115: identity.IdentityService.FetchPlayerLosersByBetCount:input_type -> identity.FetchPlayerFilterRequest
+	85,  // 116: identity.IdentityService.createAgentUser:input_type -> identity.CreateAgentRequest
+	50,  // 117: identity.IdentityService.GetPendingAgent:input_type -> identity.GetAgentUsersRequest
+	50,  // 118: identity.IdentityService.ListAgentUsers:input_type -> identity.GetAgentUsersRequest
+	50,  // 119: identity.IdentityService.ListAgents:input_type -> identity.GetAgentUsersRequest
+	14,  // 120: identity.IdentityService.ApproveAgentRegistration:input_type -> identity.ApprovalRequest
+	49,  // 121: identity.IdentityService.GetAgentUser:input_type -> identity.GetAgentUserRequest
+	51,  // 122: identity.IdentityService.getCommissionProfiles:input_type -> identity.GetCommissionsRequest
+	55,  // 123: identity.IdentityService.createCommissionProfile:input_type -> identity.CommissionProfile
+	55,  // 124: identity.IdentityService.updateCommissionProfile:input_type -> identity.CommissionProfile
+	57,  // 125: identity.IdentityService.assignUserCommissionProfile:input_type -> identity.AssignUserCommissionProfile
+	56,  // 126: identity.IdentityService.getUserCommissionProfiles:input_type -> identity.SingleItemRequest
+	57,  // 127: identity.IdentityService.removeUserCommissionProfile:input_type -> identity.AssignUserCommissionProfile
+	56,  // 128: identity.IdentityService.getCommissionProfile:input_type -> identity.SingleItemRequest
+	56,  // 129: identity.IdentityService.deleteCommissionProfile:input_type -> identity.SingleItemRequest
+	51,  // 130: identity.IdentityService.getCommissionProfileUsers:input_type -> identity.GetCommissionsRequest
+	52,  // 131: identity.IdentityService.calculateCommission:input_type -> identity.CalculateCommissionRequest
+	53,  // 132: identity.IdentityService.payoutCommission:input_type -> identity.PayoutCommissionRequest
+	50,  // 133: identity.IdentityService.getAgentTree:input_type -> identity.GetAgentUsersRequest
+	50,  // 134: identity.IdentityService.getAgentPlayers:input_type -> identity.GetAgentUsersRequest
+	56,  // 135: identity.IdentityService.getBonusGroups:input_type -> identity.SingleItemRequest
+	47,  // 136: identity.IdentityService.createBonusGroups:input_type -> identity.BonusGroups
+	30,  // 137: identity.IdentityService.createPowerBonus:input_type -> identity.PowerRequest
+	30,  // 138: identity.IdentityService.getPowerBonus:input_type -> identity.PowerRequest
+	40,  // 139: identity.IdentityService.payOutPowerBonus:input_type -> identity.PayPowerRequest
+	44,  // 140: identity.IdentityService.getNormalBonus:input_type -> identity.GetNormalRequest
+	45,  // 141: identity.IdentityService.calculateNormalBonus:input_type -> identity.PayNormalRequest
+	45,  // 142: identity.IdentityService.payOutNormalBonus:input_type -> identity.PayNormalRequest
+	27,  // 143: identity.IdentityService.getNetworkSalesReport:input_type -> identity.GetNetworkSalesRequest
+	56,  // 144: identity.IdentityService.getTrackierKeys:input_type -> identity.SingleItemRequest
+	24,  // 145: identity.IdentityService.getAllLogs:input_type -> identity.GetAllLogsRequest
+	20,  // 146: identity.IdentityService.createLog:input_type -> identity.CreateLogRequest
+	12,  // 147: identity.IdentityService.ClintUsers:input_type -> identity.ClientIdRequest
+	12,  // 148: identity.IdentityService.getPlayerStatistics:input_type -> identity.ClientIdRequest
+	13,  // 149: identity.IdentityService.findOneBanner:input_type -> identity.FindOneRequest
+	12,  // 150: identity.IdentityService.FindAllBanners:input_type -> identity.ClientIdRequest
+	12,  // 151: identity.IdentityService.userFetchBanner:input_type -> identity.ClientIdRequest
+	16,  // 152: identity.IdentityService.updateBanner:input_type -> identity.CreateBannerRequest
+	13,  // 153: identity.IdentityService.deleteBanner:input_type -> identity.FindOneRequest
+	16,  // 154: identity.IdentityService.createBanner:input_type -> identity.CreateBannerRequest
+	13,  // 155: identity.IdentityService.findOnePage:input_type -> identity.FindOneRequest
+	12,  // 156: identity.IdentityService.FindAllPages:input_type -> identity.ClientIdRequest
+	12,  // 157: identity.IdentityService.userFetchPage:input_type -> identity.ClientIdRequest
+	17,  // 158: identity.IdentityService.updatePage:input_type -> identity.CreatePageRequest
+	13,  // 159: identity.IdentityService.deletePage:input_type -> identity.FindOneRequest
+	17,  // 160: identity.IdentityService.createPage:input_type -> identity.CreatePageRequest
+	13,  // 161: identity.IdentityService.findOneMenu:input_type -> identity.FindOneRequest
+	12,  // 162: identity.IdentityService.FindAllMenu:input_type -> identity.ClientIdRequest
+	12,  // 163: identity.IdentityService.userFetchMenu:input_type -> identity.ClientIdRequest
+	18,  // 164: identity.IdentityService.updateMenu:input_type -> identity.CreateMenuRequest
+	13,  // 165: identity.IdentityService.deleteMenu:input_type -> identity.FindOneRequest
+	18,  // 166: identity.IdentityService.createMenu:input_type -> identity.CreateMenuRequest
+	10,  // 167: identity.IdentityService.CreateKyc:input_type -> identity.KycRequest
+	13,  // 168: identity.IdentityService.CheckKyc:input_type -> identity.FindOneRequest
+	12,  // 169: identity.IdentityService.ListAllKyc:input_type -> identity.ClientIdRequest
+	9,   // 170: identity.IdentityService.ListBanks:input_type -> identity.ListBanksRequest
+	12,  // 171: identity.IdentityService.FetchAgents:input_type -> identity.ClientIdRequest
+	8,   // 172: identity.IdentityService.FetchUsersId:input_type -> identity.FindUserIdRequest
+	8,   // 173: identity.IdentityService.FetchUserReferralId:input_type -> identity.FindUserIdRequest
+	7,   // 174: identity.IdentityService.AddAndRemoveUser:input_type -> identity.AddAndRemoveUserRequest
+	144, // 175: identity.IdentityService.GetAffiliateIds:input_type -> identity.EmptyRequest
+	4,   // 176: identity.IdentityService.GetAffiliateUsers:input_type -> identity.AffiliateRequest
+	4,   // 177: identity.IdentityService.GetAffiliateData:input_type -> identity.AffiliateRequest
+	12,  // 178: identity.IdentityService.GetSuperAgents:input_type -> identity.ClientIdRequest
+	8,   // 179: identity.IdentityService.GetReferralUserIdsForCommission:input_type -> identity.FindUserIdRequest
+	50,  // 180: identity.IdentityService.ListSuperAgentsUsers:input_type -> identity.GetAgentUsersRequest
+	12,  // 181: identity.IdentityService.GetClientAffiliates:input_type -> identity.ClientIdRequest
+	4,   // 182: identity.IdentityService.GetAffiliatesOverview:input_type -> identity.AffiliateRequest
+	147, // 183: identity.IdentityService.ImportUsers:input_type -> identity.ImportUsersRequest
+	116, // 184: identity.IdentityService.HandleDailyTransactions:output_type -> identity.CommonResponseObj
+	116, // 185: identity.IdentityService.HandlePin:output_type -> identity.CommonResponseObj
+	116, // 186: identity.IdentityService.HandleTransfer:output_type -> identity.CommonResponseObj
+	88,  // 187: identity.IdentityService.Register:output_type -> identity.RegisterResponse
+	88,  // 188: identity.IdentityService.RegisterAffiliate:output_type -> identity.RegisterResponse
+	90,  // 189: identity.IdentityService.Login:output_type -> identity.LoginResponse
+	143, // 190: identity.IdentityService.XpressGameLogin:output_type -> identity.XpressLoginResponse
+	116, // 191: identity.IdentityService.ValidateAuthCode:output_type -> identity.CommonResponseObj
+	143, // 192: identity.IdentityService.XpressGameLogout:output_type -> identity.XpressLoginResponse
+	97,  // 193: identity.IdentityService.Validate:output_type -> identity.ValidateResponse
+	100, // 194: identity.IdentityService.ValidateGroupCode:output_type -> identity.ValidateGroupCodeResponse
+	98,  // 195: identity.IdentityService.ValidateClient:output_type -> identity.ValidateClientResponse
+	116, // 196: identity.IdentityService.ListTestAccount:output_type -> identity.CommonResponseObj
+	95,  // 197: identity.IdentityService.ToggleAccount:output_type -> identity.ValidateTestResponse
+	92,  // 198: identity.IdentityService.GetUserDetails:output_type -> identity.GetUserDetailsResponse
+	124, // 199: identity.IdentityService.GetUserLogs:output_type -> identity.GetUserLogResponse
+	116, // 200: identity.IdentityService.CreateClient:output_type -> identity.CommonResponseObj
+	116, // 201: identity.IdentityService.CreatePermission:output_type -> identity.CommonResponseObj
+	116, // 202: identity.IdentityService.AssignRolePermission:output_type -> identity.CommonResponseObj
+	116, // 203: identity.IdentityService.GetAuthPermission:output_type -> identity.CommonResponseObj
+	116, // 204: identity.IdentityService.FindUser:output_type -> identity.CommonResponseObj
+	105, // 205: identity.IdentityService.SaveRole:output_type -> identity.SaveRoleResponse
+	115, // 206: identity.IdentityService.GetRoles:output_type -> identity.CommonResponseArray
+	106, // 207: identity.IdentityService.GetAgencyRoles:output_type -> identity.GetRolesResponse
+	116, // 208: identity.IdentityService.RemoveRole:output_type -> identity.CommonResponseObj
+	115, // 209: identity.IdentityService.FindAllPermissions:output_type -> identity.CommonResponseArray
+	115, // 210: identity.IdentityService.FindAllClients:output_type -> identity.CommonResponseArray
+	116, // 211: identity.IdentityService.RemoveClient:output_type -> identity.CommonResponseObj
+	116, // 212: identity.IdentityService.RemovePermission:output_type -> identity.CommonResponseObj
+	116, // 213: identity.IdentityService.UpdateDetails:output_type -> identity.CommonResponseObj
+	116, // 214: identity.IdentityService.CreateRetailUser:output_type -> identity.CommonResponseObj
+	116, // 215: identity.IdentityService.UpdateRetailUser:output_type -> identity.CommonResponseObj
+	116, // 216: identity.IdentityService.CreateAdminUser:output_type -> identity.CommonResponseObj
+	115, // 217: identity.IdentityService.GetAdminUsers:output_type -> identity.CommonResponseArray
+	116, // 218: identity.IdentityService.DeleteUser:output_type -> identity.CommonResponseObj
+	116, // 219: identity.IdentityService.ChangeUserTypeStatus:output_type -> identity.CommonResponseObj
+	114, // 220: identity.IdentityService.GetClient:output_type -> identity.GetClientResponse
+	112, // 221: identity.IdentityService.GetPaymentData:output_type -> identity.GetPaymentDataResponse
+	119, // 222: identity.IdentityService.SearchPlayers:output_type -> identity.SearchPlayerResponse
+	116, // 223: identity.IdentityService.UpdateUserDetails:output_type -> identity.CommonResponseObj
+	122, // 224: identity.IdentityService.GetUserByUsername:output_type -> identity.GetUserByUsernameResponse
+	127, // 225: identity.IdentityService.OnlinePlayersReport:output_type -> identity.PlayersListResponse
+	127, // 226: identity.IdentityService.RegistrationReport:output_type -> identity.PlayersListResponse
+	135, // 227: identity.IdentityService.FetchPlayerFilters:output_type -> identity.PaginationResponse
+	129, // 228: identity.IdentityService.GetPlayerData:output_type -> identity.GetPlayerDataResponse
+	116, // 229: identity.IdentityService.UpdatePlayerData:output_type -> identity.CommonResponseObj
+	116, // 230: identity.IdentityService.UpdatePlayerStatus:output_type -> identity.CommonResponseObj
+	116, // 231: identity.IdentityService.ChangePassword:output_type -> identity.CommonResponseObj
+	116, // 232: identity.IdentityService.ResetPassword:output_type -> identity.CommonResponseObj
+	116, // 233: identity.IdentityService.SavePlayerSegment:output_type -> identity.CommonResponseObj
+	115, // 234: identity.IdentityService.FetchPlayerSegment:output_type -> identity.CommonResponseArray
+	116, // 235: identity.IdentityService.AddToSegment:output_type -> identity.CommonResponseObj
+	116, // 236: identity.IdentityService.UploadToSegment:output_type -> identity.CommonResponseObj
+	116, // 237: identity.IdentityService.DeletePlayerSegment:output_type -> identity.CommonResponseObj
+	116, // 238: identity.IdentityService.RemovePlayerFromSegment:output_type -> identity.CommonResponseObj
+	115, // 239: identity.IdentityService.GetSegmentPlayers:output_type -> identity.CommonResponseArray
+	116, // 240: identity.IdentityService.GrantBonusToSegment:output_type -> identity.CommonResponseObj
+	140, // 241: identity.IdentityService.GetCountries:output_type -> identity.GetCountryResponse
+	141, // 242: identity.IdentityService.GetStatesByCountry:output_type -> identity.StateResponse
+	116, // 243: identity.IdentityService.ValidateXpressSession:output_type -> identity.CommonResponseObj
+	116, // 244: identity.IdentityService.SaveSettings:output_type -> identity.CommonResponseObj
+	116, // 245: identity.IdentityService.SaveRiskSettings:output_type -> identity.CommonResponseObj
+	116, // 246: identity.IdentityService.SaveUserRiskSettings:output_type -> identity.CommonResponseObj
+	115, // 247: identity.IdentityService.GetSettings:output_type -> identity.CommonResponseArray
+	116, // 248: identity.IdentityService.GetGlobalVariables:output_type -> identity.CommonResponseObj
+	116, // 249: identity.IdentityService.ValidateBet:output_type -> identity.CommonResponseObj
+	65,  // 250: identity.IdentityService.GetWithdrawalSettings:output_type -> identity.WithdrawalSettingsResponse
+	63,  // 251: identity.IdentityService.GetUserIdandName:output_type -> identity.GetUserIdNameResponse
+	116, // 252: identity.IdentityService.GetUserRiskSettings:output_type -> identity.CommonResponseObj
+	135, // 253: identity.IdentityService.FetchPlayerLosersByBetCount:output_type -> identity.PaginationResponse
+	116, // 254: identity.IdentityService.createAgentUser:output_type -> identity.CommonResponseObj
+	116, // 255: identity.IdentityService.GetPendingAgent:output_type -> identity.CommonResponseObj
+	115, // 256: identity.IdentityService.ListAgentUsers:output_type -> identity.CommonResponseArray
+	116, // 257: identity.IdentityService.ListAgents:output_type -> identity.CommonResponseObj
+	116, // 258: identity.IdentityService.ApproveAgentRegistration:output_type -> identity.CommonResponseObj
+	115, // 259: identity.IdentityService.GetAgentUser:output_type -> identity.CommonResponseArray
+	115, // 260: identity.IdentityService.getCommissionProfiles:output_type -> identity.CommonResponseArray
+	116, // 261: identity.IdentityService.createCommissionProfile:output_type -> identity.CommonResponseObj
+	116, // 262: identity.IdentityService.updateCommissionProfile:output_type -> identity.CommonResponseObj
+	116, // 263: identity.IdentityService.assignUserCommissionProfile:output_type -> identity.CommonResponseObj
+	115, // 264: identity.IdentityService.getUserCommissionProfiles:output_type -> identity.CommonResponseArray
+	115, // 265: identity.IdentityService.removeUserCommissionProfile:output_type -> identity.CommonResponseArray
+	116, // 266: identity.IdentityService.getCommissionProfile:output_type -> identity.CommonResponseObj
+	116, // 267: identity.IdentityService.deleteCommissionProfile:output_type -> identity.CommonResponseObj
+	115, // 268: identity.IdentityService.getCommissionProfileUsers:output_type -> identity.CommonResponseArray
+	116, // 269: identity.IdentityService.calculateCommission:output_type -> identity.CommonResponseObj
+	116, // 270: identity.IdentityService.payoutCommission:output_type -> identity.CommonResponseObj
+	116, // 271: identity.IdentityService.getAgentTree:output_type -> identity.CommonResponseObj
+	116, // 272: identity.IdentityService.getAgentPlayers:output_type -> identity.CommonResponseObj
+	48,  // 273: identity.IdentityService.getBonusGroups:output_type -> identity.BonusGroupResponse
+	48,  // 274: identity.IdentityService.createBonusGroups:output_type -> identity.BonusGroupResponse
+	43,  // 275: identity.IdentityService.createPowerBonus:output_type -> identity.PowerBonusResponse
+	43,  // 276: identity.IdentityService.getPowerBonus:output_type -> identity.PowerBonusResponse
+	42,  // 277: identity.IdentityService.payOutPowerBonus:output_type -> identity.PowerResponse
+	36,  // 278: identity.IdentityService.getNormalBonus:output_type -> identity.NormalResponse
+	37,  // 279: identity.IdentityService.calculateNormalBonus:output_type -> identity.PayNormalResponse
+	37,  // 280: identity.IdentityService.payOutNormalBonus:output_type -> identity.PayNormalResponse
+	116, // 281: identity.IdentityService.getNetworkSalesReport:output_type -> identity.CommonResponseObj
+	116, // 282: identity.IdentityService.getTrackierKeys:output_type -> identity.CommonResponseObj
+	25,  // 283: identity.IdentityService.getAllLogs:output_type -> identity.GetAllLogsResponse
+	22,  // 284: identity.IdentityService.createLog:output_type -> identity.CreateLogResponse
+	115, // 285: identity.IdentityService.ClintUsers:output_type -> identity.CommonResponseArray
+	116, // 286: identity.IdentityService.getPlayerStatistics:output_type -> identity.CommonResponseObj
+	116, // 287: identity.IdentityService.findOneBanner:output_type -> identity.CommonResponseObj
+	116, // 288: identity.IdentityService.FindAllBanners:output_type -> identity.CommonResponseObj
+	116, // 289: identity.IdentityService.userFetchBanner:output_type -> identity.CommonResponseObj
+	116, // 290: identity.IdentityService.updateBanner:output_type -> identity.CommonResponseObj
+	116, // 291: identity.IdentityService.deleteBanner:output_type -> identity.CommonResponseObj
+	116, // 292: identity.IdentityService.createBanner:output_type -> identity.CommonResponseObj
+	116, // 293: identity.IdentityService.findOnePage:output_type -> identity.CommonResponseObj
+	116, // 294: identity.IdentityService.FindAllPages:output_type -> identity.CommonResponseObj
+	116, // 295: identity.IdentityService.userFetchPage:output_type -> identity.CommonResponseObj
+	116, // 296: identity.IdentityService.updatePage:output_type -> identity.CommonResponseObj
+	116, // 297: identity.IdentityService.deletePage:output_type -> identity.CommonResponseObj
+	116, // 298: identity.IdentityService.createPage:output_type -> identity.CommonResponseObj
+	116, // 299: identity.IdentityService.findOneMenu:output_type -> identity.CommonResponseObj
+	116, // 300: identity.IdentityService.FindAllMenu:output_type -> identity.CommonResponseObj
+	116, // 301: identity.IdentityService.userFetchMenu:output_type -> identity.CommonResponseObj
+	116, // 302: identity.IdentityService.updateMenu:output_type -> identity.CommonResponseObj
+	116, // 303: identity.IdentityService.deleteMenu:output_type -> identity.CommonResponseObj
+	116, // 304: identity.IdentityService.createMenu:output_type -> identity.CommonResponseObj
+	116, // 305: identity.IdentityService.CreateKyc:output_type -> identity.CommonResponseObj
+	116, // 306: identity.IdentityService.CheckKyc:output_type -> identity.CommonResponseObj
+	115, // 307: identity.IdentityService.ListAllKyc:output_type -> identity.CommonResponseArray
+	115, // 308: identity.IdentityService.ListBanks:output_type -> identity.CommonResponseArray
+	116, // 309: identity.IdentityService.FetchAgents:output_type -> identity.CommonResponseObj
+	116, // 310: identity.IdentityService.FetchUsersId:output_type -> identity.CommonResponseObj
+	115, // 311: identity.IdentityService.FetchUserReferralId:output_type -> identity.CommonResponseArray
+	116, // 312: identity.IdentityService.AddAndRemoveUser:output_type -> identity.CommonResponseObj
+	115, // 313: identity.IdentityService.GetAffiliateIds:output_type -> identity.CommonResponseArray
+	6,   // 314: identity.IdentityService.GetAffiliateUsers:output_type -> identity.AffiliateResponse
+	116, // 315: identity.IdentityService.GetAffiliateData:output_type -> identity.CommonResponseObj
+	116, // 316: identity.IdentityService.GetSuperAgents:output_type -> identity.CommonResponseObj
+	115, // 317: identity.IdentityService.GetReferralUserIdsForCommission:output_type -> identity.CommonResponseArray
+	3,   // 318: identity.IdentityService.ListSuperAgentsUsers:output_type -> identity.ArrayResponse
+	115, // 319: identity.IdentityService.GetClientAffiliates:output_type -> identity.CommonResponseArray
+	116, // 320: identity.IdentityService.GetAffiliatesOverview:output_type -> identity.CommonResponseObj
+	148, // 321: identity.IdentityService.ImportUsers:output_type -> identity.ImportUsersResponse
+	184, // [184:322] is the sub-list for method output_type
+	46,  // [46:184] is the sub-list for method input_type
+	46,  // [46:46] is the sub-list for extension type_name
+	46,  // [46:46] is the sub-list for extension extendee
+	0,   // [0:46] is the sub-list for field type_name
 }
 
 func init() { file_identity_proto_init() }
@@ -15495,7 +16023,7 @@ func file_identity_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_identity_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ArrayResponse); i {
+			switch v := v.(*TopAffiliate); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15507,7 +16035,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AffiliateRequest); i {
+			switch v := v.(*AffiliateStatsData); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15519,7 +16047,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Pagination); i {
+			switch v := v.(*AffiliateStatsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15531,7 +16059,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AffiliateResponse); i {
+			switch v := v.(*ArrayResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15543,7 +16071,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AddAndRemoveUserRequest); i {
+			switch v := v.(*AffiliateRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15555,7 +16083,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*FindUserIdRequest); i {
+			switch v := v.(*Pagination); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15567,7 +16095,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListBanksRequest); i {
+			switch v := v.(*AffiliateResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15579,7 +16107,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*KycRequest); i {
+			switch v := v.(*AddAndRemoveUserRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15591,7 +16119,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*BasicUser); i {
+			switch v := v.(*FindUserIdRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15603,7 +16131,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ClientIdRequest); i {
+			switch v := v.(*ListBanksRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15615,7 +16143,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*FindOneRequest); i {
+			switch v := v.(*KycRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15627,7 +16155,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ApprovalRequest); i {
+			switch v := v.(*BasicUser); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15639,7 +16167,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AdditionalInfo); i {
+			switch v := v.(*ClientIdRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15651,7 +16179,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateBannerRequest); i {
+			switch v := v.(*FindOneRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15663,7 +16191,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreatePageRequest); i {
+			switch v := v.(*ApprovalRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15675,7 +16203,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateMenuRequest); i {
+			switch v := v.(*AdditionalInfo); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15687,7 +16215,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AuditLog); i {
+			switch v := v.(*CreateBannerRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15699,7 +16227,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateLogRequest); i {
+			switch v := v.(*CreatePageRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15711,7 +16239,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AuditUser); i {
+			switch v := v.(*CreateMenuRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15723,7 +16251,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateLogResponse); i {
+			switch v := v.(*AuditLog); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15735,7 +16263,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AuditQuery); i {
+			switch v := v.(*CreateLogRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15747,7 +16275,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetAllLogsRequest); i {
+			switch v := v.(*AuditUser); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15759,7 +16287,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetAllLogsResponse); i {
+			switch v := v.(*CreateLogResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15771,7 +16299,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*HandlePinRequest); i {
+			switch v := v.(*AuditQuery); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15783,7 +16311,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetNetworkSalesRequest); i {
+			switch v := v.(*GetAllLogsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15795,7 +16323,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[25].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DailyTransactionsRequest); i {
+			switch v := v.(*GetAllLogsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15807,7 +16335,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[26].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*HandleTransferRequest); i {
+			switch v := v.(*HandlePinRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15819,7 +16347,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[27].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PowerRequest); i {
+			switch v := v.(*GetNetworkSalesRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15831,7 +16359,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[28].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*BetData); i {
+			switch v := v.(*DailyTransactionsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15843,7 +16371,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[29].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Response); i {
+			switch v := v.(*HandleTransferRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15855,7 +16383,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[30].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CurrentWeekData); i {
+			switch v := v.(*PowerRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15867,7 +16395,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[31].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CurrentMonth); i {
+			switch v := v.(*BetData); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15879,7 +16407,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[32].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Meta); i {
+			switch v := v.(*Response); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15891,7 +16419,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[33].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*NormalResponse); i {
+			switch v := v.(*CurrentWeekData); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15903,7 +16431,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[34].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PayNormalResponse); i {
+			switch v := v.(*CurrentMonth); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15915,7 +16443,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[35].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*NormalPayout); i {
+			switch v := v.(*Meta); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15927,7 +16455,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[36].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PowerBonusData); i {
+			switch v := v.(*NormalResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15939,7 +16467,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[37].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PayPowerRequest); i {
+			switch v := v.(*PayNormalResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15951,7 +16479,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[38].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PowerCountData); i {
+			switch v := v.(*NormalPayout); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15963,7 +16491,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[39].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PowerResponse); i {
+			switch v := v.(*PowerBonusData); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15975,7 +16503,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[40].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PowerBonusResponse); i {
+			switch v := v.(*PayPowerRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15987,7 +16515,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[41].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetNormalRequest); i {
+			switch v := v.(*PowerCountData); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -15999,7 +16527,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[42].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PayNormalRequest); i {
+			switch v := v.(*PowerResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16011,7 +16539,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[43].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*BonusGroup); i {
+			switch v := v.(*PowerBonusResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16023,7 +16551,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[44].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*BonusGroups); i {
+			switch v := v.(*GetNormalRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16035,7 +16563,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[45].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*BonusGroupResponse); i {
+			switch v := v.(*PayNormalRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16047,7 +16575,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[46].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetAgentUserRequest); i {
+			switch v := v.(*BonusGroup); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16059,7 +16587,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[47].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetAgentUsersRequest); i {
+			switch v := v.(*BonusGroups); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16071,7 +16599,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[48].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetCommissionsRequest); i {
+			switch v := v.(*BonusGroupResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16083,7 +16611,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[49].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CalculateCommissionRequest); i {
+			switch v := v.(*GetAgentUserRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16095,7 +16623,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[50].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PayoutCommissionRequest); i {
+			switch v := v.(*GetAgentUsersRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16107,7 +16635,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[51].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PayoutCommissionData); i {
+			switch v := v.(*GetCommissionsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16119,7 +16647,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[52].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CommissionProfile); i {
+			switch v := v.(*CalculateCommissionRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16131,7 +16659,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[53].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SingleItemRequest); i {
+			switch v := v.(*PayoutCommissionRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16143,7 +16671,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[54].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AssignUserCommissionProfile); i {
+			switch v := v.(*PayoutCommissionData); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16155,7 +16683,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[55].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Commission); i {
+			switch v := v.(*CommissionProfile); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16167,7 +16695,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[56].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CommissionTurnover); i {
+			switch v := v.(*SingleItemRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16179,7 +16707,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[57].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetRiskSettingRequest); i {
+			switch v := v.(*AssignUserCommissionProfile); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16191,7 +16719,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[58].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*FindUserRequest); i {
+			switch v := v.(*Commission); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16203,7 +16731,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[59].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetUserIdNameRequest); i {
+			switch v := v.(*CommissionTurnover); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16215,7 +16743,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[60].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetUserIdNameResponse); i {
+			switch v := v.(*GetRiskSettingRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16227,7 +16755,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[61].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetWithdrawalSettingsRequest); i {
+			switch v := v.(*FindUserRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16239,7 +16767,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[62].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*WithdrawalSettingsResponse); i {
+			switch v := v.(*GetUserIdNameRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16251,7 +16779,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[63].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PlaceBetRequest); i {
+			switch v := v.(*GetUserIdNameResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16263,7 +16791,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[64].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*BetSelection); i {
+			switch v := v.(*GetWithdrawalSettingsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16275,7 +16803,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[65].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetSettingsRequest); i {
+			switch v := v.(*WithdrawalSettingsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16287,7 +16815,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[66].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SettingsRequest); i {
+			switch v := v.(*PlaceBetRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16299,7 +16827,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[67].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UserRiskSettingsRequest); i {
+			switch v := v.(*BetSelection); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16311,7 +16839,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[68].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SaveSegmentRequest); i {
+			switch v := v.(*GetSettingsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16323,7 +16851,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[69].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GrantBonusRequest); i {
+			switch v := v.(*SettingsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16335,7 +16863,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[70].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*FetchPlayerSegmentRequest); i {
+			switch v := v.(*UserRiskSettingsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16347,7 +16875,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[71].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetSegmentPlayerRequest); i {
+			switch v := v.(*SaveSegmentRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16359,7 +16887,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[72].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteItemRequest); i {
+			switch v := v.(*GrantBonusRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16371,7 +16899,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[73].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AddToSegmentRequest); i {
+			switch v := v.(*FetchPlayerSegmentRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16383,7 +16911,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[74].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UploadPlayersToSegment); i {
+			switch v := v.(*GetSegmentPlayerRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16395,7 +16923,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[75].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*FetchPlayerFilterRequest); i {
+			switch v := v.(*DeleteItemRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16407,7 +16935,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[76].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*FetchPlayerFilterResponse); i {
+			switch v := v.(*AddToSegmentRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16419,7 +16947,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[77].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*TransactionEntity); i {
+			switch v := v.(*UploadPlayersToSegment); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16431,7 +16959,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[78].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UserInfo); i {
+			switch v := v.(*FetchPlayerFilterRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16443,7 +16971,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[79].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UserData); i {
+			switch v := v.(*FetchPlayerFilterResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16455,7 +16983,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[80].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ChangeUserTypeStatusRequest); i {
+			switch v := v.(*TransactionEntity); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16467,7 +16995,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[81].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateUserRequest); i {
+			switch v := v.(*UserInfo); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16479,7 +17007,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[82].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateAgentRequest); i {
+			switch v := v.(*UserData); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16491,7 +17019,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[83].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateUserRequest); i {
+			switch v := v.(*ChangeUserTypeStatusRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16503,7 +17031,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[84].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*User); i {
+			switch v := v.(*CreateUserRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16515,7 +17043,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[85].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*RegisterResponse); i {
+			switch v := v.(*CreateAgentRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16527,7 +17055,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[86].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*LoginRequest); i {
+			switch v := v.(*UpdateUserRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16539,7 +17067,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[87].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*LoginResponse); i {
+			switch v := v.(*User); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16551,7 +17079,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[88].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetUserDetailsRequest); i {
+			switch v := v.(*RegisterResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16563,7 +17091,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[89].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetUserDetailsResponse); i {
+			switch v := v.(*LoginRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16575,7 +17103,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[90].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ValidateRequest); i {
+			switch v := v.(*LoginResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16587,7 +17115,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[91].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ValidateTestRequest); i {
+			switch v := v.(*GetUserDetailsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16599,7 +17127,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[92].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ValidateTestResponse); i {
+			switch v := v.(*GetUserDetailsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16611,7 +17139,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[93].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListTestAccountsRequest); i {
+			switch v := v.(*ValidateRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16623,7 +17151,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[94].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ValidateResponse); i {
+			switch v := v.(*ValidateTestRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16635,7 +17163,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[95].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ValidateClientResponse); i {
+			switch v := v.(*ValidateTestResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16647,7 +17175,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[96].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ValidateGroupCodeRequest); i {
+			switch v := v.(*ListTestAccountsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16659,7 +17187,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[97].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ValidateGroupCodeResponse); i {
+			switch v := v.(*ValidateResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16671,7 +17199,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[98].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ClientRequest); i {
+			switch v := v.(*ValidateClientResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16683,7 +17211,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[99].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*RemoveClientRequest); i {
+			switch v := v.(*ValidateGroupCodeRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16695,7 +17223,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[100].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*RemovePermissionRequest); i {
+			switch v := v.(*ValidateGroupCodeResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16707,7 +17235,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[101].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*RoleRequest); i {
+			switch v := v.(*ClientRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16719,7 +17247,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[102].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SaveRoleResponse); i {
+			switch v := v.(*RemoveClientRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16731,7 +17259,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[103].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetRolesResponse); i {
+			switch v := v.(*RemovePermissionRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16743,7 +17271,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[104].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*RemoveRoleRequest); i {
+			switch v := v.(*RoleRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16755,7 +17283,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[105].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Role); i {
+			switch v := v.(*SaveRoleResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16767,7 +17295,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[106].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PermissionRequest); i {
+			switch v := v.(*GetRolesResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16779,7 +17307,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[107].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AssignRolePermissionRequest); i {
+			switch v := v.(*RemoveRoleRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16791,7 +17319,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[108].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetPaymentDataRequest); i {
+			switch v := v.(*Role); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16803,7 +17331,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[109].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetPaymentDataResponse); i {
+			switch v := v.(*PermissionRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16815,7 +17343,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[110].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetClientRequest); i {
+			switch v := v.(*AssignRolePermissionRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16827,7 +17355,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[111].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetClientResponse); i {
+			switch v := v.(*GetPaymentDataRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16839,7 +17367,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[112].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CommonResponseArray); i {
+			switch v := v.(*GetPaymentDataResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16851,7 +17379,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[113].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CommonResponseObj); i {
+			switch v := v.(*GetClientRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16863,7 +17391,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[114].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ClientData); i {
+			switch v := v.(*GetClientResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16875,7 +17403,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[115].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SearchPlayerRequest); i {
+			switch v := v.(*CommonResponseArray); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16887,7 +17415,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[116].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SearchPlayerResponse); i {
+			switch v := v.(*CommonResponseObj); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16899,7 +17427,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[117].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Player); i {
+			switch v := v.(*ClientData); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16911,7 +17439,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[118].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetUserByUsernameRequest); i {
+			switch v := v.(*SearchPlayerRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16923,7 +17451,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[119].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetUserByUsernameResponse); i {
+			switch v := v.(*SearchPlayerResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16935,7 +17463,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[120].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*LoggedInUserData); i {
+			switch v := v.(*Player); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16947,7 +17475,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[121].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetUserLogResponse); i {
+			switch v := v.(*GetUserByUsernameRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16959,7 +17487,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[122].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*OnlinePlayersRequest); i {
+			switch v := v.(*GetUserByUsernameResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16971,7 +17499,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[123].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*RegistrationReportRequest); i {
+			switch v := v.(*LoggedInUserData); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16983,7 +17511,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[124].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PlayersListResponse); i {
+			switch v := v.(*GetUserLogResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -16995,7 +17523,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[125].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetPlayerDataRequest); i {
+			switch v := v.(*OnlinePlayersRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -17007,7 +17535,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[126].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetPlayerDataResponse); i {
+			switch v := v.(*RegistrationReportRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -17019,7 +17547,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[127].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdatePlayerDataRequest); i {
+			switch v := v.(*PlayersListResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -17031,7 +17559,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[128].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PlayerWalletData); i {
+			switch v := v.(*GetPlayerDataRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -17043,7 +17571,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[129].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PlayerBonusData); i {
+			switch v := v.(*GetPlayerDataResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -17055,7 +17583,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[130].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ChangePasswordRequest); i {
+			switch v := v.(*UpdatePlayerDataRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -17067,7 +17595,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[131].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ResetPasswordRequest); i {
+			switch v := v.(*PlayerWalletData); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -17079,7 +17607,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[132].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PaginationResponse); i {
+			switch v := v.(*PlayerBonusData); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -17091,7 +17619,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[133].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Country); i {
+			switch v := v.(*ChangePasswordRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -17103,7 +17631,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[134].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetStatesRequest); i {
+			switch v := v.(*ResetPasswordRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -17115,7 +17643,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[135].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SessionRequest); i {
+			switch v := v.(*PaginationResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -17127,7 +17655,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[136].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*State); i {
+			switch v := v.(*Country); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -17139,7 +17667,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[137].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetCountryResponse); i {
+			switch v := v.(*GetStatesRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -17151,7 +17679,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[138].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*StateResponse); i {
+			switch v := v.(*SessionRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -17163,7 +17691,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[139].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*XpressLoginRequest); i {
+			switch v := v.(*State); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -17175,7 +17703,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[140].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*XpressLoginResponse); i {
+			switch v := v.(*GetCountryResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -17187,7 +17715,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[141].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*EmptyRequest); i {
+			switch v := v.(*StateResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -17199,7 +17727,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[142].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MetaData); i {
+			switch v := v.(*XpressLoginRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -17211,7 +17739,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[143].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetUserIdNameResponse_Users); i {
+			switch v := v.(*XpressLoginResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -17223,7 +17751,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[144].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ValidateResponse_User); i {
+			switch v := v.(*EmptyRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -17235,7 +17763,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[145].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetUserByUsernameResponse_Data); i {
+			switch v := v.(*MetaData); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -17247,7 +17775,7 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[146].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetPlayerDataResponse_PlayerData); i {
+			switch v := v.(*ImportUserData); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -17259,6 +17787,78 @@ func file_identity_proto_init() {
 			}
 		}
 		file_identity_proto_msgTypes[147].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ImportUsersRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_identity_proto_msgTypes[148].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ImportUsersResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_identity_proto_msgTypes[149].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetUserIdNameResponse_Users); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_identity_proto_msgTypes[150].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ValidateResponse_User); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_identity_proto_msgTypes[151].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetUserByUsernameResponse_Data); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_identity_proto_msgTypes[152].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetPlayerDataResponse_PlayerData); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_identity_proto_msgTypes[153].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*XpressLoginResponse_XpressData); i {
 			case 0:
 				return &v.state
@@ -17271,70 +17871,72 @@ func file_identity_proto_init() {
 			}
 		}
 	}
-	file_identity_proto_msgTypes[1].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[3].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[7].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[9].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[13].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[14].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[15].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[20].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[21].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[22].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[0].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[4].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[6].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[10].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[12].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[16].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[17].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[18].OneofWrappers = []interface{}{}
 	file_identity_proto_msgTypes[23].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[24].OneofWrappers = []interface{}{}
 	file_identity_proto_msgTypes[25].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[26].OneofWrappers = []interface{}{}
 	file_identity_proto_msgTypes[28].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[32].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[33].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[31].OneofWrappers = []interface{}{}
 	file_identity_proto_msgTypes[35].OneofWrappers = []interface{}{}
 	file_identity_proto_msgTypes[36].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[41].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[42].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[43].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[47].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[48].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[52].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[54].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[38].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[39].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[44].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[45].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[46].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[50].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[51].OneofWrappers = []interface{}{}
 	file_identity_proto_msgTypes[55].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[56].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[57].OneofWrappers = []interface{}{}
 	file_identity_proto_msgTypes[58].OneofWrappers = []interface{}{}
 	file_identity_proto_msgTypes[59].OneofWrappers = []interface{}{}
 	file_identity_proto_msgTypes[61].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[63].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[62].OneofWrappers = []interface{}{}
 	file_identity_proto_msgTypes[64].OneofWrappers = []interface{}{}
 	file_identity_proto_msgTypes[66].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[68].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[76].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[67].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[69].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[71].OneofWrappers = []interface{}{}
 	file_identity_proto_msgTypes[79].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[81].OneofWrappers = []interface{}{}
 	file_identity_proto_msgTypes[82].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[83].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[84].OneofWrappers = []interface{}{}
 	file_identity_proto_msgTypes[85].OneofWrappers = []interface{}{}
 	file_identity_proto_msgTypes[86].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[87].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[93].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[94].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[101].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[102].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[103].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[109].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[111].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[88].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[89].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[90].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[96].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[97].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[104].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[105].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[106].OneofWrappers = []interface{}{}
 	file_identity_proto_msgTypes[112].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[113].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[122].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[123].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[114].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[115].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[116].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[125].OneofWrappers = []interface{}{}
 	file_identity_proto_msgTypes[126].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[140].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[144].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[145].OneofWrappers = []interface{}{}
-	file_identity_proto_msgTypes[147].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[129].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[143].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[146].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[150].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[151].OneofWrappers = []interface{}{}
+	file_identity_proto_msgTypes[153].OneofWrappers = []interface{}{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_identity_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   148,
+			NumMessages:   154,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

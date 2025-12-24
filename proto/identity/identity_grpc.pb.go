@@ -160,6 +160,9 @@ type IdentityServiceClient interface {
 	GetReferralUserIdsForCommission(ctx context.Context, in *FindUserIdRequest, opts ...grpc.CallOption) (*CommonResponseArray, error)
 	ListSuperAgentsUsers(ctx context.Context, in *GetAgentUsersRequest, opts ...grpc.CallOption) (*ArrayResponse, error)
 	GetClientAffiliates(ctx context.Context, in *ClientIdRequest, opts ...grpc.CallOption) (*CommonResponseArray, error)
+	GetAffiliatesOverview(ctx context.Context, in *AffiliateRequest, opts ...grpc.CallOption) (*CommonResponseObj, error)
+	// User Import
+	ImportUsers(ctx context.Context, in *ImportUsersRequest, opts ...grpc.CallOption) (*ImportUsersResponse, error)
 }
 
 type identityServiceClient struct {
@@ -1394,6 +1397,24 @@ func (c *identityServiceClient) GetClientAffiliates(ctx context.Context, in *Cli
 	return out, nil
 }
 
+func (c *identityServiceClient) GetAffiliatesOverview(ctx context.Context, in *AffiliateRequest, opts ...grpc.CallOption) (*CommonResponseObj, error) {
+	out := new(CommonResponseObj)
+	err := c.cc.Invoke(ctx, "/identity.IdentityService/GetAffiliatesOverview", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *identityServiceClient) ImportUsers(ctx context.Context, in *ImportUsersRequest, opts ...grpc.CallOption) (*ImportUsersResponse, error) {
+	out := new(ImportUsersResponse)
+	err := c.cc.Invoke(ctx, "/identity.IdentityService/ImportUsers", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // IdentityServiceServer is the server API for IdentityService service.
 // All implementations must embed UnimplementedIdentityServiceServer
 // for forward compatibility
@@ -1536,6 +1557,9 @@ type IdentityServiceServer interface {
 	GetReferralUserIdsForCommission(context.Context, *FindUserIdRequest) (*CommonResponseArray, error)
 	ListSuperAgentsUsers(context.Context, *GetAgentUsersRequest) (*ArrayResponse, error)
 	GetClientAffiliates(context.Context, *ClientIdRequest) (*CommonResponseArray, error)
+	GetAffiliatesOverview(context.Context, *AffiliateRequest) (*CommonResponseObj, error)
+	// User Import
+	ImportUsers(context.Context, *ImportUsersRequest) (*ImportUsersResponse, error)
 	mustEmbedUnimplementedIdentityServiceServer()
 }
 
@@ -1950,6 +1974,12 @@ func (UnimplementedIdentityServiceServer) ListSuperAgentsUsers(context.Context, 
 }
 func (UnimplementedIdentityServiceServer) GetClientAffiliates(context.Context, *ClientIdRequest) (*CommonResponseArray, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetClientAffiliates not implemented")
+}
+func (UnimplementedIdentityServiceServer) GetAffiliatesOverview(context.Context, *AffiliateRequest) (*CommonResponseObj, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAffiliatesOverview not implemented")
+}
+func (UnimplementedIdentityServiceServer) ImportUsers(context.Context, *ImportUsersRequest) (*ImportUsersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ImportUsers not implemented")
 }
 func (UnimplementedIdentityServiceServer) mustEmbedUnimplementedIdentityServiceServer() {}
 
@@ -4412,6 +4442,42 @@ func _IdentityService_GetClientAffiliates_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
+func _IdentityService_GetAffiliatesOverview_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AffiliateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(IdentityServiceServer).GetAffiliatesOverview(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/identity.IdentityService/GetAffiliatesOverview",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(IdentityServiceServer).GetAffiliatesOverview(ctx, req.(*AffiliateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _IdentityService_ImportUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ImportUsersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(IdentityServiceServer).ImportUsers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/identity.IdentityService/ImportUsers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(IdentityServiceServer).ImportUsers(ctx, req.(*ImportUsersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // IdentityService_ServiceDesc is the grpc.ServiceDesc for IdentityService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -4962,6 +5028,14 @@ var IdentityService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetClientAffiliates",
 			Handler:    _IdentityService_GetClientAffiliates_Handler,
+		},
+		{
+			MethodName: "GetAffiliatesOverview",
+			Handler:    _IdentityService_GetAffiliatesOverview_Handler,
+		},
+		{
+			MethodName: "ImportUsers",
+			Handler:    _IdentityService_ImportUsers_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

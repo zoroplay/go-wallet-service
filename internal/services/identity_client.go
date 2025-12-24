@@ -111,3 +111,14 @@ func (c *IdentityClient) GetWithdrawalSettings(clientId, userId int) (*identity.
 
 	return c.client.GetWithdrawalSettings(ctx, req)
 }
+
+func (c *IdentityClient) GetReferralUserIds(affiliateId int32) (*identity.CommonResponseArray, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	req := &identity.FindUserIdRequest{
+		AffiliateId: affiliateId,
+	}
+
+	return c.client.GetReferralUserIdsForCommission(ctx, req)
+}
