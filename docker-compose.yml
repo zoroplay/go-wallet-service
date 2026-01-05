@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   go-wallet-service:
-    build: .
+    image: ghcr.io/zoroplay/go-wallet-service:latest
     ports:
      
       - "9019:5000"
