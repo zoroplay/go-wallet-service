@@ -187,18 +187,18 @@ jobs:
       - name: Deploy to STAGING server
         run: |
           # Create directory on server
-          ssh -o StrictHostKeyChecking=no ${{ secrets.STAGING_SERVER_USER }}@${{ secrets.STAGING_SERVER_IP }} 'mkdir -p ~/bonus-service/'
+          ssh -o StrictHostKeyChecking=no ${{ secrets.STAGING_SERVER_USER }}@${{ secrets.STAGING_SERVER_IP }} 'mkdir -p ~/go-wallet-service/'
           
           # Copy files to server
-          scp -o StrictHostKeyChecking=no .env ${{ secrets.STAGING_SERVER_USER }}@${{ secrets.STAGING_SERVER_IP }}:~/bonus-service/
-          scp -o StrictHostKeyChecking=no docker-compose.yml ${{ secrets.STAGING_SERVER_USER }}@${{ secrets.STAGING_SERVER_IP }}:~/bonus-service/
-          scp -o StrictHostKeyChecking=no deploy.sh ${{ secrets.STAGING_SERVER_USER }}@${{ secrets.STAGING_SERVER_IP }}:~/bonus-service/
+          scp -o StrictHostKeyChecking=no .env ${{ secrets.STAGING_SERVER_USER }}@${{ secrets.STAGING_SERVER_IP }}:~/go-wallet-service/
+          scp -o StrictHostKeyChecking=no docker-compose.yml ${{ secrets.STAGING_SERVER_USER }}@${{ secrets.STAGING_SERVER_IP }}:~/go-wallet-service/
+          scp -o StrictHostKeyChecking=no deploy.sh ${{ secrets.STAGING_SERVER_USER }}@${{ secrets.STAGING_SERVER_IP }}:~/go-wallet-service/
           
           # Login to GitHub Container Registry on server and execute deployment
           ssh -o StrictHostKeyChecking=no ${{ secrets.STAGING_SERVER_USER }}@${{ secrets.STAGING_SERVER_IP }} '
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            chmod +x ~/bonus-service/deploy.sh
-            bash ~/bonus-service/deploy.sh
+            chmod +x ~/go-wallet-service/deploy.sh
+            bash ~/go-wallet-service/deploy.sh
           '
 
   deploy-production:

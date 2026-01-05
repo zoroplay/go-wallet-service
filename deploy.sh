@@ -3,7 +3,7 @@
 set -e  # Exit on any error
 
 # Change to correct directory
-cd ~/bonus-service
+cd ~/go-wallet-service
 
 # Load environment variables..
 if [ -f .env ]; then

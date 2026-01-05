@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  go-wallet-service:
+    build: .
+    ports:
+     
+      - "9019:5000"
+    env_file:
+      - .env
+    volumes:
+      - migration-data:/app/migrations
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 256M
+    restart: unless-stopped
+
+volumes:
+  migration-data:
