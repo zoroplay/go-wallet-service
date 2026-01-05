@@ -201,10 +201,10 @@ jobs:
             bash ~/go-wallet-service/deploy.sh
           '
 
-  deploy-production:
+  deploy-staging:
     needs: [version, build, release]
     runs-on: self-hosted
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
