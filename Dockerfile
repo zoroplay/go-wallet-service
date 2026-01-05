@@ -11,9 +11,9 @@ RUN go mod download
 RUN go build -o /go-wallet-service
 
 # HTTP Port
-EXPOSE 8080
+EXPOSE 5025
 
 # GRPC port
-EXPOSE 8081
+EXPOSE 5000
 
 CMD ["/go-wallet-service"]
