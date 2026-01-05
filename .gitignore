@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Environment
 .env
 .env.local
@@ -49,3 +50,6 @@ debug
 
 # Air live reload
 tmp/
+=======
+src/.env
+>>>>>>> ded236a (first commit)
