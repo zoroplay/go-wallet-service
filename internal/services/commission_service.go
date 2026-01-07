@@ -69,7 +69,7 @@ func (s *CommissionService) UpdateCommissionWallet(data CommissionRequestDTO) (i
 		Description:   data.Description,
 		Source:        "internal",
 		Channel:       "commission",
-		AvailableBalance: wallet.AvailableBalance + data.Amount, // Aprrox
+		Balance:       wallet.AvailableBalance + data.Amount, // Aprrox
 		Status:        1,
 		Wallet:        "Commission",
 	}
@@ -113,7 +113,7 @@ func (s *CommissionService) DebitCommissionWallet(data CommissionRequestDTO) (in
 		Description:   data.Description,
 		Source:        "internal",
 		Channel:       "commission",
-		AvailableBalance: wallet.CommissionBalance - data.Amount,
+		Balance:       wallet.CommissionBalance - data.Amount,
 		Status:        1,
 		Wallet:        "Commission",
 	}
@@ -210,16 +210,6 @@ func (s *CommissionService) WithdrawCommissionBalance(data WithdrawCommissionDTO
 		return common.NewErrorResponse("Insufficient balance", nil, 400), nil
 	}
 
-	// This logic usually moves money from Commission Wallet to Main Wallet?
-	// Or creates a withdrawal request?
-	// TS: WithdrawalQueue.add('commission-withdrawal').
-	// Usually this implies moving to Available Balance or a payout.
-	// Let's assume transfer to available balance for now or just a debit if it's a cashout.
-	// TS code: balance = wallet.commission_balance; ... reduces commission balance.
-	// Does it credit available balance? Not explicitly shown in just the 'add' payload setup.
-	// But in existing systems, "Withdraw Commission" usually means Transfer to Betting Wallet.
-
-	// Let's implement as: Debit Commission, Credit Available.
 
 	err := s.DB.Transaction(func(tx *gorm.DB) error {
 		// Debit Commission
@@ -245,7 +235,7 @@ func (s *CommissionService) WithdrawCommissionBalance(data WithdrawCommissionDTO
 			Description:   "Transfer to Main Wallet",
 			Wallet:        "Commission",
 			Status:        1,
-			AvailableBalance: wallet.AvailableBalance, // Approx
+			Balance:       wallet.AvailableBalance, // Approx
 		})
 
 		// Record Credit on Main
@@ -260,7 +250,7 @@ func (s *CommissionService) WithdrawCommissionBalance(data WithdrawCommissionDTO
 			Description:   "Transfer from Commission Wallet",
 			Wallet:        "Main",
 			Status:        1,
-			AvailableBalance: wallet.AvailableBalance + data.Amount,
+			Balance:       wallet.AvailableBalance + data.Amount,
 		})
 
 		return nil
@@ -298,19 +288,6 @@ type RequestCommissionByAffiliateDTO struct {
 }
 
 func (s *CommissionService) RequestCommissionByAffiliate(data RequestCommissionByAffiliateDTO) (interface{}, error) {
-	// Resolve Affiliate ID to User ID
-	// identityService.getUserIdWithAffiliatId
-	// Note: IdentityClient needs a specific method for this if not generic.
-	// Checking IdentityClient wrapper... I don't see `GetUserIdWithAffiliatId` there.
-	// I might need to add it or use `GetUserDetails` if it supports alternate lookup.
-	// TS uses `getUserIdWithAffiliatId`.
-	// For now, I'll assume I need to implement that in IdentityClient or stub it.
-	// Or maybe the `UserId` passed IS the real user ID if the frontend handles resolution?
-	// TS: `response = await this.identityService.getUserIdWithAffiliatId({ affiliateId: userId })`
-
-	// STUB: Assume UserId IS the ID for now or implement lookup.
-	// Let's implement a lookup in IdentityClient if possible.
-	// But first, let's just proceed assuming we have the ID.
 	realUserId := data.UserId
 	// TODO: Resolve realUserId from AffiliateID if different.
 
@@ -364,7 +341,7 @@ func (s *CommissionService) RequestCommissionByAffiliate(data RequestCommissionB
 			Description:   "Commission Withdrawal",
 			Wallet:        "Commission",
 			Status:        0, // Pending
-			AvailableBalance: wallet.AvailableBalance,
+			Balance:       wallet.AvailableBalance,
 		}
 
 		if data.TransactionNo != "" {
@@ -440,12 +417,70 @@ func (s *CommissionService) GetAffiliateCommissionBalance(clientId, userId int) 
 		return common.NewErrorResponse("Wallet not found", nil, 404), nil
 	}
 
+	// Get referral user IDs for this affiliate
+	affiliateId := int32(userId)
+	referralRes, err := s.IdentityClient.GetAffiliateUsers(&identity.AffiliateRequest{
+		AffiliateId: &affiliateId,
+	})
+
+	var totalDepositCount int64 = 0
+	var totalDepositAmount float64 = 0
+	var totalWithdrawalCount int64 = 0
+	var totalWithdrawalAmount float64 = 0
+
+	if err == nil && referralRes != nil {
+		referrals := referralRes.GetData()
+		referralIds := make([]int, 0, len(referrals))
+		for _, ref := range referrals {
+			refMap := ref.AsMap()
+			if val, ok := refMap["userId"]; ok {
+				if idFloat, ok := val.(float64); ok {
+					referralIds = append(referralIds, int(idFloat))
+				}
+			}
+		}
+
+		if len(referralIds) > 0 {
+			// Query total deposits from referrals
+			var depositResult struct {
+				DepositCount  int64
+				DepositAmount float64
+			}
+			s.DB.Table("transactions").
+				Select("COUNT(*) as deposit_count, COALESCE(SUM(amount), 0) as deposit_amount").
+				Where("client_id = ? AND user_id IN ? AND subject = ? AND tranasaction_type = ? AND status = ?",
+					clientId, referralIds, "Deposit", "credit", 1).
+				Scan(&depositResult)
+
+			totalDepositCount = depositResult.DepositCount
+			totalDepositAmount = depositResult.DepositAmount
+
+			// Query total withdrawals from referrals
+			var withdrawalResult struct {
+				WithdrawalCount  int64
+				WithdrawalAmount float64
+			}
+			s.DB.Table("withdrawals").
+				Select("COUNT(*) as withdrawal_count, COALESCE(SUM(amount), 0) as withdrawal_amount").
+				Where("client_id = ? AND user_id IN ? AND status = ?",
+					clientId, referralIds, 1).
+				Scan(&withdrawalResult)
+
+			totalWithdrawalCount = withdrawalResult.WithdrawalCount
+			totalWithdrawalAmount = withdrawalResult.WithdrawalAmount
+		}
+	}
+
 	return map[string]interface{}{
 		"success": true,
 		"message": "Commission balance fetched successfully.",
 		"status":  200,
 		"data": map[string]interface{}{
-			"commission_balance": wallet.CommissionBalance,
+			"commission_balance":    wallet.CommissionBalance,
+			"totalDepositCount":     totalDepositCount,
+			"totalDepositAmount":    totalDepositAmount,
+			"totalWithdrawalCount":  totalWithdrawalCount,
+			"totalWithdrawalAmount": totalWithdrawalAmount,
 		},
 	}, nil
 }
@@ -1078,8 +1113,8 @@ func (s *CommissionService) ListAffiliateTotalDepositsAndWithdrawals(data *walle
 		},
 	}, nil
 }
-// --- REPLACED BY OPTIMIZED AdminAffiliateDashboardData BELOW ---
 
+// --- REPLACED BY OPTIMIZED AdminAffiliateDashboardData BELOW ---
 
 type AffiliateDashboardDataDTO struct {
 	ClientId int     `json:"clientId"`
@@ -1193,19 +1228,25 @@ func (s *CommissionService) AdminAffiliateDashboardData(data AffiliateDashboardD
 			affiliateName = userInfoRes.GetData().GetUsername()
 		}
 
-	resp := map[string]interface{}{
+		resp := map[string]interface{}{
 			"success": true,
 			"status":  200,
 			"message": "Affiliate dashboard data fetched successfully",
 			"data": map[string]interface{}{
-				"affiliateId":      float64(userId),
-				"affiliateName":    affiliateName,
-				"referralCount":    float64(len(referralIds)),
-				"totalDeposits":    totalDeposits,
-				"totalWithdrawals": totalWithdrawals,
-				"dailyDeposit":     dailyDeposit,
-				"monthlyDeposit":   monthlyDeposit,
-				"balance":          walletData.AvailableBalance,
+				"affiliates": []map[string]interface{}{
+					{
+						"affiliateId":      float64(userId),
+						"affiliateName":    affiliateName,
+						"referralCount":    float64(len(referralIds)),
+						"totalDeposits":    totalDeposits,
+						"totalWithdrawals": totalWithdrawals,
+						"dailyDeposit":     dailyDeposit,
+						"monthlyDeposit":   monthlyDeposit,
+						"balance":          walletData.AvailableBalance,
+					},
+				},
+				"grandTotalDeposit":    totalDeposits,
+				"grandTotalWithdrawal": totalWithdrawals,
 			},
 		}
 		log.Printf("AdminAffiliateDashboardData (Single) returning data for affiliate %d\n", userId)
@@ -1461,4 +1502,3 @@ func (s *CommissionService) AdminAffiliateDashboardData(data AffiliateDashboardD
 	log.Printf("AdminAffiliateDashboardData (All) full response: %s\n", string(respJson))
 	return resp, nil
 }
-

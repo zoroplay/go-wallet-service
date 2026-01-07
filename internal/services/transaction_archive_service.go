@@ -59,7 +59,7 @@ func (s *TransactionArchiveService) ArchiveTransactions() {
 			Subject:       tx.Subject,
 			Description:   tx.Description,
 			Source:        tx.Source,
-			AvailableBalance: tx.AvailableBalance,
+			Balance:       tx.Balance,
 			Wallet:        tx.Wallet,
 			SettlementId:  tx.SettlementId,
 			CreatedAt:     tx.CreatedAt,

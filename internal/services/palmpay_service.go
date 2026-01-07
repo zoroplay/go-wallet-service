@@ -24,13 +24,6 @@ import (
 type PalmPayService struct {
 	DB            *gorm.DB
 	HelperService *HelperService
-	// IdentityService omitted, we access User via DB or other means if needed for Payout?
-	// The `payoutToUser` needs `user` to get phone number.
-	// We might need to inject IdentityService or mock it.
-	// For now, I'll access checks via DB or assume phone is in Withdrawal? No, withdrawal has user_id.
-	// I will omit IdentityService usage or find workaround if possible.
-	// Withdrawal entity usually has necessary details or we can fetch User from DB.
-	// Assuming User model exists and can be queried.
 }
 
 func NewPalmPayService(db *gorm.DB, helper *HelperService) *PalmPayService {
@@ -49,8 +42,51 @@ func (s *PalmPayService) palmPaySettings(clientId int) (*models.PaymentMethod, e
 	return &pm, nil
 }
 
+func (s *PalmPayService) formatPemKey(key string) string {
+	// First try replacing \\n with actual newlines
+	formatted := strings.ReplaceAll(key, "\\n", "\n")
+
+	// Check if it's still a single line (has spaces between header and content)
+	if strings.Contains(formatted, "-----BEGIN") && !strings.Contains(formatted, "\n") {
+		// Find the begin marker
+		beginMarkerStart := strings.Index(formatted, "-----BEGIN ")
+		if beginMarkerStart >= 0 {
+			// Find the closing ----- of the header (search after "BEGIN ")
+			afterBegin := beginMarkerStart + 11 // len("-----BEGIN ")
+			closingDashes := strings.Index(formatted[afterBegin:], "-----")
+			if closingDashes >= 0 {
+				headerEndPos := afterBegin + closingDashes + 5
+				header := formatted[beginMarkerStart:headerEndPos]
+
+				// Find the end marker
+				endIdx := strings.Index(formatted, "-----END")
+				if endIdx > headerEndPos {
+					// Extract content between header and footer
+					content := strings.TrimSpace(formatted[headerEndPos:endIdx])
+					// Remove all whitespace from content
+					content = strings.ReplaceAll(content, " ", "")
+
+					// Get the footer
+					footer := formatted[endIdx:]
+
+					// Rebuild the PEM
+					formatted = header + "\n" + content + "\n" + footer
+					fmt.Printf("Formatted PEM Key:\n%s\n", formatted)
+					return formatted
+				}
+			}
+		}
+	}
+
+	fmt.Printf("Formatted PEM Key (unchanged): %s\n", formatted)
+	return formatted
+}
+
 func (s *PalmPayService) generateSignatureRSA(data string, privateKeyPem string) (string, error) {
-	block, _ := pem.Decode([]byte(privateKeyPem))
+	// Format the PEM key first
+	formattedKey := s.formatPemKey(privateKeyPem)
+
+	block, _ := pem.Decode([]byte(formattedKey))
 	if block == nil {
 		return "", fmt.Errorf("failed to decode PEM block")
 	}
@@ -160,7 +196,7 @@ func (s *PalmPayService) HandleWebhook(data map[string]interface{}) (interface{}
 
 	var transaction models.Transaction
 	if err := s.DB.Where("client_id = ? AND transaction_no = ? AND tranasaction_type = ?", clientId, ref, "credit").First(&transaction).Error; err != nil {
-		s.logCallback(clientId, "Transaction not found", rawBody, 0, ref, "PalmPay") 
+		s.logCallback(clientId, "Transaction not found", rawBody, 0, ref, "PalmPay")
 		return common.NewErrorResponse("Transaction not found", nil, 404), nil
 	}
 

@@ -51,7 +51,7 @@ func CreditUser(c *gin.Context) {
 		Subject:       "deposit",
 		Description:   req.Description,
 		Source:        req.Source,
-		AvailableBalance: wallet.AvailableBalance,
+		Balance:       wallet.AvailableBalance,
 		Status:        1,
 	}
 
@@ -104,7 +104,7 @@ func DebitUser(c *gin.Context) {
 		Subject:       "withdrawal",
 		Description:   req.Description,
 		Source:        req.Source,
-		AvailableBalance: wallet.AvailableBalance,
+		Balance:       wallet.AvailableBalance,
 		Status:        1,
 	}
 
