@@ -740,7 +740,7 @@ func (s *PaymentService) InitiateDeposit(param InitiateDepositRequestDTO) (inter
 		ToUsername:      wallet.Username,
 		ToUserBalance:   wallet.AvailableBalance,
 		FromUserId:      param.UserId,
-		FromUsername:    wallet.Username,
+		FromUsername:    "System",
 		FromUserBalance: wallet.AvailableBalance,
 		Source:          param.Source,
 		Subject:         "Deposit",
@@ -768,17 +768,42 @@ type UpdateWithdrawalDTO struct {
 }
 
 func (s *PaymentService) UpdateWithdrawalStatus(param UpdateWithdrawalDTO) (interface{}, error) {
+	// Use a transaction with pessimistic lock to prevent race conditions
+	tx := s.DB.Begin()
+	if tx.Error != nil {
+		return common.NewErrorResponse("Unable to start transaction", nil, 500), nil
+	}
+
 	var withdrawal models.Withdrawal
-	if err := s.DB.Where("id = ? AND client_id = ?", param.WithdrawalId, param.ClientId).First(&withdrawal).Error; err != nil {
+	// Lock the row for update to prevent concurrent processing
+	if err := tx.Set("gorm:query_option", "FOR UPDATE").Where("id = ? AND client_id = ?", param.WithdrawalId, param.ClientId).First(&withdrawal).Error; err != nil {
+		tx.Rollback()
 		return common.NewErrorResponse("Withdrawal request not found", nil, 404), nil
+	}
+
+	// Check if transaction has already been processed (status 1 = approved)
+	if withdrawal.Status == 1 {
+		tx.Rollback()
+		return common.NewErrorResponse("Withdrawal request has already been processed", nil, 400), nil
+	}
+
+	// Check if transaction has been rejected (status 2) or cancelled (status 3)
+	if withdrawal.Status == 2 || withdrawal.Status == 3 {
+		tx.Rollback()
+		message := "Withdrawal request has already been rejected"
+		if withdrawal.Status == 3 {
+			message = "Withdrawal request has already been cancelled"
+		}
+		return common.NewErrorResponse(message, nil, 400), nil
 	}
 
 	switch param.Status {
 	case "approve":
 		// Disburse Funds Logic
 		paymentMethod := models.PaymentMethod{}
-		err := s.DB.Where("for_disbursement = ? AND client_id = ?", 1, param.ClientId).First(&paymentMethod).Error
+		err := tx.Where("for_disbursement = ? AND client_id = ?", 1, param.ClientId).First(&paymentMethod).Error
 		if err != nil {
+			tx.Rollback()
 			return common.NewErrorResponse("No payment method setup for auto disbursement", nil, 501), nil
 		}
 
@@ -819,10 +844,12 @@ func (s *PaymentService) UpdateWithdrawalStatus(param UpdateWithdrawalDTO) (inte
 			resp, disbursementErr = s.SmileAndPay.InitiatePayout(data, param.ClientId)
 
 		default:
+			tx.Rollback()
 			return common.NewErrorResponse("Provider not supported for disbursement: "+paymentMethod.Provider, nil, 501), nil
 		}
 
 		if disbursementErr != nil {
+			tx.Rollback()
 			return common.NewErrorResponse(disbursementErr.Error(), nil, 400), nil
 		}
 
@@ -833,12 +860,16 @@ func (s *PaymentService) UpdateWithdrawalStatus(param UpdateWithdrawalDTO) (inte
 
 		if respMap, ok := resp.(map[string]interface{}); ok {
 			if success, ok := respMap["success"].(bool); ok && success {
-				s.DB.Model(&withdrawal).Updates(map[string]interface{}{"status": 1, "updated_by": param.UpdatedBy})
+				tx.Model(&withdrawal).Updates(map[string]interface{}{"status": 1, "updated_by": param.UpdatedBy})
 			}
 		} else if respStruct, ok := resp.(common.SuccessResponse); ok {
 			if respStruct.Success {
-				s.DB.Model(&withdrawal).Updates(map[string]interface{}{"status": 1, "updated_by": param.UpdatedBy})
+				tx.Model(&withdrawal).Updates(map[string]interface{}{"status": 1, "updated_by": param.UpdatedBy})
 			}
+		}
+
+		if err := tx.Commit().Error; err != nil {
+			return common.NewErrorResponse("Failed to commit transaction", nil, 500), nil
 		}
 
 		return resp, nil
@@ -848,21 +879,25 @@ func (s *PaymentService) UpdateWithdrawalStatus(param UpdateWithdrawalDTO) (inte
 		transactionNo := withdrawal.WithdrawalCode
 
 		// Update Withdrawal
-		s.DB.Model(&withdrawal).Updates(map[string]interface{}{
+		tx.Model(&withdrawal).Updates(map[string]interface{}{
 			"status":     3,
 			"comment":    param.Comment,
 			"updated_by": param.UpdatedBy,
 		})
 
 		// Update Transactions (Debit/Credit) -> Status 3 (Cancelled/Failed)
-		s.DB.Model(&models.Transaction{}).Where("transaction_no = ?", transactionNo).Update("status", 3)
+		tx.Model(&models.Transaction{}).Where("transaction_no = ?", transactionNo).Update("status", 3)
 
 		// Refund Wallet
 		var wallet models.Wallet
-		s.DB.Where("client_id = ? AND user_id = ?", param.ClientId, withdrawal.UserId).First(&wallet)
+		tx.Where("client_id = ? AND user_id = ?", param.ClientId, withdrawal.UserId).First(&wallet)
 
 		newBalance := wallet.AvailableBalance + withdrawal.Amount
-		s.DB.Model(&wallet).Update("available_balance", newBalance)
+		tx.Model(&wallet).Update("available_balance", newBalance)
+
+		if err := tx.Commit().Error; err != nil {
+			return common.NewErrorResponse("Failed to commit transaction", nil, 500), nil
+		}
 
 		// Log Refund Transaction
 		s.Helper.SaveTransaction(TransactionData{
@@ -887,7 +922,7 @@ func (s *PaymentService) UpdateWithdrawalStatus(param UpdateWithdrawalDTO) (inte
 	default:
 		// Default (Process/Other Action) -> TS logic seems to treat default as "Rejected Request" / Refund essentially?
 		// "update withdrawal status to 2"
-		s.DB.Model(&withdrawal).Updates(map[string]interface{}{
+		tx.Model(&withdrawal).Updates(map[string]interface{}{
 			"status":     2,
 			"comment":    param.Comment,
 			"updated_by": param.UpdatedBy,
@@ -895,9 +930,13 @@ func (s *PaymentService) UpdateWithdrawalStatus(param UpdateWithdrawalDTO) (inte
 
 		// TS Logic: Refund funds to user wallet
 		var wallet models.Wallet
-		if err := s.DB.Where("client_id = ? AND user_id = ?", param.ClientId, withdrawal.UserId).First(&wallet).Error; err == nil {
+		if err := tx.Where("client_id = ? AND user_id = ?", param.ClientId, withdrawal.UserId).First(&wallet).Error; err == nil {
 			balance := wallet.AvailableBalance + withdrawal.Amount
-			s.DB.Model(&wallet).Update("available_balance", balance)
+			tx.Model(&wallet).Update("available_balance", balance)
+
+			if err := tx.Commit().Error; err != nil {
+				return common.NewErrorResponse("Failed to commit transaction", nil, 500), nil
+			}
 
 			s.Helper.SaveTransaction(TransactionData{
 				Amount:          withdrawal.Amount,
@@ -915,6 +954,8 @@ func (s *PaymentService) UpdateWithdrawalStatus(param UpdateWithdrawalDTO) (inte
 				TransactionNo:   common.GenerateTrxNo(),
 				Status:          1,
 			})
+		} else {
+			tx.Commit()
 		}
 
 		return map[string]interface{}{"success": true, "message": "Withdrawal request updated"}, nil
@@ -1141,7 +1182,7 @@ func (s *PaymentService) WalletTransfer(payload WalletTransferDTO) (interface{},
 
 	desc := payload.Description
 	if desc == "" {
-		desc = "Inter account transfer"
+		desc = "Transfer from " + payload.FromUsername + " to " + payload.ToUsername
 	}
 
 	s.Helper.SaveTransaction(TransactionData{
@@ -1247,12 +1288,16 @@ func (s *PaymentService) VerifyBankAccount(param VerifyBankAccountDTO) (interfac
 	// Find payment method for disbursement
 	var pm models.PaymentMethod
 	if err := s.DB.Where("client_id = ? AND for_disbursement = ?", param.ClientId, 1).First(&pm).Error; err != nil {
+		log.Printf("VerifyBankAccount: No payment method found for clientId %d", param.ClientId)
 		return common.NewErrorResponse("No payment method is active for disbursement", nil, 404), nil
 	}
+
+	log.Printf("VerifyBankAccount: Found payment method %s for clientId %d", pm.Provider, param.ClientId)
 
 	// Get User Details from Identity Service
 	userResp, err := s.IdentityClient.GetUser(param.UserId) // Changed to GetUser as per IdentityClient definition
 	if err != nil {
+		log.Printf("VerifyBankAccount: Failed to fetch user details for userId %d: %v", param.UserId, err)
 		return common.NewErrorResponse("Failed to fetch user details", nil, 500), nil
 	}
 
@@ -1260,11 +1305,16 @@ func (s *PaymentService) VerifyBankAccount(param VerifyBankAccountDTO) (interfac
 	// Go generated getters are safer.
 	userData := userResp.GetData()
 	if userData == nil {
+		log.Printf("VerifyBankAccount: User data not found for userId %d", param.UserId)
 		return common.NewErrorResponse("User data not found", nil, 404), nil
 	}
 
 	firstName := strings.ToLower(userData.GetFirstName())
 	lastName := strings.ToLower(userData.GetLastName())
+
+	//:TODO Fix splite names
+
+	log.Printf("VerifyBankAccount: User details - FirstName: %s, LastName: %s", firstName, lastName)
 
 	if firstName == "" {
 		return common.NewErrorResponse("Please update your profile details to proceed", nil, 404), nil
@@ -1273,6 +1323,8 @@ func (s *PaymentService) VerifyBankAccount(param VerifyBankAccountDTO) (interfac
 	var accountName string
 	var resolveErr error
 	var resolveResp interface{}
+
+	log.Printf("VerifyBankAccount: Switching on provider %s", pm.Provider)
 
 	switch pm.Provider {
 	case "paystack":
@@ -1283,8 +1335,10 @@ func (s *PaymentService) VerifyBankAccount(param VerifyBankAccountDTO) (interfac
 		resolveResp, resolveErr = s.Monnify.ResolveAccountNumber(param.ClientId, param.AccountNumber, param.BankCode)
 	case "korapay":
 		resolveResp, resolveErr = s.Korapay.ResolveAccountNumber(param.ClientId, param.AccountNumber, param.BankCode)
-	// case "opay":
-	// 	resolveResp, resolveErr = s.OPay.ResolveAccountNumber(param.ClientId, param.AccountNumber, param.BankCode)
+	case "opay":
+		fmt.Println("OPay ResolveAccountNumber")
+		resolveResp, resolveErr = s.OPay.ResolveAccountNumber(param.ClientId, param.AccountNumber, param.BankCode)
+
 	// Add other providers if they support ResolveAccountNumber
 	default:
 		return common.NewErrorResponse("Provider does not support account resolution", nil, 400), nil

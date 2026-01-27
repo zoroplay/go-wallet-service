@@ -21,9 +21,8 @@ type IdentityClient struct {
 func NewIdentityClient() (*IdentityClient, error) {
 	identityUrl := os.Getenv("IDENTITY_SERVICE_URL")
 	if identityUrl == "" {
-		identityUrl = "localhost:5002" // Default fallback
+		identityUrl = "localhost:5002"
 	}
-
 	conn, err := grpc.NewClient(identityUrl, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to identity service: %v", err)
@@ -43,7 +42,7 @@ func (c *IdentityClient) Close() {
 }
 
 func (c *IdentityClient) GetUser(userId int) (*identity.GetUserDetailsResponse, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	req := &identity.GetUserDetailsRequest{

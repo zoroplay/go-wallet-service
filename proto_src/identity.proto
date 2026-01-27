@@ -168,6 +168,9 @@ service IdentityService {
   // User Import
   rpc ImportUsers (ImportUsersRequest) returns (ImportUsersResponse) {}
 
+  // Delete Client Data
+  rpc DeleteClientData (DeleteClientDataRequest) returns (DeleteClientDataResponse) {}
+
 }
 
 
@@ -1515,4 +1518,20 @@ message ImportUsersResponse {
   int32 totalCreated = 4;
   int32 totalSkipped = 5;
   repeated string errors = 6;
+}
+
+// Delete Client Data Messages
+message DeleteClientDataRequest {
+  int32 client_id = 1;
+  optional string confirmation_code = 2; // Optional security confirmation
+}
+
+message DeleteClientDataResponse {
+  bool success = 1;
+  string message = 2;
+  int32 users_deleted = 3;
+  int32 wallets_deleted = 4;
+  int32 bets_deleted = 5;
+  int32 bonuses_deleted = 6;
+  repeated string errors = 7;
 }

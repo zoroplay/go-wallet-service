@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 	"encoding/pem"
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 
@@ -254,43 +255,35 @@ func (s *OpayService) DisburseFunds(withdrawal *models.Withdrawal, clientId int)
 		return common.SuccessResponse{Success: false, Message: "Opay has not been configured"}, nil
 	}
 
-	baseUrl := "https://api.prod.sportsbookengine.com" // Default from TS logic logic
+	baseUrl := "https://api.prod.sportsbookengine.com"
 	if clientId == 4 {
 		baseUrl = "https://dev.staging.sportsbookengine.com"
 	}
 
-	// Payload construction
 	payload := map[string]interface{}{
 		"payoutType":      "BankTransfer",
 		"notifyUrl":       fmt.Sprintf("%s/api/v2/webhook/checkout/%d/opay/callback", baseUrl, clientId),
 		"merchantOrderNo": withdrawal.WithdrawalCode,
 		"country":         "NG",
-		"amount":          withdrawal.Amount * 100, // TS converts to kobo? "Number(withdrawal.amount) * 100"
+		"amount":          int(withdrawal.Amount * 100),
 		"currency":        "NGN",
 		"language":        "en_US",
 		"metaData": map[string]interface{}{
 			"accountBankCode": withdrawal.BankCode,
 			"accountName":     withdrawal.AccountName,
 			"accountNo":       withdrawal.AccountNumber,
-			"serviceProvider": "Opay",
-			"customerName":    withdrawal.Username, // Assuming username is name
 		},
 	}
 
-	// Sign logic
-	// TS: crypto.createSign('RSA-SHA256')
-
-	privKeyPem := strings.ReplaceAll(settings.SecretKey, "\\n", "\n") // Actually TS uses process.env.OPAY_PRIVATE_KEY?
-	// TS: const privateKey = process.env.OPAY_PRIVATE_KEY.replace(/\\n/g, '\n');
-	// In Go, I should probably use settings.SecretKey or if it's strictly ENV, I need to know.
-	// Assuming settings.SecretKey holds the private key for now, as usually PaymentMethod stores keys.
-	// But TS explicitly used process.env.OPAY_PRIVATE_KEY.
-	// I'll stick to settings.SecretKey as it's cleaner than reading env directly here, unless user insists.
-
-	// Create RSA signature
-	signature, err := s.generateSignature(payload, privKeyPem)
+	privateKey := s.formatPrivateKey(settings.SecretKey)
+	signature, err := s.signRequestBody(payload, privateKey)
 	if err != nil {
-		return common.SuccessResponse{Success: false, Message: "Signing failed"}, nil
+		return common.SuccessResponse{Success: false, Message: "Signing failed: " + err.Error()}, nil
+	}
+
+	url := "https://testapi.opaycheckout.com/api/v1/international/payout/createSingleOrder"
+	if clientId != 4 {
+		url = "https://api.opaycheckout.com/api/v1/international/payout/createSingleOrder"
 	}
 
 	headers := map[string]string{
@@ -299,57 +292,135 @@ func (s *OpayService) DisburseFunds(withdrawal *models.Withdrawal, clientId int)
 		"Content-Type":  "application/json",
 	}
 
-	url := "https://testapi.opaycheckout.com/api/v1/international/payout/createSingleOrder" // Hardcoded in TS?
-
 	resp, err := common.Post(url, payload, headers)
 	if err != nil {
-		return common.SuccessResponse{Success: false, Message: "Unable to disburse funds"}, nil
+		return common.SuccessResponse{Success: false, Message: "Unable to disburse funds: " + err.Error()}, nil
 	}
 
 	respMap, _ := resp.(map[string]interface{})
-	dataMap, _ := respMap["data"].(map[string]interface{})
-	status, _ := dataMap["status"].(string)
+	code, _ := respMap["code"].(string)
 
-	if status == "SUCCESSFUL" {
+	if code == "00000" {
 		s.DB.Model(&models.Withdrawal{}).Where("id = ?", withdrawal.ID).Update("status", 1)
 		return map[string]interface{}{"success": true, "message": "Funds disbursed successfully"}, nil
-
 	}
 
 	return map[string]interface{}{"success": false, "message": respMap["message"]}, nil
-
 }
 
-func (s *OpayService) generateSignature(data interface{}, privKeyPem string) (string, error) {
-	block, _ := pem.Decode([]byte(privKeyPem))
+func (s *OpayService) ResolveAccountNumber(clientId int, accountNo, bankCode string) (interface{}, error) {
+	log.Printf("OPay: ResolveAccountNumber called with clientId: %d, accountNo: %s, bankCode: %s", clientId, accountNo, bankCode)
+	settings, err := s.opaySettings(clientId)
+	if err != nil {
+		return common.SuccessResponse{Success: false, Message: "OPay has not been configured for client"}, nil
+	}
+
+	payload := map[string]interface{}{
+		"accountNo":       accountNo,
+		"accountBankCode": bankCode,
+	}
+
+	url := "https://api.opaycheckout.com/api/v1/international/payout/bank-account-validate"
+	if clientId == 4 {
+		url = "https://testapi.opaycheckout.com/api/v1/international/payout/bank-account-validate"
+	}
+
+	privateKey := s.formatPrivateKey(settings.SecretKey)
+	signature, err := s.signRequestBody(payload, privateKey)
+	if err != nil {
+		return common.SuccessResponse{Success: false, Message: "Signing failed: " + err.Error()}, nil
+	}
+
+	headers := map[string]string{
+		"Authorization": "Bearer " + signature,
+		"MerchantId":    settings.MerchantId,
+		"Content-Type":  "application/json",
+	}
+
+	resp, err := common.Post(url, payload, headers)
+	if err != nil {
+		return common.SuccessResponse{Success: false, Message: "Something went wrong: " + err.Error()}, nil
+	}
+
+	fmt.Println("RES", resp)
+
+	respMap, _ := resp.(map[string]interface{})
+	success, _ := respMap["success"].(bool)
+	message, _ := respMap["message"].(string)
+	fmt.Println("RES>DATA", respMap)
+
+	fmt.Println("SUCCESS", success)
+
+	if success {
+		accountName, _ := respMap["accountName"].(string)
+		return map[string]interface{}{
+			"success": true,
+			"data": map[string]interface{}{
+				"account_name":   accountName,
+				"account_number": accountNo,
+			},
+			"message": message,
+		}, nil
+	}
+
+	return map[string]interface{}{
+		"success": false,
+		"message": message,
+	}, nil
+}
+
+func (s *OpayService) signRequestBody(body interface{}, privateKey string) (string, error) {
+	bodyBytes, err := json.Marshal(body)
+	if err != nil {
+		return "", err
+	}
+
+	block, _ := pem.Decode([]byte(privateKey))
 	if block == nil {
 		return "", fmt.Errorf("failed to decode PEM block")
 	}
 
-	pk, err := x509.ParsePKCS8PrivateKey(block.Bytes)
+	var key interface{}
+	key, err = x509.ParsePKCS8PrivateKey(block.Bytes)
 	if err != nil {
-		// Try PKCS1
-		pk, err = x509.ParsePKCS1PrivateKey(block.Bytes)
+		key, err = x509.ParsePKCS1PrivateKey(block.Bytes)
 		if err != nil {
 			return "", err
 		}
 	}
 
-	rsaKey, ok := pk.(*rsa.PrivateKey)
+	rsaKey, ok := key.(*rsa.PrivateKey)
 	if !ok {
 		return "", fmt.Errorf("not an RSA private key")
 	}
 
-	payloadBytes, _ := json.Marshal(data)
-
-	hashed := sha256.Sum256(payloadBytes)
-
+	hashed := sha256.Sum256(bodyBytes)
 	signature, err := rsa.SignPKCS1v15(rand.Reader, rsaKey, crypto.SHA256, hashed[:])
 	if err != nil {
 		return "", err
 	}
 
 	return base64.StdEncoding.EncodeToString(signature), nil
+}
+
+func (s *OpayService) formatPrivateKey(key string) string {
+	cleanKey := strings.ReplaceAll(key, "-----BEGIN PRIVATE KEY-----", "")
+	cleanKey = strings.ReplaceAll(cleanKey, "-----END PRIVATE KEY-----", "")
+	cleanKey = strings.ReplaceAll(cleanKey, " ", "")
+	cleanKey = strings.ReplaceAll(cleanKey, "\n", "")
+	cleanKey = strings.ReplaceAll(cleanKey, "\r", "")
+	cleanKey = strings.ReplaceAll(cleanKey, "\\n", "")
+
+	var lines []string
+	for i := 0; i < len(cleanKey); i += 64 {
+		end := i + 64
+		if end > len(cleanKey) {
+			end = len(cleanKey)
+		}
+		lines = append(lines, cleanKey[i:end])
+	}
+
+	return "-----BEGIN PRIVATE KEY-----\n" + strings.Join(lines, "\n") + "\n-----END PRIVATE KEY-----"
 }
 
 func (s *OpayService) HandlePaymentStatus(data map[string]interface{}) (interface{}, error) {

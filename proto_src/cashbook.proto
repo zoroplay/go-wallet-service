@@ -1,0 +1,117 @@
+syntax = "proto3";
+
+package cashbook;
+
+
+message BranchRequest {
+    int32 branchId = 1;
+}
+
+  message CashbookApproveExpenseRequest {
+    int32 status = 1;
+    int32 verifiedBy = 2;
+    int32 amount = 3;
+    int32 expenseId = 4;
+    string comment = 5;
+  }
+  message CashbookCreateExpenseRequest {
+    int32 amount = 1;
+    int32 expenseTypeId = 2;
+    int32 branchId = 3;
+    string comment = 4;
+  }
+  message ExpenseSingleResponse{
+    bool success = 1;
+    int32 status = 2;
+    string message = 3;
+    optional Expense data = 4;
+  }
+  
+  message ExpenseRepeatedResponse{
+    bool success = 1;
+    int32 status = 2;
+    string message = 3;
+    repeated Expense data = 4;
+  }
+  
+  message Expense{
+    int32 id = 1;
+    int32 userId = 2;
+    int32 expenseTypeId = 3;
+    int32 requestedAmount = 4;
+    int32 approvedAmount = 5;
+    int32 status = 6;
+    string branchComment = 7;
+    string adminComment = 8;
+    string verifiedAt = 9;
+    int32 verifiedBy = 10;
+    string createdAt = 11;
+    optional int32 balance = 12;
+  }
+  
+  message CashbookApproveCashInOutRequest {
+    int32 status = 1;
+    int32 cashoutId = 2;
+    int32 verifiedBy = 3;
+  }
+  message CashbookCreateCashInOutRequest {
+    int32 userId = 1;
+    int32 branchId = 2;
+    int32 amount = 3;
+    string comment = 4;
+  }
+  
+  message CashInOutSingleResponse{
+    bool success = 1;
+    int32 status = 2;
+    string message = 3;
+    optional CashInOut data = 4;
+  }
+  
+  message CashInOutRepeatedResponse{
+    bool success = 1;
+    int32 status = 2;
+    string message = 3;
+    repeated CashInOut data = 4;
+  }
+  
+  message CashInOut{
+    int32 id = 1;
+    int32 userId = 2;
+    int32 approvedBy = 3;
+    int32 branchId = 4;
+    int32 amount = 5;
+    string comment = 6;
+    int32 status = 7;
+    string createdAt = 8;
+    optional int32 balance = 9;
+  }
+  
+  message CashbookCreateExpenseTypeRequest {
+    string title = 1;
+    int32 fixed = 3;
+    int32 amount = 4;
+  }
+  
+  message ExpenseTypeSingleResponse{
+    bool success = 1;
+    int32 status = 2;
+    string message = 3;
+    optional ExpenseType data = 4;
+  }
+  
+  message ExpenseTypeRepeatedResponse{
+    bool success = 1;
+    int32 status = 2;
+    string message = 3;
+    repeated ExpenseType data = 4;
+  }
+  
+  message ExpenseType {
+    int32 id = 1;
+    string title = 2;
+    int32 amount = 3;
+    string createdAt = 4;
+    int32 status = 5;
+    int32 fixed = 6;
+  }

@@ -311,7 +311,7 @@ func (s *Server) RequestWithdrawal(ctx context.Context, req *pb.WithdrawRequest)
 	}
 
 	respMap, _ := resp.(common.SuccessResponse)
-	
+
 	var withdrawData *pb.Withdraw
 	if data, ok := respMap.Data.(map[string]interface{}); ok {
 		withdrawData = &pb.Withdraw{
@@ -593,10 +593,10 @@ func (s *Server) FetchPlayerDeposit(ctx context.Context, req *pb.FetchPlayerDepo
 	if err != nil {
 		return &pb.WalletResponse{Success: false, Message: err.Error()}, nil
 	}
-	
+
 	rMap, _ := resp.(map[string]interface{})
 	var walletData *pb.Wallet
-	
+
 	if d, ok := rMap["data"].(map[string]interface{}); ok {
 		// Manual mapping to pb.Wallet
 		walletData = &pb.Wallet{
@@ -712,7 +712,6 @@ func (s *Server) SmilePayPayout(ctx context.Context, req *pb.CreatePawapayReques
 	return &pb.WithdrawResponse{Success: true, Message: "Received"}, nil
 }
 
-
 func (s *Server) ValidateDepositCode(ctx context.Context, req *pb.ValidateTransactionRequest) (*pb.CommonResponseObj, error) {
 	resp, err := s.Deposit.ValidateDepositCode(req)
 	if err != nil {
@@ -786,7 +785,7 @@ func (s *Server) DebitAgentBalance(ctx context.Context, req *pb.DebitUserRequest
 	if err != nil {
 		return &pb.CommonResponseObj{Success: false, Message: err.Error()}, nil
 	}
-	// Response is SuccessResponse with Data as Wallet. 
+	// Response is SuccessResponse with Data as Wallet.
 	// Proto expects CommonResponseObj.
 	return &pb.CommonResponseObj{Success: true, Message: resp.Message}, nil
 }
@@ -813,15 +812,15 @@ func (s *Server) GetPaymentMethods(ctx context.Context, req *pb.GetPaymentMethod
 	if req.Status != nil {
 		statusPtr = &statusVal
 	}
-	
+
 	resp, err := s.Wallet.GetPaymentMethods(int(req.ClientId), statusPtr)
 	if err != nil {
 		return &pb.GetPaymentMethodResponse{Success: false, Message: err.Error()}, nil
 	}
-	
+
 	dataBytes, _ := json.Marshal(resp.Data)
 	var pbList []*pb.PaymentMethod
-	json.Unmarshal(dataBytes, &pbList) 
+	json.Unmarshal(dataBytes, &pbList)
 
 	return &pb.GetPaymentMethodResponse{Success: true, Message: "Success", Data: pbList}, nil
 }
@@ -842,11 +841,11 @@ func (s *Server) SavePaymentMethod(ctx context.Context, req *pb.PaymentMethodReq
 	if err != nil {
 		return &pb.PaymentMethodResponse{Success: false, Message: err.Error()}, nil
 	}
-	
+
 	dataBytes, _ := json.Marshal(resp.Data)
 	var pm *pb.PaymentMethod
 	json.Unmarshal(dataBytes, &pm)
-	
+
 	return &pb.PaymentMethodResponse{Success: true, Message: "Saved", Data: pm}, nil
 }
 
@@ -883,11 +882,11 @@ func (s *Server) ListBanks(ctx context.Context, req *pb.EmptyRequest) (*pb.Commo
 	if err != nil {
 		return &pb.CommonResponseArray{Success: false, Message: err.Error()}, nil
 	}
-	
+
 	dataBytes, _ := json.Marshal(resp.Data)
 	var mapList []map[string]interface{}
 	json.Unmarshal(dataBytes, &mapList)
-	
+
 	var pbList []*structpb.Struct
 	for _, m := range mapList {
 		st, _ := structpb.NewStruct(m)
@@ -905,7 +904,7 @@ func (s *Server) UserTransactions(ctx context.Context, req *pb.UserTransactionRe
 	if req.Page != nil {
 		page = int(*req.Page)
 	}
-	
+
 	resp, err := s.Wallet.GetUserTransactions(services.UserTransactionDTO{
 		ClientId:  int(req.ClientId),
 		UserId:    int(req.UserId),
@@ -917,25 +916,25 @@ func (s *Server) UserTransactions(ctx context.Context, req *pb.UserTransactionRe
 	if err != nil {
 		return &pb.UserTransactionResponse{Success: false, Message: err.Error()}, nil
 	}
-	
+
 	// Map resp.Data (which is []Transaction) to repeated TransactionData
 	// resp.Data is []Transaction.
 	// Need to check specific fields mapping.
 	// Using json marshaling for quick adaptation if fields match.
 	// Proto TransactionData: id, referenceNo, amount, balance, subject, type, description, transactionDate, channel, status, wallet.
 	// Model Transaction: TransactionNo, Amount, Balance...
-	
+
 	dataBytes, _ := json.Marshal(resp.Data)
 	var pbList []*pb.TransactionData
 	json.Unmarshal(dataBytes, &pbList) // This might work if JSON tags match
-	
+
 	return &pb.UserTransactionResponse{
-		Success: true, 
+		Success: true,
 		Message: "Success",
 		Data:    pbList,
 		Meta: &pb.MetaData{
-			Page: int32(resp.CurrentPage),
-			Total: int32(resp.Count),
+			Page:    int32(resp.CurrentPage),
+			Total:   int32(resp.Count),
 			PerPage: int32(limit),
 		},
 	}, nil
@@ -949,12 +948,12 @@ func (s *Server) GetPlayerWalletData(ctx context.Context, req *pb.GetBalanceRequ
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "%v", err)
 	}
-	
+
 	rMap, ok := resp.(map[string]interface{})
 	if !ok {
 		return nil, status.Errorf(codes.Internal, "Invalid response")
 	}
-	
+
 	// Map manually
 	return &pb.PlayerWalletData{
 		SportBalance:         getFloat(rMap["sportBalance"]),
@@ -981,12 +980,12 @@ func (s *Server) GetUserAccounts(ctx context.Context, req *pb.GetBalanceRequest)
 	if err != nil {
 		return &pb.GetUserAccountsResponse{}, nil // Proto doesn't have success field to return error properly? Should I return grpc error? Yes.
 	}
-	
+
 	// Map resp.Data (map/interface) to []BankAccount
 	dataBytes, _ := json.Marshal(resp.Data)
 	var mapList []map[string]interface{}
 	json.Unmarshal(dataBytes, &mapList)
-	
+
 	var pbList []*pb.GetUserAccountsResponse_BankAccount
 	for _, m := range mapList {
 		pbList = append(pbList, &pb.GetUserAccountsResponse_BankAccount{
@@ -1001,7 +1000,7 @@ func (s *Server) GetUserAccounts(ctx context.Context, req *pb.GetBalanceRequest)
 
 func (s *Server) GetNetworkBalance(ctx context.Context, req *pb.GetNetworkBalanceRequest) (*pb.GetNetworkBalanceResponse, error) {
 	userIds := strings.Split(req.UserIds, ",")
-	
+
 	resp, err := s.Wallet.GetNetworkBalance(services.GetNetworkBalanceDTO{
 		AgentId: int(req.AgentId),
 		UserIds: userIds,
@@ -1009,7 +1008,7 @@ func (s *Server) GetNetworkBalance(ctx context.Context, req *pb.GetNetworkBalanc
 	if err != nil {
 		return &pb.GetNetworkBalanceResponse{Success: false, Message: err.Error()}, nil
 	}
-	
+
 	nb := getFloat(resp["networkBalance"])
 	ntb := getFloat(resp["networkTrustBalance"])
 	tb := getFloat(resp["trustBalance"])
@@ -1020,12 +1019,12 @@ func (s *Server) GetNetworkBalance(ctx context.Context, req *pb.GetNetworkBalanc
 	return &pb.GetNetworkBalanceResponse{
 		Success:             true,
 		Message:             "Success",
-		NetworkBalance:      nb,      // Not optional? Check proto.
-		NetworkTrustBalance: ntb,     // Not optional? Check proto.
-		TrustBalance:        &tb,     // Optional
-		AvailableBalance:    &ab,     // Optional
-		Balance:             &bal,    // Optional
-		CommissionBalance:   &cb,     // Optional
+		NetworkBalance:      nb,   // Not optional? Check proto.
+		NetworkTrustBalance: ntb,  // Not optional? Check proto.
+		TrustBalance:        &tb,  // Optional
+		AvailableBalance:    &ab,  // Optional
+		Balance:             &bal, // Optional
+		CommissionBalance:   &cb,  // Optional
 	}, nil
 }
 
@@ -1089,9 +1088,14 @@ func getInt32(v interface{}) int32 {
 	if i, ok := v.(int64); ok {
 		return int32(i)
 	}
+	if f, ok := v.(float64); ok {
+		return int32(f)
+	}
+	if f, ok := v.(float32); ok {
+		return int32(f)
+	}
 	return 0
 }
-
 
 func (s *Server) VerifyBankAccount(ctx context.Context, req *pb.VerifyBankAccountRequest) (*pb.VerifyBankAccountResponse, error) {
 	resp, err := s.Payment.VerifyBankAccount(services.VerifyBankAccountDTO{
@@ -1101,16 +1105,54 @@ func (s *Server) VerifyBankAccount(ctx context.Context, req *pb.VerifyBankAccoun
 		BankCode:      req.BankCode,
 	})
 	if err != nil {
-		return &pb.VerifyBankAccountResponse{Success: false, Message: err.Error()}, nil
+		return &pb.VerifyBankAccountResponse{Success: false, Message: err.Error(), Status: 500}, nil
 	}
 
-	rMap, _ := resp.(map[string]interface{})
-	accName, _ := rMap["account_name"].(string)
-	
+	var success bool
+	var message string
+	var status int
+	var accName string
+
+	// Handle different response types from PaymentService
+	switch r := resp.(type) {
+	case common.SuccessResponse:
+		success = r.Success
+		message = r.Message
+		status = r.Status
+		if data, ok := r.Data.(map[string]interface{}); ok {
+			accName, _ = data["account_name"].(string)
+		}
+	case common.ErrorResponse:
+		success = r.Success
+		message = r.Message
+		status = r.Status
+	case map[string]interface{}:
+		success, _ = r["success"].(bool)
+		message, _ = r["message"].(string)
+		accName, _ = r["account_name"].(string)
+		if s, ok := r["status"].(int); ok {
+			status = s
+		} else if sf, ok := r["status"].(float64); ok {
+			status = int(sf)
+		}
+	default:
+		return &pb.VerifyBankAccountResponse{Success: false, Message: "Invalid response format from service", Status: 500}, nil
+	}
+
+	// Default status if not set
+	if status == 0 {
+		if success {
+			status = 200
+		} else {
+			status = 400
+		}
+	}
+
 	return &pb.VerifyBankAccountResponse{
-		Success:       true,
-		Message:       "Account verified",
-		AccountName:   &accName,
+		Success:     success,
+		Message:     message,
+		Status:      int32(status),
+		AccountName: &accName,
 	}, nil
 }
 
@@ -1122,7 +1164,7 @@ func (s *Server) VerifyBankAccount(ctx context.Context, req *pb.VerifyBankAccoun
 
 // ... PawapayPayout ... (unchanged in this block)
 
-// Webhook Stubs/Impls 
+// Webhook Stubs/Impls
 func (s *Server) PaystackWebhook(ctx context.Context, req *pb.PaystackWebhookRequest) (*pb.WebhookResponse, error) {
 	return &pb.WebhookResponse{Success: true}, nil
 }
@@ -1142,8 +1184,6 @@ func (s *Server) KorapayWebhook(ctx context.Context, req *pb.KoraPayWebhookReque
 func (s *Server) OpayDepositWebhook(ctx context.Context, req *pb.OpayWebhookRequest) (*pb.OpayWebhookResponse, error) {
 	return &pb.OpayWebhookResponse{ResponseCode: "00000", ResponseMessage: "Success"}, nil
 }
-
-
 
 // STUBS for Missing Services
 
@@ -1245,7 +1285,7 @@ func (s *Server) CashbookFindAllBranchCashOut(context.Context, *pb.BranchRequest
 }
 
 func (s *Server) AdminAffiliateReferralDashboardData(ctx context.Context, req *pb.AffiliateDashboardData) (*pb.CommonResponseObj, error) {
-	log.Println("gRPC: [AdminAffiliateReferralDashboardData] called");
+	log.Println("gRPC: [AdminAffiliateReferralDashboardData] called")
 
 	var userIdPtr *int
 	if req.UserId != nil {
@@ -1424,7 +1464,7 @@ func (s *Server) ListAffiliateTotalDepositsAndWithdrawals(ctx context.Context, r
 	// Reusing PlayerRequest struct as the service method expects it or mapping it
 	// NOTE: Proto expects DepositWithdrawals, Service expects PlayerRequest (based on name ListAffiliateTotalDepositsAndWithdrawals in code view step 111).
 	// Let's adapt.
-	
+
 	// Create a PlayerRequest from DepositWithdrawals
 	pReq := &pb.PlayerRequest{
 		ClientId: req.ClientId,
@@ -1432,7 +1472,7 @@ func (s *Server) ListAffiliateTotalDepositsAndWithdrawals(ctx context.Context, r
 		From:     req.From,
 		To:       req.To,
 	}
-	
+
 	resp, err := s.Commission.ListAffiliateTotalDepositsAndWithdrawals(pReq)
 	if err != nil {
 		return &pb.CommonResponseObj{Success: false, Message: err.Error()}, nil
@@ -1465,7 +1505,7 @@ func commonResponseToProto(resp interface{}) (*pb.CommonResponseObj, error) {
 	}
 	success, _ := rMap["success"].(bool)
 	message, _ := rMap["message"].(string)
-	statusVal, _ := rMap["status"].(int)
+	statusVal := getInt32(rMap["status"])
 
 	var dataStruct *structpb.Struct
 	if d, ok := rMap["data"]; ok && d != nil {

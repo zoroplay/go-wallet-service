@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package common;
+
+import "google/protobuf/struct.proto";
+
+
+message CommonResponseArray {
+    optional int32 status = 1;
+    optional bool success = 2;
+    string message = 3;
+    repeated google.protobuf.Struct data = 4;
+    optional string errors = 5;
+  }
+  
+  message CommonResponseObj{
+    optional int32 status = 1;
+    optional bool success = 2;
+    string message = 3;
+    optional google.protobuf.Struct data = 4;
+    optional string errors = 5;
+  }
+
+  message PaginationResponse {
+    string message = 1;
+    int32 count = 2;
+    int32 currentPage = 3;
+    int32 nextPage = 4;
+    int32 prevPage = 5;
+    int32 lastPage = 6;
+    repeated google.protobuf.Struct data = 7;
+  }
