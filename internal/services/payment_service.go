@@ -7,13 +7,13 @@ import (
 	"strings"
 	"time"
 
-	"wallet-service/internal/models"
-	"wallet-service/pkg/common"
-	"wallet-service/proto/identity"
-
 	"github.com/google/uuid"
 	"github.com/robfig/cron/v3"
 	"gorm.io/gorm"
+
+	"wallet-service/internal/models"
+	"wallet-service/pkg/common"
+	"wallet-service/proto/identity"
 )
 
 type PaymentService struct {
@@ -122,6 +122,7 @@ func (s *PaymentService) InitiateDeposit(param InitiateDepositRequestDTO) (inter
 	var description string
 	status := 0 // Pending
 
+	fmt.Println(param)
 	// Find Wallet
 	var wallet models.Wallet
 	if err := s.DB.Where("client_id = ? AND user_id = ?", param.ClientId, param.UserId).First(&wallet).Error; err != nil {
@@ -134,8 +135,20 @@ func (s *PaymentService) InitiateDeposit(param InitiateDepositRequestDTO) (inter
 		ClientId: int32(param.ClientId),
 		Source:   param.Source,
 	})
+	fmt.Println("Identity Service Response: ", userResp)
+	fmt.Println("Wallet: ", wallet)
 	if err != nil {
-		return common.NewErrorResponse("User does not exist or error fetching user", nil, 404), nil
+		return common.NewErrorResponse(
+			fmt.Sprintf("Identity service GetPaymentData failed: %v", err),
+			nil,
+			503,
+		), nil
+	}
+	if userResp == nil {
+		return common.NewErrorResponse("Identity service returned empty payment data response", nil, 503), nil
+	}
+	if strings.TrimSpace(userResp.Username) == "" {
+		return common.NewErrorResponse("User does not exist in identity service", nil, 404), nil
 	}
 
 	userEmail := userResp.Email
@@ -171,14 +184,46 @@ func (s *PaymentService) InitiateDeposit(param InitiateDepositRequestDTO) (inter
 			return common.NewErrorResponse("Paystack error", nil, 500), nil
 		}
 
-		if pResStruct, ok := pRes.(common.SuccessResponse); ok {
-			if pMap, ok := pResStruct.Data.(map[string]interface{}); ok {
-				if data, ok := pMap["data"].(map[string]interface{}); ok {
-					if url, ok := data["authorization_url"].(string); ok {
-						link = url
-					}
+		switch res := pRes.(type) {
+		case common.SuccessResponse:
+			if !res.Success {
+				return res, nil
+			}
+
+			respMap, ok := res.Data.(map[string]interface{})
+			if !ok {
+				return common.NewErrorResponse("Invalid Paystack response format", nil, 502), nil
+			}
+
+			// Paystack returns {status, message, data}. Respect provider-level failures.
+			if statusVal, ok := respMap["status"].(bool); ok && !statusVal {
+				msg := "Unable to initiate deposit with paystack"
+				if providerMsg, ok := respMap["message"].(string); ok && providerMsg != "" {
+					msg = providerMsg
+				}
+				return common.NewErrorResponse(msg, respMap, 400), nil
+			}
+
+			if data, ok := respMap["data"].(map[string]interface{}); ok {
+				if url, ok := data["authorization_url"].(string); ok {
+					link = url
 				}
 			}
+		case map[string]interface{}:
+			if statusVal, ok := res["success"].(bool); ok && !statusVal {
+				return res, nil
+			}
+			if data, ok := res["data"].(map[string]interface{}); ok {
+				if url, ok := data["authorization_url"].(string); ok {
+					link = url
+				}
+			}
+		default:
+			return common.NewErrorResponse("Unexpected Paystack response format", nil, 502), nil
+		}
+
+		if link == "" {
+			return common.NewErrorResponse("Payment link not found in Paystack response", nil, 502), nil
 		}
 		description = "Online Deposit (Paystack)"
 
@@ -346,6 +391,16 @@ func (s *PaymentService) InitiateDeposit(param InitiateDepositRequestDTO) (inter
 		// Get BaseUrl from helper or config? TS uses hardcoded logic based on clientID or environment.
 		// Assuming helper can provide or OPayService handles it.
 		// OPayService InitiatePayment takes data map.
+		opayReturnBase := strings.TrimSpace(callbackUrl)
+		if opayReturnBase == "" {
+			if strings.HasPrefix(siteUrl, "http://") || strings.HasPrefix(siteUrl, "https://") {
+				opayReturnBase = siteUrl
+			} else if strings.TrimSpace(siteUrl) != "" {
+				opayReturnBase = "https://" + strings.TrimSpace(siteUrl)
+			} else {
+				opayReturnBase = s.getApiBaseUrl(param.ClientId)
+			}
+		}
 
 		opayRes, err := s.OPay.InitiatePayment(map[string]interface{}{
 			"country":   "NG",
@@ -354,9 +409,9 @@ func (s *PaymentService) InitiateDeposit(param InitiateDepositRequestDTO) (inter
 				"total":    param.Amount * 100,
 				"currency": "NGN",
 			},
-			"returnUrl":   fmt.Sprintf("%s/payment-verification/opay", callbackUrl),
+			"returnUrl":   fmt.Sprintf("%s/payment-verification/opay", opayReturnBase),
 			"callbackUrl": fmt.Sprintf("%s/api/v2/webhook/checkout/%d/opay/callback", s.getApiBaseUrl(param.ClientId), param.ClientId),
-			"cancelUrl":   fmt.Sprintf("%s/payment-verification/opay", callbackUrl),
+			"cancelUrl":   fmt.Sprintf("%s/payment-verification/opay", opayReturnBase),
 			"evokeOpay":   true,
 			"expireAt":    300,
 			"product": map[string]interface{}{

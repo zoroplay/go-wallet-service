@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"wallet-service/pkg/common"
@@ -19,10 +20,19 @@ type IdentityClient struct {
 }
 
 func NewIdentityClient() (*IdentityClient, error) {
-	identityUrl := os.Getenv("IDENTITY_SERVICE_URL")
+	identityUrl := strings.TrimSpace(os.Getenv("IDENTITY_SERVICE_URL"))
 	if identityUrl == "" {
-		identityUrl = "localhost:5002"
+		host := strings.TrimSpace(os.Getenv("IDENTITY_SERVICE_HOST"))
+		port := strings.TrimSpace(os.Getenv("IDENTITY_SERVICE_PORT"))
+		if host == "" {
+			host = "localhost"
+		}
+		if port == "" {
+			port = "5002"
+		}
+		identityUrl = fmt.Sprintf("%s:%s", host, port)
 	}
+
 	conn, err := grpc.NewClient(identityUrl, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to identity service: %v", err)

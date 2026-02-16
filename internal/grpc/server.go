@@ -220,19 +220,64 @@ func (s *Server) InititateDeposit(ctx context.Context, req *pb.InitiateDepositRe
 		return &pb.InitiateDepositResponse{Success: false, Message: err.Error()}, nil
 	}
 
-	respMap, _ := resp.(map[string]interface{})
-	data, _ := respMap["data"].(map[string]interface{})
+	success := true
+	message := "Initiated"
+	link := ""
+	ref := ""
 
-	link, _ := data["link"].(string)
-	ref, _ := data["transactionRef"].(string)
+	extractData := func(data map[string]interface{}) {
+		if l, ok := data["link"].(string); ok {
+			link = l
+		}
+		if t, ok := data["transactionRef"].(string); ok {
+			ref = t
+		}
+	}
 
-	return &pb.InitiateDepositResponse{
-		Success: true,
-		Message: "Initiated",
-		Data: &pb.InitiateDepositResponse_Data{
+	switch r := resp.(type) {
+	case map[string]interface{}:
+		if sVal, ok := r["success"].(bool); ok {
+			success = sVal
+		}
+		if mVal, ok := r["message"].(string); ok && mVal != "" {
+			message = mVal
+		}
+		if data, ok := r["data"].(map[string]interface{}); ok {
+			extractData(data)
+		}
+	case common.SuccessResponse:
+		success = r.Success
+		if r.Message != "" {
+			message = r.Message
+		}
+		if data, ok := r.Data.(map[string]interface{}); ok {
+			extractData(data)
+		}
+	case common.ErrorResponse:
+		success = r.Success
+		if r.Message != "" {
+			message = r.Message
+		}
+		if data, ok := r.Data.(map[string]interface{}); ok {
+			extractData(data)
+		}
+	default:
+		success = false
+		message = "Invalid response from payment service"
+	}
+
+	var respData *pb.InitiateDepositResponse_Data
+	if link != "" || ref != "" {
+		respData = &pb.InitiateDepositResponse_Data{
 			Link:           &link,
 			TransactionRef: &ref,
-		},
+		}
+	}
+
+	return &pb.InitiateDepositResponse{
+		Success: success,
+		Message: message,
+		Data:    respData,
 	}, nil
 }
 

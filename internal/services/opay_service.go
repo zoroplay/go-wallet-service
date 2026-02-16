@@ -11,13 +11,14 @@ import (
 	"encoding/pem"
 	"fmt"
 	"log"
+	"math"
 	"strconv"
 	"strings"
 
+	"gorm.io/gorm"
+
 	"wallet-service/internal/models"
 	"wallet-service/pkg/common"
-
-	"gorm.io/gorm"
 )
 
 type OpayService struct {
@@ -41,11 +42,127 @@ func (s *OpayService) opaySettings(clientId int) (*models.PaymentMethod, error) 
 	return &pm, nil
 }
 
+func (s *OpayService) mapOpayBankCode(code string) string {
+	switch code {
+	case "999992":
+		return "305"
+	case "999991":
+		return "312"
+	default:
+		return code
+	}
+}
+
+func uniqueStrings(items []string) []string {
+	seen := make(map[string]struct{}, len(items))
+	result := make([]string, 0, len(items))
+	for _, item := range items {
+		val := strings.TrimSpace(item)
+		if val == "" {
+			continue
+		}
+		if _, exists := seen[val]; exists {
+			continue
+		}
+		seen[val] = struct{}{}
+		result = append(result, val)
+	}
+	return result
+}
+
+func buildOpayURL(configured, path string) string {
+	base := strings.TrimSpace(configured)
+	if base == "" {
+		return ""
+	}
+	base = strings.TrimRight(base, "/")
+	if strings.Contains(base, path) {
+		return base
+	}
+	return base + path
+}
+
+func (s *OpayService) cashierEndpoints(configured string, clientId int) []string {
+	const path = "/api/v1/international/cashier/create"
+	cfgURL := buildOpayURL(configured, path)
+	if clientId == 4 {
+		return uniqueStrings([]string{
+			cfgURL,
+			"https://testapi.opaycheckout.com" + path,
+			"https://liveapi.opaycheckout.com" + path,
+			"https://api.opaycheckout.com" + path,
+		})
+	}
+	return uniqueStrings([]string{
+		cfgURL,
+		"https://liveapi.opaycheckout.com" + path,
+		"https://api.opaycheckout.com" + path,
+		"https://testapi.opaycheckout.com" + path,
+	})
+}
+
+func (s *OpayService) payoutEndpoints(clientId int) []string {
+	const path = "/api/v1/international/payout/createSingleOrder"
+	if clientId == 4 {
+		return uniqueStrings([]string{
+			"https://testapi.opaycheckout.com" + path,
+			"https://liveapi.opaycheckout.com" + path,
+			"https://api.opaycheckout.com" + path,
+		})
+	}
+	return uniqueStrings([]string{
+		"https://liveapi.opaycheckout.com" + path,
+		"https://api.opaycheckout.com" + path,
+		"https://testapi.opaycheckout.com" + path,
+	})
+}
+
+func (s *OpayService) resolveEndpoints(clientId int) []string {
+	const path = "/api/v1/international/payout/bank-account-validate"
+	if clientId == 4 {
+		return uniqueStrings([]string{
+			"https://testapi.opaycheckout.com" + path,
+			"https://liveapi.opaycheckout.com" + path,
+			"https://api.opaycheckout.com" + path,
+		})
+	}
+	return uniqueStrings([]string{
+		"https://liveapi.opaycheckout.com" + path,
+		"https://api.opaycheckout.com" + path,
+		"https://testapi.opaycheckout.com" + path,
+	})
+}
+
+func (s *OpayService) postWithFallback(endpoints []string, payload interface{}, headers map[string]string) (map[string]interface{}, string, error) {
+	errors := make([]string, 0, len(endpoints))
+	for _, endpoint := range endpoints {
+		resp, err := common.Post(endpoint, payload, headers)
+		if err != nil {
+			errors = append(errors, fmt.Sprintf("%s => %v", endpoint, err))
+			continue
+		}
+
+		respMap, ok := resp.(map[string]interface{})
+		if !ok {
+			respJSON, _ := json.Marshal(resp)
+			errors = append(errors, fmt.Sprintf("%s => unexpected response: %s", endpoint, string(respJSON)))
+			continue
+		}
+
+		return respMap, endpoint, nil
+	}
+
+	return nil, "", fmt.Errorf("all OPay endpoints failed: %s", strings.Join(errors, " | "))
+}
+
 func (s *OpayService) InitiatePayment(data map[string]interface{}, clientId int) (interface{}, error) {
 	settings, err := s.opaySettings(clientId)
 	if err != nil {
 		return common.SuccessResponse{Success: false, Message: "Opay has not been configured for client"}, nil
 	}
+
+	fmt.Println("SETTINGS", settings.PublicKey)
+	fmt.Println("SETTINGS=1", settings.MerchantId)
 
 	headers := map[string]string{
 		"Authorization": "Bearer " + settings.PublicKey,
@@ -53,25 +170,96 @@ func (s *OpayService) InitiatePayment(data map[string]interface{}, clientId int)
 		"Content-Type":  "application/json",
 	}
 
-	res, err := common.Post(settings.BaseUrl, data, headers)
+	endpoints := s.cashierEndpoints(settings.BaseUrl, clientId)
+	resMap, endpoint, err := s.postWithFallback(endpoints, data, headers)
 	if err != nil {
-		fmt.Printf("Opay error: %v\n", err)
-		return common.SuccessResponse{Success: false, Message: "Unable to initiate deposit with Opay"}, nil
+		log.Printf("Opay cashier error: %v", err)
+		return common.SuccessResponse{
+			Success: false,
+			Message: fmt.Sprintf("Unable to initiate deposit with Opay: %v", err),
+		}, nil
 	}
 
-	resMap, _ := res.(map[string]interface{})
+	fmt.Printf("Opay endpoint: %s\n", endpoint)
+	fmt.Printf("Opay response: %v\n", resMap)
+	if code, ok := resMap["code"].(string); ok && code != "" && code != "00000" {
+		msg, _ := resMap["message"].(string)
+		if msg == "" {
+			msg = "Unable to initiate deposit with Opay"
+		}
+		return common.SuccessResponse{Success: false, Message: msg, Data: resMap}, nil
+	}
+
 	dataVal, _ := resMap["data"].(map[string]interface{})
 	cashierUrl, _ := dataVal["cashierUrl"].(string)
+
+	if cashierUrl == "" {
+		return common.SuccessResponse{
+			Success: false,
+			Message: "Unable to initiate deposit with Opay: cashierUrl missing in response",
+			Data:    resMap,
+		}, nil
+	}
+
+	fmt.Printf("Opay url: %v\n", cashierUrl)
 
 	return common.SuccessResponse{Success: true, Data: cashierUrl}, nil
 }
 
 func (s *OpayService) UpdateNotify(param map[string]interface{}) (interface{}, error) {
+	if param == nil {
+		return map[string]interface{}{
+			"responseCode":    "00004",
+			"responseMessage": "Bad Request Empty Data",
+			"data":            map[string]interface{}{},
+		}, nil
+	}
+
 	clientIdFloat, _ := param["clientId"].(float64)
 	clientId := int(clientIdFloat)
 	orderNo, _ := param["orderNo"].(string)
 	username, _ := param["username"].(string)
-	amountStr, _ := param["amount"].(string) // "100" string? TS says param.amount
+
+	amountStr := ""
+	switch amountVal := param["amount"].(type) {
+	case string:
+		amountStr = strings.TrimSpace(amountVal)
+	case float64:
+		amountStr = strconv.FormatFloat(amountVal, 'f', -1, 64)
+	case int:
+		amountStr = strconv.Itoa(amountVal)
+	}
+
+	if orderNo == "" {
+		return map[string]interface{}{
+			"responseCode":    "00004",
+			"responseMessage": "Bad Request Empty OrderNo",
+			"data":            map[string]interface{}{},
+		}, nil
+	}
+	if username == "" {
+		return map[string]interface{}{
+			"responseCode":    "00004",
+			"responseMessage": "Bad Request Empty UserID",
+			"data":            map[string]interface{}{},
+		}, nil
+	}
+	if amountStr == "" {
+		return map[string]interface{}{
+			"responseCode":    "00004",
+			"responseMessage": "Bad Request Empty Amount",
+			"data":            map[string]interface{}{},
+		}, nil
+	}
+
+	parsedAmount, parseErr := strconv.ParseFloat(amountStr, 64)
+	if parseErr != nil || parsedAmount <= 0 {
+		return map[string]interface{}{
+			"responseCode":    "00004",
+			"responseMessage": "Bad Request Invalid Amount",
+			"data":            map[string]interface{}{},
+		}, nil
+	}
 
 	// Check transaction
 	var transaction models.Transaction
@@ -82,8 +270,7 @@ func (s *OpayService) UpdateNotify(param map[string]interface{}) (interface{}, e
 		var wallet models.Wallet
 		if err := s.DB.Where("client_id = ? AND username = ?", clientId, username).First(&wallet).Error; err == nil {
 			// Wallet found
-			amount, _ := strconv.ParseFloat(amountStr, 64)
-			amount = amount / 100 // TS: parseFloat(param.amount) / 100
+			amount := parsedAmount / 100 // TS: parseFloat(param.amount) / 100
 			balance := wallet.AvailableBalance + amount
 
 			// Update Wallet
@@ -126,8 +313,8 @@ func (s *OpayService) UpdateNotify(param map[string]interface{}) (interface{}, e
 		} else {
 			s.logCallback(clientId, "Transaction not found", param, 0, orderNo, "Opay")
 			return map[string]interface{}{
-				"responseCode":    "10967",
-				"responseMessage": "Invalid user ID",
+				"responseCode":    "00003",
+				"responseMessage": "Invalid userID",
 				"data":            map[string]interface{}{},
 			}, nil
 		}
@@ -135,7 +322,7 @@ func (s *OpayService) UpdateNotify(param map[string]interface{}) (interface{}, e
 		// Found
 		s.logCallback(clientId, "Transaction not found", param, 0, orderNo, "Opay") // TS logs "Transaction not found" even if found? "Duplicate transaction"
 		return map[string]interface{}{
-			"responseCode":    "05011",
+			"responseCode":    "00002",
 			"responseMessage": "Duplicate transaction",
 			"data":            map[string]interface{}{},
 		}, nil
@@ -169,8 +356,8 @@ func (s *OpayService) ReQueryLookUp(clientId int, orderNo string) (interface{}, 
 		}, nil
 	} else {
 		return map[string]interface{}{
-			"responseCode":    "19089",
-			"responseMessage": "Transaction not found",
+			"responseCode":    "00003",
+			"responseMessage": "Not Found Transaction Not Found",
 			"data":            map[string]interface{}{},
 		}, nil
 	}
@@ -260,16 +447,17 @@ func (s *OpayService) DisburseFunds(withdrawal *models.Withdrawal, clientId int)
 		baseUrl = "https://dev.staging.sportsbookengine.com"
 	}
 
+	bankCode := s.mapOpayBankCode(withdrawal.BankCode)
 	payload := map[string]interface{}{
 		"payoutType":      "BankTransfer",
-		"notifyUrl":       fmt.Sprintf("%s/api/v2/webhook/checkout/%d/opay/callback", baseUrl, clientId),
+		"notifyUrl":       fmt.Sprintf("%s/api/v2/webhook/checkout/%d/opay/callback", baseUrl, withdrawal.ClientId),
 		"merchantOrderNo": withdrawal.WithdrawalCode,
 		"country":         "NG",
-		"amount":          int(withdrawal.Amount * 100),
+		"amount":          int(math.Round(withdrawal.Amount * 100)),
 		"currency":        "NGN",
 		"language":        "en_US",
 		"metaData": map[string]interface{}{
-			"accountBankCode": withdrawal.BankCode,
+			"accountBankCode": bankCode,
 			"accountName":     withdrawal.AccountName,
 			"accountNo":       withdrawal.AccountNumber,
 		},
@@ -281,23 +469,18 @@ func (s *OpayService) DisburseFunds(withdrawal *models.Withdrawal, clientId int)
 		return common.SuccessResponse{Success: false, Message: "Signing failed: " + err.Error()}, nil
 	}
 
-	url := "https://testapi.opaycheckout.com/api/v1/international/payout/createSingleOrder"
-	if clientId != 4 {
-		url = "https://api.opaycheckout.com/api/v1/international/payout/createSingleOrder"
-	}
-
 	headers := map[string]string{
 		"Authorization": "Bearer " + signature,
 		"MerchantId":    settings.MerchantId,
 		"Content-Type":  "application/json",
 	}
 
-	resp, err := common.Post(url, payload, headers)
+	endpoints := s.payoutEndpoints(clientId)
+	respMap, endpoint, err := s.postWithFallback(endpoints, payload, headers)
 	if err != nil {
 		return common.SuccessResponse{Success: false, Message: "Unable to disburse funds: " + err.Error()}, nil
 	}
-
-	respMap, _ := resp.(map[string]interface{})
+	log.Printf("OPay payout endpoint: %s", endpoint)
 	code, _ := respMap["code"].(string)
 
 	if code == "00000" {
@@ -315,14 +498,11 @@ func (s *OpayService) ResolveAccountNumber(clientId int, accountNo, bankCode str
 		return common.SuccessResponse{Success: false, Message: "OPay has not been configured for client"}, nil
 	}
 
+	bankCode = s.mapOpayBankCode(bankCode)
 	payload := map[string]interface{}{
 		"accountNo":       accountNo,
 		"accountBankCode": bankCode,
-	}
-
-	url := "https://api.opaycheckout.com/api/v1/international/payout/bank-account-validate"
-	if clientId == 4 {
-		url = "https://testapi.opaycheckout.com/api/v1/international/payout/bank-account-validate"
+		"countryCode":     "NG",
 	}
 
 	privateKey := s.formatPrivateKey(settings.SecretKey)
@@ -337,29 +517,30 @@ func (s *OpayService) ResolveAccountNumber(clientId int, accountNo, bankCode str
 		"Content-Type":  "application/json",
 	}
 
-	resp, err := common.Post(url, payload, headers)
+	endpoints := s.resolveEndpoints(clientId)
+	respMap, endpoint, err := s.postWithFallback(endpoints, payload, headers)
 	if err != nil {
 		return common.SuccessResponse{Success: false, Message: "Something went wrong: " + err.Error()}, nil
 	}
-
-	fmt.Println("RES", resp)
-
-	respMap, _ := resp.(map[string]interface{})
-	success, _ := respMap["success"].(bool)
+	log.Printf("OPay resolve endpoint: %s", endpoint)
+	code, _ := respMap["code"].(string)
 	message, _ := respMap["message"].(string)
 	fmt.Println("RES>DATA", respMap)
 
-	fmt.Println("SUCCESS", success)
-
-	if success {
-		accountName, _ := respMap["accountName"].(string)
+	if code == "00000" {
+		dataMap, _ := respMap["data"].(map[string]interface{})
+		accountName, _ := dataMap["accountName"].(string)
+		accountNumber, _ := dataMap["accountNo"].(string)
+		bankID, _ := dataMap["accountBankCode"].(string)
 		return map[string]interface{}{
+			"status":  true,
 			"success": true,
 			"data": map[string]interface{}{
 				"account_name":   accountName,
-				"account_number": accountNo,
+				"account_number": accountNumber,
+				"bank_id":        bankID,
 			},
-			"message": message,
+			"message": "Account number resolved",
 		}, nil
 	}
 
